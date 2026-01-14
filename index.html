@@ -1,379 +1,493 @@
-import React, { useState } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pull Up Coffee - Premium Curbside</title>
+    
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            400: '#a8a29e',
+                            500: '#78716c',
+                            600: '#57534e',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        brand: {
+                            orange: '#f97316', // High visibility for actions
+                            dark: '#0f0f0f',   // Luxury dark mode feel
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
-// --- Icons (Built-in so you don't need to install anything) ---
-const Icons = {
-  Car: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>,
-  Coffee: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>,
-  User: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  Store: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>,
-  X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>,
-  ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
-  CheckCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
-  MapPin: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
-  Trash2: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-};
+    <!-- 3. React Engine -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- 4. Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-// --- Configuration ---
-const CURBSIDE_FEE = 2.00; 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
 
-const MENU_ITEMS = [
-  { id: 1, name: 'Flat White', price: 4.50, desc: 'Smooth texture, double shot' },
-  { id: 2, name: 'Cappuccino', price: 4.50, desc: 'Frothy and dusted with chocolate' },
-  { id: 3, name: 'Latte', price: 4.50, desc: 'Creamy and milky' },
-  { id: 4, name: 'Long Black', price: 4.00, desc: 'Double shot over hot water' },
-  { id: 5, name: 'Iced Latte', price: 5.50, desc: 'Served over ice' },
-  { id: 6, name: 'Babyccino', price: 1.00, desc: 'For the little one (if they wake up!)' },
-];
-
-export default function App() {
-  // --- App State ---
-  const [view, setView] = useState('landing'); 
-  const [cart, setCart] = useState([]);
-  const [activeOrders, setActiveOrders] = useState([]);
-  const [isCafeOpen, setIsCafeOpen] = useState(true);
-  
-  // Customer Details
-  const [customerName, setCustomerName] = useState('');
-  const [carModel, setCarModel] = useState('');
-  const [carColor, setCarColor] = useState('');
-  const [plateNumber, setPlateNumber] = useState('');
-
-  // --- Actions ---
-
-  const addToCart = (item) => {
-    setCart([...cart, { ...item, cartId: Math.random() }]);
-  };
-
-  const calculateTotal = () => {
-    const itemsTotal = cart.reduce((sum, item) => sum + item.price, 0);
-    return (itemsTotal + CURBSIDE_FEE).toFixed(2);
-  };
-
-  const placeOrder = () => {
-    if (!customerName || !carModel || !carColor) {
-      alert("Please fill in your car details so we can find you!");
-      return;
-    }
-
-    const newOrder = {
-      id: Math.floor(Math.random() * 10000),
-      customerName,
-      carModel,
-      carColor,
-      plateNumber,
-      items: cart,
-      total: calculateTotal(),
-      status: 'pending', // pending, ready, delivered
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setActiveOrders([newOrder, ...activeOrders]);
-    setCart([]);
-    setView('success');
-  };
-
-  const updateOrderStatus = (orderId, newStatus) => {
-    setActiveOrders(activeOrders.map(order => 
-      order.id === orderId ? { ...order, status: newStatus } : order
-    ));
-  };
-
-  const resetApp = () => {
-    if(confirm("This will clear all orders and reset the demo. Are you sure?")) {
-        setActiveOrders([]);
-        setCart([]);
-        setView('landing');
-    }
-  };
-
-  // --- Screens ---
-
-  const LandingPage = () => (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-stone-900 text-white p-6 text-center">
-      <div className="bg-orange-500 p-4 rounded-full mb-6 animate-bounce">
-        <Icons.Car />
-      </div>
-      <h1 className="text-5xl font-extrabold mb-2 tracking-tight">Pull Up Coffee</h1>
-      <p className="text-stone-400 mb-8 text-lg max-w-md">
-        Don't wake the baby. Don't find parking. 
-        <br/>We run the coffee out to your car.
-      </p>
-
-      <div className="flex flex-col gap-4 w-full max-w-sm">
-        <button 
-          onClick={() => setView('customer')}
-          className="bg-white text-stone-900 py-4 px-6 rounded-xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-200 transition shadow-lg"
-        >
-          <Icons.User />
-          I want Coffee
-        </button>
-        <button 
-          onClick={() => setView('cafe')}
-          className="bg-stone-800 text-stone-300 py-4 px-6 rounded-xl font-semibold flex items-center justify-center gap-3 hover:bg-stone-700 transition border border-stone-700"
-        >
-          <Icons.Store />
-          I'm a Cafe Owner
-        </button>
-      </div>
-    </div>
-  );
-
-  const CustomerMenu = () => (
-    <div className="min-h-screen bg-stone-50 pb-24">
-      <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex justify-between items-center">
-        <button onClick={() => setView('landing')} className="text-stone-500 hover:text-stone-900">
-          <Icons.X />
-        </button>
-        <h2 className="font-bold text-xl text-stone-800">The Daily Grind</h2>
-        <div className="w-6"></div>
-      </div>
-
-      <div className={`p-3 text-center text-sm font-semibold text-white ${isCafeOpen ? 'bg-green-600' : 'bg-red-500'}`}>
-        {isCafeOpen ? '🟢 Curbside Pickup Active' : '🔴 Curbside Pickup Currently Unavailable'}
-      </div>
-
-      <div className="p-4 space-y-4">
-        {MENU_ITEMS.map(item => (
-          <div key={item.id} className="bg-white p-4 rounded-xl shadow-sm border border-stone-100 flex justify-between items-center">
-            <div>
-              <h3 className="font-bold text-stone-800 text-lg">{item.name}</h3>
-              <p className="text-stone-500 text-sm">{item.desc}</p>
-              <p className="text-orange-600 font-bold mt-1">${item.price.toFixed(2)}</p>
-            </div>
-            <button 
-              disabled={!isCafeOpen}
-              onClick={() => addToCart(item)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
-                isCafeOpen ? 'bg-stone-900 text-white hover:scale-110' : 'bg-stone-300 text-stone-500'
-              }`}
-            >
-              +
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {cart.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-stone-200 shadow-lg">
-          <div className="max-w-md mx-auto flex justify-between items-center">
-            <div>
-              <p className="text-stone-500 text-sm">{cart.length} items</p>
-              <p className="font-bold text-xl text-stone-900">${calculateTotal()}</p>
-            </div>
-            <button 
-              onClick={() => setView('checkout')}
-              className="bg-orange-500 text-white py-3 px-8 rounded-full font-bold shadow-lg hover:bg-orange-600 transition flex items-center gap-2"
-            >
-              Checkout <Icons.ChevronRight />
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  const Checkout = () => (
-    <div className="min-h-screen bg-stone-50 p-4">
-      <button onClick={() => setView('customer')} className="mb-6 flex items-center text-stone-500 font-medium">
-        <Icons.X /> <span className="ml-1">Back to Menu</span>
-      </button>
-
-      <h2 className="text-2xl font-extrabold text-stone-900 mb-6">Order Details</h2>
-
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4 mb-6">
-        <div>
-          <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Your Name</label>
-          <input 
-            type="text" 
-            placeholder="e.g. Sarah"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            className="w-full p-3 bg-stone-50 rounded-lg border border-stone-200 focus:outline-none focus:border-orange-500"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Car Model</label>
-            <input 
-              type="text" 
-              placeholder="e.g. Toyota"
-              value={carModel}
-              onChange={(e) => setCarModel(e.target.value)}
-              className="w-full p-3 bg-stone-50 rounded-lg border border-stone-200 focus:outline-none focus:border-orange-500"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">Color</label>
-            <input 
-              type="text" 
-              placeholder="e.g. Silver"
-              value={carColor}
-              onChange={(e) => setCarColor(e.target.value)}
-              className="w-full p-3 bg-stone-50 rounded-lg border border-stone-200 focus:outline-none focus:border-orange-500"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-24">
-        <h3 className="font-bold text-lg mb-4">Summary</h3>
-        {cart.map((item) => (
-          <div key={item.cartId} className="flex justify-between text-sm py-2 border-b border-stone-100">
-            <span>{item.name}</span>
-            <span>${item.price.toFixed(2)}</span>
-          </div>
-        ))}
-        <div className="flex justify-between text-sm py-2 text-orange-600 font-medium">
-          <span>Curbside Fee</span>
-          <span>${CURBSIDE_FEE.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between font-bold text-xl mt-4 pt-4 border-t border-stone-200">
-          <span>Total</span>
-          <span>${calculateTotal()}</span>
-        </div>
-      </div>
-
-      <button 
-        onClick={placeOrder}
-        className="fixed bottom-6 left-4 right-4 bg-stone-900 text-white py-4 rounded-xl font-bold text-xl shadow-xl hover:bg-stone-800 transition"
-      >
-        Pay & Park Up
-      </button>
-    </div>
-  );
-
-  const SuccessView = () => (
-    <div className="min-h-screen bg-green-500 flex flex-col items-center justify-center p-6 text-white text-center">
-      <div className="bg-white text-green-500 p-6 rounded-full mb-6 shadow-lg animate-pulse">
-        <Icons.CheckCircle />
-      </div>
-      <h2 className="text-4xl font-extrabold mb-4">Order Sent!</h2>
-      <p className="text-xl mb-8 font-medium">We are looking for your <span className="font-bold underline">{carColor} {carModel}</span>.</p>
-      
-      <button 
-        onClick={() => {
-            setCart([]);
-            setView('landing');
-        }}
-        className="mt-12 text-white font-semibold hover:opacity-80 underline"
-      >
-        Back to Home
-      </button>
-    </div>
-  );
-
-  const CafeDashboard = () => (
-    <div className="min-h-screen bg-stone-100 flex flex-col md:flex-row">
-      {/* Sidebar */}
-      <div className="bg-stone-900 text-stone-400 p-4 md:w-64 flex flex-row md:flex-col justify-between items-center md:items-stretch">
-        <div className="flex items-center gap-3 text-white mb-0 md:mb-8">
-          <div className="bg-orange-500 p-2 rounded-lg">
-            <Icons.Coffee />
-          </div>
-          <span className="font-bold text-xl hidden md:block">CafePortal</span>
-        </div>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        <div className="flex md:flex-col gap-2">
-            <button onClick={resetApp} className="text-red-400 hover:text-red-300 text-sm flex items-center gap-2">
-                <Icons.Trash2 /> <span className="hidden md:inline">Reset Demo</span>
-            </button>
-        </div>
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="text-stone-800 antialiased">
 
-        <button onClick={() => setView('landing')} className="flex items-center gap-3 text-sm hover:text-white mt-0 md:mt-auto">
-             <Icons.X /> <span className="hidden md:block">Sign Out</span>
-        </button>
-      </div>
+    <div id="root"></div>
 
-      {/* Main Content */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-stone-800">Live Dashboard</h2>
-          
-          <div className="flex items-center gap-3 bg-white p-2 rounded-xl shadow-sm px-4">
-            <span className={`text-sm font-bold ${isCafeOpen ? 'text-green-600' : 'text-stone-400'}`}>
-              {isCafeOpen ? 'Curbside: ON' : 'OFF'}
-            </span>
-            <button 
-              onClick={() => setIsCafeOpen(!isCafeOpen)}
-              className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${isCafeOpen ? 'bg-green-500' : 'bg-stone-300'}`}
-            >
-              <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${isCafeOpen ? 'translate-x-6' : 'translate-x-0'}`}></div>
-            </button>
-          </div>
-        </div>
+    <script type="text/babel">
+        const { useState, useEffect, Fragment } = React;
 
-        {activeOrders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64 bg-white rounded-2xl border-2 border-dashed border-stone-300 text-stone-400">
-            <div className="opacity-20 mb-4"><Icons.Coffee /></div>
-            <p className="text-lg">No active orders yet.</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-            {activeOrders.map(order => (
-              <div key={order.id} className={`bg-white rounded-2xl shadow-sm border overflow-hidden ${order.status === 'delivered' ? 'opacity-50' : 'border-orange-200 shadow-orange-100'}`}>
-                {/* Header */}
-                <div className="bg-stone-50 p-4 border-b border-stone-100 flex justify-between items-start">
-                  <div>
-                     <div className="flex items-center gap-2 mb-1">
-                        <div className="text-orange-600"><Icons.Car /></div>
-                        <span className="font-bold text-stone-800 text-lg">{order.carModel}</span>
-                     </div>
-                     <div className="text-sm text-stone-600">
-                        {order.carColor} {order.plateNumber}
-                     </div>
-                  </div>
-                  <span className="text-xs font-bold text-stone-400">{order.timestamp}</span>
+        // --- ICONS ---
+        const Icons = {
+            Car: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>,
+            Coffee: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>,
+            User: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+            Store: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>,
+            X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>,
+            ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
+            CheckCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+            MapPin: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
+            Trash2: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>,
+            Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        };
+
+        // --- DATA & CONFIG ---
+        const CURBSIDE_FEE = 2.00; 
+
+        // Professional images sourced from Unsplash
+        const MENU_ITEMS = [
+            { id: 1, name: 'Flat White', price: 4.50, desc: 'Velvet texture, double shot', img: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=400&q=80' },
+            { id: 2, name: 'Cappuccino', price: 4.50, desc: 'Frothy & chocolate dusted', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=400&q=80' },
+            { id: 3, name: 'Latte', price: 4.50, desc: 'Creamy steamed milk', img: 'https://images.unsplash.com/photo-1561047029-3000c68339ca?auto=format&fit=crop&w=400&q=80' },
+            { id: 4, name: 'Long Black', price: 4.00, desc: 'Strong & bold over water', img: 'https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?auto=format&fit=crop&w=400&q=80' },
+            { id: 5, name: 'Iced Latte', price: 5.50, desc: 'Chilled over ice cubes', img: 'https://images.unsplash.com/photo-1517701604599-bb29b5dd73ad?auto=format&fit=crop&w=400&q=80' },
+            { id: 6, name: 'Croissant', price: 6.00, desc: 'Fresh buttery pastry', img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80' },
+        ];
+
+        // --- APP COMPONENT ---
+        const App = () => {
+            // State
+            const [view, setView] = useState('landing'); 
+            const [cart, setCart] = useState([]);
+            const [orders, setOrders] = useState([]);
+            const [isStoreOpen, setIsStoreOpen] = useState(true);
+            
+            // Customer Form State
+            const [customerName, setCustomerName] = useState('');
+            const [carModel, setCarModel] = useState('');
+            const [carColor, setCarColor] = useState('');
+            const [plateNumber, setPlateNumber] = useState('');
+
+            // --- Logic ---
+            const addToCart = (item) => {
+                setCart([...cart, { ...item, cartId: Math.random() }]);
+            };
+
+            const removeFromCart = (cartId) => {
+                setCart(cart.filter(item => item.cartId !== cartId));
+            };
+
+            const getSubtotal = () => cart.reduce((sum, item) => sum + item.price, 0);
+            const getTotal = () => (getSubtotal() + CURBSIDE_FEE).toFixed(2);
+
+            const placeOrder = () => {
+                if (!customerName || !carModel || !carColor || !plateNumber) {
+                    alert("Please help us find you by entering your car details!");
+                    return;
+                }
+                const newOrder = {
+                    id: Math.floor(Math.random() * 9000) + 1000,
+                    customerName,
+                    carModel,
+                    carColor,
+                    plateNumber,
+                    items: cart,
+                    total: getTotal(),
+                    status: 'pending', // pending -> ready -> delivered
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+                setOrders([newOrder, ...orders]);
+                setCart([]);
+                setView('success');
+            };
+
+            const updateOrderStatus = (id, status) => {
+                setOrders(orders.map(o => o.id === id ? { ...o, status } : o));
+            };
+
+            // --- VIEW COMPONENTS ---
+
+            const LandingPage = () => (
+                <div className="flex flex-col items-center justify-center min-h-screen bg-brand-dark text-white p-6 text-center relative overflow-hidden">
+                    {/* Background decoration */}
+                    <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-20 blur-sm"></div>
+                    
+                    <div className="relative z-10 flex flex-col items-center fade-in">
+                        <div className="bg-brand-orange p-5 rounded-full mb-8 shadow-2xl shadow-orange-500/20 animate-bounce">
+                            <Icons.Car />
+                        </div>
+                        <h1 className="text-6xl font-serif italic mb-4 tracking-tight">Pull Up Coffee</h1>
+                        <p className="text-stone-300 mb-12 text-lg max-w-md font-light">
+                            Premium coffee run out to your car window.<br/>
+                            <span className="text-brand-orange font-medium">No parking. No waiting.</span>
+                        </p>
+
+                        <div className="flex flex-col gap-4 w-full max-w-sm">
+                            <button 
+                                onClick={() => setView('customer')}
+                                className="bg-white text-brand-dark py-4 px-8 rounded-xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-100 transform hover:scale-105 transition shadow-lg"
+                            >
+                                <Icons.User /> Order Now
+                            </button>
+                            <button 
+                                onClick={() => setView('cafe')}
+                                className="bg-stone-800/80 backdrop-blur-sm text-stone-300 py-4 px-8 rounded-xl font-medium flex items-center justify-center gap-3 hover:bg-stone-800 transition border border-stone-700"
+                            >
+                                <Icons.Store /> Staff Portal
+                            </button>
+                        </div>
+                    </div>
                 </div>
+            );
 
-                {/* Body */}
-                <div className="p-4">
-                  <p className="font-bold text-stone-900 mb-2">{order.customerName}</p>
-                  <ul className="space-y-2 mb-4">
-                    {order.items.map((item, idx) => (
-                      <li key={idx} className="text-sm text-stone-600 flex justify-between">
-                        <span>1x {item.name}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex justify-between items-center text-sm font-bold pt-3 border-t border-stone-100">
-                    <span className="text-stone-400">Total</span>
-                    <span className="text-stone-800">${order.total}</span>
-                  </div>
+            const CustomerMenu = () => (
+                <div className="min-h-screen bg-stone-50 pb-32">
+                    {/* Header */}
+                    <div className="bg-white p-4 shadow-sm sticky top-0 z-20 flex justify-between items-center border-b border-stone-100">
+                        <button onClick={() => setView('landing')} className="p-2 hover:bg-stone-100 rounded-full transition">
+                            <Icons.X />
+                        </button>
+                        <h2 className="font-serif font-bold text-xl text-brand-dark">The Daily Grind</h2>
+                        <div className="w-8"></div>
+                    </div>
+
+                    {/* Status Bar */}
+                    <div className={`p-3 text-center text-xs font-bold tracking-widest uppercase text-white ${isStoreOpen ? 'bg-brand-dark' : 'bg-red-500'}`}>
+                        {isStoreOpen ? '● Curbside Service Active' : '● Service Currently Paused'}
+                    </div>
+
+                    {/* Menu Grid */}
+                    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                        {MENU_ITEMS.map(item => (
+                            <div key={item.id} className="group bg-white rounded-2xl p-3 shadow-sm hover:shadow-md transition border border-stone-100 flex gap-4 overflow-hidden">
+                                <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                                    <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+                                </div>
+                                <div className="flex flex-col justify-center flex-1">
+                                    <h3 className="font-serif font-bold text-lg text-brand-dark">{item.name}</h3>
+                                    <p className="text-stone-500 text-sm mb-2">{item.desc}</p>
+                                    <div className="flex justify-between items-center mt-auto">
+                                        <span className="font-bold text-brand-orange">${item.price.toFixed(2)}</span>
+                                        <button 
+                                            disabled={!isStoreOpen}
+                                            onClick={() => addToCart(item)}
+                                            className="bg-stone-100 hover:bg-brand-dark hover:text-white text-stone-900 w-8 h-8 rounded-full flex items-center justify-center transition disabled:opacity-50"
+                                        >
+                                            <Icons.Plus />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Floating Cart */}
+                    {cart.length > 0 && (
+                        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent z-30 slide-up">
+                            <div className="max-w-md mx-auto">
+                                <button 
+                                    onClick={() => setView('checkout')}
+                                    className="w-full bg-brand-dark text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center font-bold text-lg transform hover:scale-[1.02] transition"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className="bg-brand-orange text-white px-2 py-0.5 rounded-md text-sm">{cart.length}</span>
+                                        <span>View Order</span>
+                                    </div>
+                                    <span>${getTotal()}</span>
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
+            );
 
-                {/* Actions */}
-                <div className="p-2 grid grid-cols-1 gap-2 bg-stone-50">
-                   {order.status === 'pending' && (
-                      <button className="bg-stone-800 text-white py-3 rounded-lg font-bold hover:bg-stone-700 transition w-full" onClick={() => updateOrderStatus(order.id, 'ready')}>
-                        Mark Ready
-                      </button>
-                   )}
-                   {order.status === 'ready' && (
-                     <button className="bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-600 transition w-full flex items-center justify-center gap-2" onClick={() => updateOrderStatus(order.id, 'delivered')}>
-                       <Icons.MapPin /> Run to Car
-                     </button>
-                   )}
-                   {order.status === 'delivered' && (
-                     <div className="text-center text-green-600 font-bold py-2 flex items-center justify-center gap-2">
-                       <Icons.CheckCircle /> Completed
-                     </div>
-                   )}
+            const Checkout = () => (
+                <div className="min-h-screen bg-stone-50 p-6 fade-in">
+                    <div className="max-w-lg mx-auto">
+                        <button onClick={() => setView('customer')} className="mb-6 flex items-center text-stone-500 font-medium hover:text-brand-dark transition">
+                            <Icons.X /> <span className="ml-2">Back to Menu</span>
+                        </button>
+
+                        <h2 className="text-3xl font-serif font-bold text-brand-dark mb-2">Final Details</h2>
+                        <p className="text-stone-500 mb-8">Tell us what you're driving so we can spot you.</p>
+
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-5 mb-6">
+                            <div>
+                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label>
+                                <input 
+                                    type="text" 
+                                    value={customerName}
+                                    onChange={e => setCustomerName(e.target.value)}
+                                    placeholder="e.g. Alex"
+                                    className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Car Model</label>
+                                    <input 
+                                        type="text" 
+                                        value={carModel}
+                                        onChange={e => setCarModel(e.target.value)}
+                                        placeholder="e.g. Tesla"
+                                        className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Color</label>
+                                    <input 
+                                        type="text" 
+                                        value={carColor}
+                                        onChange={e => setCarColor(e.target.value)}
+                                        placeholder="e.g. White"
+                                        className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">License Plate (Last 3)</label>
+                                <input 
+                                    type="text" 
+                                    value={plateNumber}
+                                    onChange={e => setPlateNumber(e.target.value)}
+                                    placeholder="e.g. ABC"
+                                    className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition uppercase font-mono tracking-widest"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8">
+                            <h3 className="font-bold text-stone-900 mb-4 text-sm uppercase tracking-wider">Order Summary</h3>
+                            <div className="space-y-3">
+                                {cart.map((item, idx) => (
+                                    <div key={item.cartId} className="flex justify-between text-sm text-stone-600">
+                                        <span>{item.name}</span>
+                                        <span>${item.price.toFixed(2)}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="h-px bg-stone-100 my-4"></div>
+                            <div className="flex justify-between text-sm text-brand-orange font-medium mb-1">
+                                <span>Curbside Convenience Fee</span>
+                                <span>${CURBSIDE_FEE.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4">
+                                <span>Total</span>
+                                <span>${getTotal()}</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={placeOrder}
+                            className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2"
+                        >
+                            Pay & Pull Up <Icons.ChevronRight />
+                        </button>
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+            );
 
-  return (
-    <div className="font-sans text-stone-900">
-      {view === 'landing' && <LandingPage />}
-      {view === 'customer' && <CustomerMenu />}
-      {view === 'cafe' && <CafeDashboard />}
-      {view === 'checkout' && <Checkout />}
-      {view === 'success' && <SuccessView />}
-    </div>
-  );
-}
+            const SuccessView = () => (
+                <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center p-6 text-white text-center fade-in">
+                    <div className="bg-brand-orange text-white w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-bounce">
+                        <Icons.CheckCircle />
+                    </div>
+                    <h2 className="text-4xl font-serif italic mb-4">Order Confirmed</h2>
+                    <p className="text-stone-400 text-lg mb-8 max-w-sm font-light leading-relaxed">
+                        Drive to the pickup zone.<br/>We are looking for your<br/>
+                        <span className="text-white font-bold text-xl border-b-2 border-brand-orange inline-block mt-2 pb-1">
+                            {carColor} {carModel} ({plateNumber.toUpperCase()})
+                        </span>
+                    </p>
+                    <button 
+                        onClick={() => { setCart([]); setView('landing'); }}
+                        className="text-stone-400 hover:text-white transition underline text-sm tracking-widest uppercase"
+                    >
+                        Back to Home
+                    </button>
+                </div>
+            );
+
+            const CafeDashboard = () => (
+                <div className="min-h-screen bg-stone-100 flex flex-col md:flex-row fade-in">
+                    {/* Sidebar */}
+                    <div className="bg-brand-dark text-stone-400 w-full md:w-72 p-6 flex flex-col justify-between flex-shrink-0">
+                        <div>
+                            <div className="flex items-center gap-3 text-white mb-10">
+                                <div className="bg-brand-orange p-2 rounded-lg"><Icons.Coffee /></div>
+                                <span className="font-serif font-bold text-xl">CafePortal</span>
+                            </div>
+                            
+                            <div className="bg-white/5 p-4 rounded-xl mb-6 border border-white/10">
+                                <p className="text-xs uppercase tracking-widest font-bold mb-2 text-stone-500">Service Status</p>
+                                <div className="flex items-center justify-between">
+                                    <span className={isStoreOpen ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
+                                        {isStoreOpen ? 'Active' : 'Paused'}
+                                    </span>
+                                    <button 
+                                        onClick={() => setIsStoreOpen(!isStoreOpen)}
+                                        className={`w-10 h-6 rounded-full p-1 transition-colors duration-300 ${isStoreOpen ? 'bg-green-500' : 'bg-stone-600'}`}
+                                    >
+                                        <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${isStoreOpen ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button 
+                                onClick={() => { if(confirm('Reset all data?')) { setOrders([]); setCart([]); setView('landing'); } }} 
+                                className="flex items-center gap-3 text-sm hover:text-red-400 transition mb-4 w-full"
+                            >
+                                <Icons.Trash2 /> Reset Demo
+                            </button>
+                            <button 
+                                onClick={() => setView('landing')} 
+                                className="flex items-center gap-3 text-sm hover:text-white transition w-full border-t border-stone-800 pt-4"
+                            >
+                                <Icons.X /> Sign Out
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Main Board */}
+                    <div className="flex-1 p-6 md:p-10 overflow-y-auto">
+                        <header className="flex justify-between items-end mb-8">
+                            <div>
+                                <h2 className="text-3xl font-serif font-bold text-brand-dark">Live Orders</h2>
+                                <p className="text-stone-500 mt-1">Real-time curbside feed</p>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-4xl font-bold text-brand-dark block">{orders.filter(o => o.status !== 'delivered').length}</span>
+                                <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Pending</span>
+                            </div>
+                        </header>
+
+                        {orders.length === 0 ? (
+                            <div className="h-64 border-2 border-dashed border-stone-300 rounded-2xl flex flex-col items-center justify-center text-stone-400">
+                                <div className="opacity-20 mb-4 scale-150"><Icons.Coffee /></div>
+                                <p>No active orders. Waiting for cars...</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                                {orders.map(order => (
+                                    <div 
+                                        key={order.id} 
+                                        className={`bg-white rounded-xl shadow-sm border-2 overflow-hidden transition-all duration-300
+                                            ${order.status === 'pending' ? 'border-brand-orange shadow-orange-100 ring-4 ring-orange-50' : 
+                                              order.status === 'ready' ? 'border-green-500 shadow-green-100' : 
+                                              'border-stone-100 opacity-60 grayscale'}`}
+                                    >
+                                        <div className="p-4 border-b border-stone-100 bg-stone-50 flex justify-between items-start">
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <div className={order.status === 'pending' ? 'text-brand-orange' : 'text-green-600'}><Icons.Car /></div>
+                                                    <span className="font-bold text-brand-dark text-lg">{order.carModel}</span>
+                                                </div>
+                                                <div className="text-sm font-mono text-stone-500 bg-stone-200 inline-block px-1.5 rounded">
+                                                    {order.carColor} • {order.plateNumber.toUpperCase()}
+                                                </div>
+                                            </div>
+                                            <span className="text-xs font-bold text-stone-400">{order.timestamp}</span>
+                                        </div>
+
+                                        <div className="p-5">
+                                            <p className="font-bold text-brand-dark mb-3 text-lg">{order.customerName}</p>
+                                            <ul className="space-y-2 mb-6">
+                                                {order.items.map((item, idx) => (
+                                                    <li key={idx} className="text-stone-600 flex justify-between text-sm border-b border-stone-50 pb-1 last:border-0">
+                                                        <span>1x {item.name}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            
+                                            {/* Action Buttons */}
+                                            {order.status === 'pending' && (
+                                                <button 
+                                                    onClick={() => updateOrderStatus(order.id, 'ready')}
+                                                    className="w-full py-3 bg-stone-800 text-white rounded-lg font-bold hover:bg-stone-700 transition"
+                                                >
+                                                    Mark Order Ready
+                                                </button>
+                                            )}
+                                            {order.status === 'ready' && (
+                                                <button 
+                                                    onClick={() => updateOrderStatus(order.id, 'delivered')}
+                                                    className="w-full py-3 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition flex items-center justify-center gap-2 animate-pulse"
+                                                >
+                                                    <Icons.MapPin /> Run to Car
+                                                </button>
+                                            )}
+                                            {order.status === 'delivered' && (
+                                                <div className="w-full py-3 bg-stone-100 text-stone-400 rounded-lg font-bold text-center flex items-center justify-center gap-2">
+                                                    <Icons.CheckCircle /> Completed
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+
+            // --- RENDER ---
+            return (
+                <div className="font-sans">
+                    {view === 'landing' && <LandingPage />}
+                    {view === 'customer' && <CustomerMenu />}
+                    {view === 'checkout' && <Checkout />}
+                    {view === 'success' && <SuccessView />}
+                    {view === 'cafe' && <CafeDashboard />}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
