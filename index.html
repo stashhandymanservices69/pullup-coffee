@@ -3,36 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pull Up Coffee - Premium Curbside</title>
+    <title>Pull Up Coffee™ - The Drive-Thru Revolution</title>
     
     <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 2. Configuration -->
+    <!-- 2. Configuration & Theme -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        stone: {
-                            50: '#fafaf9',
-                            100: '#f5f5f4',
-                            200: '#e7e5e4',
-                            300: '#d6d3d1',
-                            400: '#a8a29e',
-                            500: '#78716c',
-                            600: '#57534e',
-                            800: '#292524',
-                            900: '#1c1917',
-                        },
-                        brand: {
-                            orange: '#f97316', // High visibility for actions
-                            dark: '#0f0f0f',   // Luxury dark mode feel
-                        }
+                        stone: { 50:'#fafaf9', 100:'#f5f5f4', 200:'#e7e5e4', 300:'#d6d3d1', 400:'#a8a29e', 500:'#78716c', 600:'#57534e', 800:'#292524', 900:'#1c1917' },
+                        brand: { orange: '#f97316', dark: '#0f0f0f' }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'bounce-slow': 'bounce 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
                     }
                 }
             }
@@ -42,32 +38,28 @@
     <!-- 3. React Engine -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    
-    <!-- 4. Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; }
+        body { font-family: 'Inter', sans-serif; background-color: #fafaf9; -webkit-tap-highlight-color: transparent; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        .slide-up { animation: slideUp 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        /* Hide scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        input:focus, select:focus, textarea:focus { outline: none; ring: 2px solid #f97316; }
+        
+        /* Disable image interaction for the profile pic */
+        .secure-img { pointer-events: none; user-select: none; -webkit-user-drag: none; }
     </style>
 </head>
-<body class="text-stone-800 antialiased">
+<body class="text-stone-800 antialiased selection:bg-orange-100">
 
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, Fragment } = React;
+        const { useState, useEffect, useRef, Fragment } = React;
 
         // --- ICONS ---
         const Icons = {
@@ -80,157 +72,522 @@
             CheckCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
             MapPin: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
             Trash2: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>,
-            Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
+            Settings: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+            Info: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
+            Shield: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+            TrendingUp: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
+            Camera: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>,
+            Clock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
         };
 
-        // --- DATA & CONFIG ---
-        const CURBSIDE_FEE = 2.00; 
+        // --- LOCATIONS ---
+        const LOCATIONS = [
+            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "1 Allen St, Moffat Beach QLD 4551", logo: "willie.avif" },
+            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "6 Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
+            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "3 Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
+        ];
 
-        // Professional images sourced from Unsplash
-        const MENU_ITEMS = [
+        const DEFAULT_MENU = [
             { id: 1, name: 'Flat White', price: 4.50, desc: 'Velvet texture, double shot', img: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=400&q=80' },
             { id: 2, name: 'Cappuccino', price: 4.50, desc: 'Frothy & chocolate dusted', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=400&q=80' },
             { id: 3, name: 'Latte', price: 4.50, desc: 'Creamy steamed milk', img: 'https://images.unsplash.com/photo-1561047029-3000c68339ca?auto=format&fit=crop&w=400&q=80' },
             { id: 4, name: 'Long Black', price: 4.00, desc: 'Strong & bold over water', img: 'https://images.unsplash.com/photo-1594631252845-29fc4cc8cde9?auto=format&fit=crop&w=400&q=80' },
-            { id: 5, name: 'Iced Latte', price: 5.50, desc: 'Chilled over ice cubes', img: 'https://images.unsplash.com/photo-1517701604599-bb29b5dd73ad?auto=format&fit=crop&w=400&q=80' },
-            { id: 6, name: 'Croissant', price: 6.00, desc: 'Fresh buttery pastry', img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80' },
+            { id: 5, name: 'Iced Latte', price: 5.50, desc: 'Chilled over ice cubes', img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=400&q=80' },
+            { id: 6, name: 'Muffin of the Day', price: 5.00, desc: 'Freshly baked blueberry', img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80' },
         ];
 
-        // --- APP COMPONENT ---
+        const CURBSIDE_FEE = 2.00;
+
+        // --- SUB-COMPONENTS ---
+
+        // 1. PRODUCT MODAL
+        const ProductModal = ({ item, onClose, onAdd }) => {
+            const [size, setSize] = useState('Reg');
+            const [milk, setMilk] = useState('Full Cream');
+            const [sugar, setSugar] = useState('0');
+            const [temp, setTemp] = useState('Hot');
+            const [notes, setNotes] = useState('');
+
+            const getAdjustedPrice = () => {
+                let price = item.price;
+                if(size === 'Large') price += 0.50;
+                if(milk === 'Oat' || milk === 'Almond' || milk === 'Soy') price += 0.50;
+                return price;
+            };
+
+            return (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in">
+                    <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 className="font-serif font-bold text-2xl text-brand-dark">{item.name}</h3>
+                                <p className="text-stone-500 text-sm">Customize your brew</p>
+                            </div>
+                            <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
+                        </div>
+
+                        <div className="space-y-6 mb-8">
+                            {/* Size */}
+                            <div>
+                                <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Size</label>
+                                <div className="flex gap-2">
+                                    {['Small', 'Reg', 'Large'].map(opt => (
+                                        <button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Milk */}
+                            {!item.name.includes("Black") && !item.name.includes("Muffin") && (
+                            <div>
+                                <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label>
+                                <select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition">
+                                    <option>Full Cream</option>
+                                    <option>Skim</option>
+                                    <option>Oat (+$0.50)</option>
+                                    <option>Almond (+$0.50)</option>
+                                    <option>Soy (+$0.50)</option>
+                                    <option>Lactose Free</option>
+                                </select>
+                            </div>
+                            )}
+
+                            {/* Grid */}
+                            {!item.name.includes("Muffin") && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Sugar</label>
+                                    <select value={sugar} onChange={e => setSugar(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl">
+                                        <option value="0">None</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="Splenda">Splenda</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Temp</label>
+                                    <select value={temp} onChange={e => setTemp(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl">
+                                        <option>Hot</option>
+                                        <option>Extra Hot</option>
+                                        <option>Warm</option>
+                                    </select>
+                                </div>
+                            </div>
+                            )}
+
+                            {/* Notes */}
+                            <div>
+                                <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Barista Notes</label>
+                                <textarea 
+                                    value={notes} 
+                                    onChange={e => setNotes(e.target.value)} 
+                                    placeholder="e.g. 3/4 full, no lid..." 
+                                    className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm focus:bg-white transition"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={() => onAdd({ ...item, size, milk, sugar, temp, notes, price: getAdjustedPrice() })}
+                            className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-stone-800 transition transform active:scale-[0.98]"
+                        >
+                            Add to Order • ${getAdjustedPrice().toFixed(2)}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // 2. CHECKOUT FORM
+        const CheckoutForm = ({ user, setUser, onSubmit, onBack, cart, total }) => {
+            const [pickupType, setPickupType] = useState('ASAP');
+            const [customTime, setCustomTime] = useState('');
+            const [details, setDetails] = useState('');
+            const [carPhoto, setCarPhoto] = useState(null);
+            
+            const fileInputRef = useRef(null);
+
+            const handleChange = (field, value) => {
+                setUser(prev => ({ ...prev, [field]: value }));
+            };
+
+            const handlePhotoUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setCarPhoto(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            // Calculate default future time (current + 15 mins)
+            useEffect(() => {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() + 15);
+                const timeString = now.toTimeString().slice(0, 5); // HH:MM
+                setCustomTime(timeString);
+            }, []);
+
+            return (
+                <div className="min-h-screen bg-stone-50 p-6 animate-fade-in pb-24">
+                    <div className="max-w-lg mx-auto">
+                        <button onClick={onBack} className="mb-6 flex items-center text-stone-500 font-medium hover:text-brand-dark transition">
+                            <Icons.X /> <span className="ml-2">Back to Menu</span>
+                        </button>
+
+                        <h2 className="text-3xl font-serif font-bold text-brand-dark mb-2">Final Details</h2>
+                        <p className="text-stone-500 mb-8">Tell us when and where to find you.</p>
+
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-5 mb-6">
+                            
+                            {/* PICKUP TIME */}
+                            <div>
+                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Pickup Time</label>
+                                <div className="flex gap-2 mb-3">
+                                    <button 
+                                        onClick={() => setPickupType('ASAP')}
+                                        className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'ASAP' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}
+                                    >
+                                        <Icons.TrendingUp /> ASAP
+                                    </button>
+                                    <button 
+                                        onClick={() => setPickupType('LATER')}
+                                        className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'LATER' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}
+                                    >
+                                        <Icons.Clock /> Pick Time
+                                    </button>
+                                </div>
+                                {pickupType === 'LATER' && (
+                                    <div className="animate-fade-in">
+                                        <input 
+                                            type="time" 
+                                            value={customTime}
+                                            onChange={(e) => setCustomTime(e.target.value)}
+                                            className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-lg font-bold text-center"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* NAME */}
+                            <div>
+                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label>
+                                <input 
+                                    type="text" 
+                                    value={user.name} 
+                                    onChange={e => handleChange('name', e.target.value)}
+                                    placeholder="e.g. Alex"
+                                    className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition"
+                                />
+                            </div>
+
+                            {/* CAR DETAILS */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Car Model</label>
+                                    <input 
+                                        type="text" 
+                                        value={user.carModel} 
+                                        onChange={e => handleChange('carModel', e.target.value)}
+                                        placeholder="e.g. Tesla"
+                                        className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Color</label>
+                                    <input 
+                                        type="text" 
+                                        value={user.carColor} 
+                                        onChange={e => handleChange('carColor', e.target.value)}
+                                        placeholder="e.g. White"
+                                        className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* FULL PLATE */}
+                            <div>
+                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">License Plate (Full)</label>
+                                <input 
+                                    type="text" 
+                                    value={user.plate} 
+                                    onChange={e => handleChange('plate', e.target.value)}
+                                    placeholder="e.g. 123-ABC"
+                                    className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium uppercase font-mono tracking-widest transition"
+                                />
+                            </div>
+
+                            {/* LOCATION DETAILS & PHOTO */}
+                            <div>
+                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Parking Spot / Location Details</label>
+                                <textarea 
+                                    value={details}
+                                    onChange={(e) => setDetails(e.target.value)}
+                                    placeholder="e.g. Parked near the big tree, hazards on..."
+                                    className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm mb-3 focus:bg-white transition"
+                                ></textarea>
+                                
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    className="hidden" 
+                                    ref={fileInputRef}
+                                    onChange={handlePhotoUpload}
+                                />
+                                
+                                {carPhoto ? (
+                                    <div className="relative w-full h-32 rounded-xl overflow-hidden border border-stone-200">
+                                        <img src={carPhoto} alt="Car Preview" className="w-full h-full object-cover" />
+                                        <button onClick={() => setCarPhoto(null)} className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full"><Icons.X /></button>
+                                    </div>
+                                ) : (
+                                    <button 
+                                        onClick={() => fileInputRef.current.click()}
+                                        className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 font-bold flex items-center justify-center gap-2 hover:bg-stone-50 transition"
+                                    >
+                                        <Icons.Camera /> Snap Photo of Spot
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Safety Notice */}
+                        <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl mb-6 text-sm text-orange-800 flex gap-3">
+                            <div className="shrink-0 text-xl">⚠️</div>
+                            <div>
+                                <p className="font-bold mb-1">Safety First</p>
+                                <p className="opacity-90">Please ensure you are parked in a safe, legal zone. No smoking while staff are delivering. Help us help you!</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8">
+                            <h3 className="font-bold text-stone-900 mb-4 text-xs uppercase tracking-wider">Order Summary</h3>
+                            <div className="space-y-3">
+                                {cart.map((item, idx) => (
+                                    <div key={item.cartId} className="flex justify-between text-sm text-stone-600 border-b border-stone-50 pb-2">
+                                        <div>
+                                            <span className="font-semibold text-stone-800">{item.name}</span>
+                                            <span className="block text-xs text-stone-500 mt-0.5">{item.size}, {item.milk}</span>
+                                            {item.notes && <span className="block text-xs text-brand-orange italic mt-0.5">"{item.notes}"</span>}
+                                        </div>
+                                        <span>${item.price.toFixed(2)}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="flex justify-between text-sm text-brand-orange font-medium mt-4">
+                                <span>Curbside Convenience Fee</span>
+                                <span>${CURBSIDE_FEE.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4 pt-4 border-t border-stone-100">
+                                <span>Total</span>
+                                <span>${total}</span>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={() => onSubmit({ pickupType, customTime, details, carPhoto })}
+                            className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2"
+                        >
+                            Pay & Pull Up <Icons.ChevronRight />
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- MAIN APP ---
         const App = () => {
-            // State
-            const [view, setView] = useState('landing'); 
+            const [view, setView] = useState('landing');
+            const [selectedLocation, setSelectedLocation] = useState(null);
             const [cart, setCart] = useState([]);
             const [orders, setOrders] = useState([]);
-            const [isStoreOpen, setIsStoreOpen] = useState(true);
+            const [userProfile, setUserProfile] = useState({ name: '', carModel: '', carColor: '', plate: '' });
             
-            // Customer Form State
-            const [customerName, setCustomerName] = useState('');
-            const [carModel, setCarModel] = useState('');
-            const [carColor, setCarColor] = useState('');
-            const [plateNumber, setPlateNumber] = useState('');
+            // Menu state
+            const [menu, setMenu] = useState(DEFAULT_MENU);
+            const [modalItem, setModalItem] = useState(null);
+            const [newItem, setNewItem] = useState({ name: '', price: '', desc: '' });
+            
+            // Admin Tabs
+            const [adminTab, setAdminTab] = useState('orders'); // orders, menu, partner, settings
 
-            // --- Logic ---
-            const addToCart = (item) => {
-                setCart([...cart, { ...item, cartId: Math.random() }]);
-            };
-
-            const removeFromCart = (cartId) => {
-                setCart(cart.filter(item => item.cartId !== cartId));
-            };
-
+            // Derived
             const getSubtotal = () => cart.reduce((sum, item) => sum + item.price, 0);
             const getTotal = () => (getSubtotal() + CURBSIDE_FEE).toFixed(2);
 
-            const placeOrder = () => {
-                if (!customerName || !carModel || !carColor || !plateNumber) {
-                    alert("Please help us find you by entering your car details!");
-                    return;
+            // Actions
+            const addToCart = (customizedItem) => {
+                setCart([...cart, { ...customizedItem, cartId: Math.random() }]);
+                setModalItem(null);
+            };
+
+            const placeOrder = (extraDetails) => {
+                if (!userProfile.name || !userProfile.carModel || !userProfile.carColor) {
+                    alert("Please fill in all details!"); return;
                 }
+                
+                const pickupTime = extraDetails.pickupType === 'ASAP' ? 'ASAP' : extraDetails.customTime;
+
                 const newOrder = {
                     id: Math.floor(Math.random() * 9000) + 1000,
-                    customerName,
-                    carModel,
-                    carColor,
-                    plateNumber,
+                    ...userProfile,
                     items: cart,
                     total: getTotal(),
-                    status: 'pending', // pending -> ready -> delivered
-                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    status: 'pending',
+                    locationId: selectedLocation ? selectedLocation.id : 1,
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    pickupTime: pickupTime,
+                    locationDetails: extraDetails.details,
+                    photo: extraDetails.carPhoto
                 };
                 setOrders([newOrder, ...orders]);
                 setCart([]);
                 setView('success');
             };
 
-            const updateOrderStatus = (id, status) => {
-                setOrders(orders.map(o => o.id === id ? { ...o, status } : o));
+            const addNewMenuItem = () => {
+                if(!newItem.name || !newItem.price) return;
+                const item = {
+                    id: Date.now(),
+                    name: newItem.name,
+                    price: parseFloat(newItem.price),
+                    desc: newItem.desc,
+                    img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80'
+                };
+                setMenu([...menu, item]);
+                setNewItem({ name: '', price: '', desc: '' });
             };
 
-            // --- VIEW COMPONENTS ---
+            const deleteMenuItem = (id) => {
+                if(confirm("Remove this item from the menu?")) {
+                    setMenu(menu.filter(m => m.id !== id));
+                }
+            };
+
+            // --- VIEWS ---
 
             const LandingPage = () => (
-                <div className="flex flex-col items-center justify-center min-h-screen bg-brand-dark text-white p-6 text-center relative overflow-hidden">
-                    {/* Background decoration */}
-                    <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-20 blur-sm"></div>
+                <div className="flex flex-col min-h-screen bg-brand-dark text-white relative overflow-hidden font-sans">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30"></div>
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/70 via-black/40 to-black/90"></div>
                     
-                    <div className="relative z-10 flex flex-col items-center fade-in">
-                        <div className="bg-brand-orange p-5 rounded-full mb-8 shadow-2xl shadow-orange-500/20 animate-bounce">
-                            <Icons.Car />
+                    <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+                        <div className="bg-brand-orange p-6 rounded-full mb-8 shadow-[0_0_40px_rgba(249,115,22,0.4)] animate-bounce-slow">
+                            <div className="scale-125"><Icons.Car /></div>
                         </div>
-                        <h1 className="text-6xl font-serif italic mb-4 tracking-tight">Pull Up Coffee</h1>
-                        <p className="text-stone-300 mb-12 text-lg max-w-md font-light">
-                            Premium coffee run out to your car window.<br/>
-                            <span className="text-brand-orange font-medium">No parking. No waiting.</span>
+
+                        <h1 className="text-6xl font-serif italic mb-4 tracking-tight drop-shadow-xl">Pull Up Coffee™</h1>
+                        <p className="text-stone-300 mb-12 text-lg max-w-md font-light leading-relaxed">
+                            The drive-thru revolution.<br/>
+                            <span className="text-brand-orange font-medium">Premium coffee, delivered to your window.</span>
                         </p>
 
                         <div className="flex flex-col gap-4 w-full max-w-sm">
-                            <button 
-                                onClick={() => setView('customer')}
-                                className="bg-white text-brand-dark py-4 px-8 rounded-xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-100 transform hover:scale-105 transition shadow-lg"
-                            >
-                                <Icons.User /> Order Now
+                            <button onClick={() => setView('location-select')} className="bg-white text-brand-dark py-5 px-8 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-200 transform hover:scale-105 transition shadow-2xl">
+                                <Icons.Car /> Order Now
                             </button>
-                            <button 
-                                onClick={() => setView('cafe')}
-                                className="bg-stone-800/80 backdrop-blur-sm text-stone-300 py-4 px-8 rounded-xl font-medium flex items-center justify-center gap-3 hover:bg-stone-800 transition border border-stone-700"
-                            >
-                                <Icons.Store /> Staff Portal
-                            </button>
+                            <div className="flex gap-4">
+                                <button onClick={() => setView('profile')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Profile</button>
+                                <button onClick={() => setView('cafe-login')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partners</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="relative z-10 bg-black/40 backdrop-blur-lg border-t border-white/10 p-6 md:p-8">
+                        <div className="max-w-xl mx-auto flex gap-4 items-start">
+                            <div className="shrink-0 pt-1">
+                                <img src="creatorpullup.jpg" alt="Steven" 
+                                     onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Steven+Weir&background=f97316&color=fff"; }}
+                                     className="w-12 h-12 rounded-full border border-white/20 shadow-lg secure-img bg-stone-800 object-cover object-center" />
+                            </div>
+                            <div className="text-left">
+                                <p className="text-stone-300 text-xs leading-relaxed italic opacity-90">
+                                    "Becoming a new dad brought so many joyful moments, and one very familiar routine: those gentle drives to help my baby drift off to sleep. The only challenge? Craving a great cup of coffee without disturbing that precious nap or stepping out in my pajamas. That’s why I created Pull Up Coffee™."
+                                </p>
+                                <p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mt-2">– Steven Weir, Founder</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             );
 
+            const LocationSelect = () => (
+                <div className="min-h-screen bg-stone-900 text-white p-6 animate-fade-in flex flex-col">
+                    <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-400 hover:text-white transition w-fit"><Icons.X /> <span className="ml-2">Back</span></button>
+                    <h2 className="text-3xl font-serif font-bold mb-2">Select Location</h2>
+                    <p className="text-stone-400 mb-8">Find a partner cafe near you.</p>
+
+                    <div className="space-y-4 max-w-lg mx-auto w-full">
+                        {LOCATIONS.map(loc => (
+                            <button 
+                                key={loc.id}
+                                disabled={loc.status === 'closed'}
+                                onClick={() => { setSelectedLocation(loc); setView('customer'); }}
+                                className={`w-full p-4 rounded-2xl flex justify-between items-center transition border text-left group relative overflow-hidden
+                                    ${loc.status === 'open' ? 'bg-stone-800 border-stone-700 hover:border-brand-orange hover:bg-stone-750 cursor-pointer' : 'bg-stone-900 border-stone-800 opacity-60 cursor-not-allowed'}`}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0 border border-stone-600">
+                                        <img src={loc.logo} alt={loc.name} 
+                                             onError={(e) => { e.target.onerror = null; e.target.parentElement.innerHTML = '<span style="font-size:20px">☕</span>'; }}
+                                             className="w-full h-full object-contain" />
+                                    </div>
+                                    <div>
+                                        <span className={`font-bold block text-lg ${loc.status === 'open' ? 'text-white group-hover:text-brand-orange' : 'text-stone-500'}`}>{loc.name}</span>
+                                        <div className="flex items-center gap-1 text-xs text-stone-400 mt-1">
+                                            <div className="w-3"><Icons.MapPin /></div> {loc.address}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="pl-2">
+                                    {loc.status === 'open' ? <span className="text-green-400 text-[10px] font-bold px-2 py-1 bg-green-900/30 rounded-full border border-green-800">OPEN</span> : <span className="text-stone-500 text-[10px] font-bold px-2 py-1 bg-stone-800 rounded-full">CLOSED</span>}
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+            
             const CustomerMenu = () => (
-                <div className="min-h-screen bg-stone-50 pb-32">
-                    {/* Header */}
+                <div className="min-h-screen bg-stone-50 pb-32 animate-fade-in">
                     <div className="bg-white p-4 shadow-sm sticky top-0 z-20 flex justify-between items-center border-b border-stone-100">
-                        <button onClick={() => setView('landing')} className="p-2 hover:bg-stone-100 rounded-full transition">
-                            <Icons.X />
-                        </button>
-                        <h2 className="font-serif font-bold text-xl text-brand-dark">The Daily Grind</h2>
+                        <button onClick={() => setView('location-select')} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
+                        <div className="text-center">
+                            <h2 className="font-serif font-bold text-xl text-brand-dark">{selectedLocation?.name}</h2>
+                            <span className="text-xs text-green-600 font-bold tracking-widest uppercase">● Accepting Orders</span>
+                        </div>
                         <div className="w-8"></div>
                     </div>
 
-                    {/* Status Bar */}
-                    <div className={`p-3 text-center text-xs font-bold tracking-widest uppercase text-white ${isStoreOpen ? 'bg-brand-dark' : 'bg-red-500'}`}>
-                        {isStoreOpen ? '● Curbside Service Active' : '● Service Currently Paused'}
-                    </div>
-
-                    {/* Menu Grid */}
                     <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                        {MENU_ITEMS.map(item => (
-                            <div key={item.id} className="group bg-white rounded-2xl p-3 shadow-sm hover:shadow-md transition border border-stone-100 flex gap-4 overflow-hidden">
-                                <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                        {menu.map(item => (
+                            <div key={item.id} onClick={() => setModalItem(item)} className="group bg-white rounded-2xl p-3 shadow-sm hover:shadow-md transition border border-stone-100 flex gap-4 overflow-hidden cursor-pointer">
+                                <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 relative">
                                     <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"></div>
                                 </div>
                                 <div className="flex flex-col justify-center flex-1">
                                     <h3 className="font-serif font-bold text-lg text-brand-dark">{item.name}</h3>
                                     <p className="text-stone-500 text-sm mb-2">{item.desc}</p>
                                     <div className="flex justify-between items-center mt-auto">
                                         <span className="font-bold text-brand-orange">${item.price.toFixed(2)}</span>
-                                        <button 
-                                            disabled={!isStoreOpen}
-                                            onClick={() => addToCart(item)}
-                                            className="bg-stone-100 hover:bg-brand-dark hover:text-white text-stone-900 w-8 h-8 rounded-full flex items-center justify-center transition disabled:opacity-50"
-                                        >
-                                            <Icons.Plus />
-                                        </button>
+                                        <span className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 group-hover:bg-brand-dark group-hover:text-white transition"><Icons.Plus /></span>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* Floating Cart */}
                     {cart.length > 0 && (
-                        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent z-30 slide-up">
+                        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent z-30 animate-slide-up">
                             <div className="max-w-md mx-auto">
-                                <button 
-                                    onClick={() => setView('checkout')}
-                                    className="w-full bg-brand-dark text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center font-bold text-lg transform hover:scale-[1.02] transition"
-                                >
+                                <button onClick={() => setView('checkout')} className="w-full bg-brand-dark text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center font-bold text-lg transform hover:scale-[1.02] transition">
                                     <div className="flex items-center gap-3">
                                         <span className="bg-brand-orange text-white px-2 py-0.5 rounded-md text-sm">{cart.length}</span>
                                         <span>View Order</span>
@@ -240,248 +597,186 @@
                             </div>
                         </div>
                     )}
+
+                    {modalItem && <ProductModal item={modalItem} onClose={() => setModalItem(null)} onAdd={addToCart} />}
                 </div>
             );
 
-            const Checkout = () => (
-                <div className="min-h-screen bg-stone-50 p-6 fade-in">
-                    <div className="max-w-lg mx-auto">
-                        <button onClick={() => setView('customer')} className="mb-6 flex items-center text-stone-500 font-medium hover:text-brand-dark transition">
-                            <Icons.X /> <span className="ml-2">Back to Menu</span>
-                        </button>
-
-                        <h2 className="text-3xl font-serif font-bold text-brand-dark mb-2">Final Details</h2>
-                        <p className="text-stone-500 mb-8">Tell us what you're driving so we can spot you.</p>
-
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-5 mb-6">
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label>
-                                <input 
-                                    type="text" 
-                                    value={customerName}
-                                    onChange={e => setCustomerName(e.target.value)}
-                                    placeholder="e.g. Alex"
-                                    className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition"
-                                />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Car Model</label>
-                                    <input 
-                                        type="text" 
-                                        value={carModel}
-                                        onChange={e => setCarModel(e.target.value)}
-                                        placeholder="e.g. Tesla"
-                                        className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Color</label>
-                                    <input 
-                                        type="text" 
-                                        value={carColor}
-                                        onChange={e => setCarColor(e.target.value)}
-                                        placeholder="e.g. White"
-                                        className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">License Plate (Last 3)</label>
-                                <input 
-                                    type="text" 
-                                    value={plateNumber}
-                                    onChange={e => setPlateNumber(e.target.value)}
-                                    placeholder="e.g. ABC"
-                                    className="w-full p-4 bg-stone-50 rounded-xl border-none focus:ring-2 focus:ring-brand-orange/20 text-stone-900 font-medium placeholder-stone-300 transition uppercase font-mono tracking-widest"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8">
-                            <h3 className="font-bold text-stone-900 mb-4 text-sm uppercase tracking-wider">Order Summary</h3>
-                            <div className="space-y-3">
-                                {cart.map((item, idx) => (
-                                    <div key={item.cartId} className="flex justify-between text-sm text-stone-600">
-                                        <span>{item.name}</span>
-                                        <span>${item.price.toFixed(2)}</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="h-px bg-stone-100 my-4"></div>
-                            <div className="flex justify-between text-sm text-brand-orange font-medium mb-1">
-                                <span>Curbside Convenience Fee</span>
-                                <span>${CURBSIDE_FEE.toFixed(2)}</span>
-                            </div>
-                            <div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4">
-                                <span>Total</span>
-                                <span>${getTotal()}</span>
-                            </div>
-                        </div>
-
-                        <button 
-                            onClick={placeOrder}
-                            className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2"
-                        >
-                            Pay & Pull Up <Icons.ChevronRight />
-                        </button>
-                    </div>
-                </div>
-            );
-
-            const SuccessView = () => (
-                <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center p-6 text-white text-center fade-in">
-                    <div className="bg-brand-orange text-white w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-bounce">
-                        <Icons.CheckCircle />
-                    </div>
-                    <h2 className="text-4xl font-serif italic mb-4">Order Confirmed</h2>
-                    <p className="text-stone-400 text-lg mb-8 max-w-sm font-light leading-relaxed">
-                        Drive to the pickup zone.<br/>We are looking for your<br/>
-                        <span className="text-white font-bold text-xl border-b-2 border-brand-orange inline-block mt-2 pb-1">
-                            {carColor} {carModel} ({plateNumber.toUpperCase()})
-                        </span>
-                    </p>
-                    <button 
-                        onClick={() => { setCart([]); setView('landing'); }}
-                        className="text-stone-400 hover:text-white transition underline text-sm tracking-widest uppercase"
-                    >
-                        Back to Home
-                    </button>
-                </div>
-            );
-
-            const CafeDashboard = () => (
-                <div className="min-h-screen bg-stone-100 flex flex-col md:flex-row fade-in">
-                    {/* Sidebar */}
-                    <div className="bg-brand-dark text-stone-400 w-full md:w-72 p-6 flex flex-col justify-between flex-shrink-0">
-                        <div>
-                            <div className="flex items-center gap-3 text-white mb-10">
-                                <div className="bg-brand-orange p-2 rounded-lg"><Icons.Coffee /></div>
-                                <span className="font-serif font-bold text-xl">CafePortal</span>
+            const UserProfile = () => (
+                <div className="min-h-screen bg-stone-50 p-6 flex flex-col items-center animate-fade-in">
+                    <div className="w-full max-w-md">
+                        <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-500 hover:text-brand-dark"><Icons.X /> Back</button>
+                        <h2 className="text-3xl font-serif font-bold text-brand-dark mb-6">My Profile</h2>
+                        
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                            <h3 className="font-bold mb-4">Saved Details</h3>
+                            <p className="text-sm text-stone-500 mb-4">We'll auto-fill these when you order.</p>
+                            
+                            <div className="space-y-4">
+                                <input type="text" placeholder="My Name" value={userProfile.name} onChange={e => setUserProfile({...userProfile, name: e.target.value})} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
+                                <input type="text" placeholder="My Car Model" value={userProfile.carModel} onChange={e => setUserProfile({...userProfile, carModel: e.target.value})} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
+                                <input type="text" placeholder="My Car Color" value={userProfile.carColor} onChange={e => setUserProfile({...userProfile, carColor: e.target.value})} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
+                                <input type="text" placeholder="My License Plate (Full)" value={userProfile.plate} onChange={e => setUserProfile({...userProfile, plate: e.target.value})} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl uppercase font-mono tracking-widest focus:bg-white transition" />
                             </div>
                             
-                            <div className="bg-white/5 p-4 rounded-xl mb-6 border border-white/10">
-                                <p className="text-xs uppercase tracking-widest font-bold mb-2 text-stone-500">Service Status</p>
-                                <div className="flex items-center justify-between">
-                                    <span className={isStoreOpen ? "text-green-400 font-bold" : "text-red-400 font-bold"}>
-                                        {isStoreOpen ? 'Active' : 'Paused'}
-                                    </span>
-                                    <button 
-                                        onClick={() => setIsStoreOpen(!isStoreOpen)}
-                                        className={`w-10 h-6 rounded-full p-1 transition-colors duration-300 ${isStoreOpen ? 'bg-green-500' : 'bg-stone-600'}`}
-                                    >
-                                        <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${isStoreOpen ? 'translate-x-4' : 'translate-x-0'}`}></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <button 
-                                onClick={() => { if(confirm('Reset all data?')) { setOrders([]); setCart([]); setView('landing'); } }} 
-                                className="flex items-center gap-3 text-sm hover:text-red-400 transition mb-4 w-full"
-                            >
-                                <Icons.Trash2 /> Reset Demo
-                            </button>
-                            <button 
-                                onClick={() => setView('landing')} 
-                                className="flex items-center gap-3 text-sm hover:text-white transition w-full border-t border-stone-800 pt-4"
-                            >
-                                <Icons.X /> Sign Out
-                            </button>
+                            <button onClick={() => { alert('Profile Saved!'); setView('landing'); }} className="w-full mt-6 bg-brand-dark text-white py-3 rounded-xl font-bold hover:bg-stone-800 transition">Save Profile</button>
                         </div>
                     </div>
+                </div>
+            );
 
-                    {/* Main Board */}
-                    <div className="flex-1 p-6 md:p-10 overflow-y-auto">
-                        <header className="flex justify-between items-end mb-8">
-                            <div>
-                                <h2 className="text-3xl font-serif font-bold text-brand-dark">Live Orders</h2>
-                                <p className="text-stone-500 mt-1">Real-time curbside feed</p>
+            // --- PROFESSIONAL PARTNER DASHBOARD ---
+            const CafeAdmin = () => (
+                <div className="min-h-screen bg-stone-50 flex flex-col p-6 animate-fade-in">
+                    <div className="max-w-5xl mx-auto w-full">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-10 pb-6 border-b border-stone-200">
+                            <div className="text-center md:text-left mb-4 md:mb-0">
+                                <h2 className="text-3xl font-serif font-bold text-brand-dark flex items-center gap-2">
+                                    <span className="text-brand-orange text-4xl">●</span> Owner Portal
+                                </h2>
+                                <p className="text-stone-500 mt-1">Grounds Keeper Willie (Demo Mode)</p>
                             </div>
-                            <div className="text-right">
-                                <span className="text-4xl font-bold text-brand-dark block">{orders.filter(o => o.status !== 'delivered').length}</span>
-                                <span className="text-xs font-bold uppercase tracking-wider text-stone-400">Pending</span>
+                            <div className="flex gap-4">
+                                <button onClick={() => setAdminTab('orders')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'orders' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Live Orders</button>
+                                <button onClick={() => setAdminTab('settings')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'settings' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Settings</button>
+                                <button onClick={() => setAdminTab('partner')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'partner' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Partner Hub</button>
+                                <button onClick={() => setView('landing')} className="px-6 py-2 text-stone-400 hover:text-red-500 font-medium">Log Out</button>
                             </div>
-                        </header>
+                        </div>
 
-                        {orders.length === 0 ? (
-                            <div className="h-64 border-2 border-dashed border-stone-300 rounded-2xl flex flex-col items-center justify-center text-stone-400">
-                                <div className="opacity-20 mb-4 scale-150"><Icons.Coffee /></div>
-                                <p>No active orders. Waiting for cars...</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {orders.map(order => (
-                                    <div 
-                                        key={order.id} 
-                                        className={`bg-white rounded-xl shadow-sm border-2 overflow-hidden transition-all duration-300
-                                            ${order.status === 'pending' ? 'border-brand-orange shadow-orange-100 ring-4 ring-orange-50' : 
-                                              order.status === 'ready' ? 'border-green-500 shadow-green-100' : 
-                                              'border-stone-100 opacity-60 grayscale'}`}
-                                    >
-                                        <div className="p-4 border-b border-stone-100 bg-stone-50 flex justify-between items-start">
-                                            <div>
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <div className={order.status === 'pending' ? 'text-brand-orange' : 'text-green-600'}><Icons.Car /></div>
-                                                    <span className="font-bold text-brand-dark text-lg">{order.carModel}</span>
-                                                </div>
-                                                <div className="text-sm font-mono text-stone-500 bg-stone-200 inline-block px-1.5 rounded">
-                                                    {order.carColor} • {order.plateNumber.toUpperCase()}
-                                                </div>
-                                            </div>
-                                            <span className="text-xs font-bold text-stone-400">{order.timestamp}</span>
+                        {adminTab === 'orders' && (
+                            <div className="animate-fade-in">
+                                <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                    {orders.length === 0 ? (
+                                        <div className="col-span-full py-16 text-center border-2 border-dashed border-stone-200 rounded-2xl bg-white">
+                                            <div className="text-stone-300 mb-4 scale-150 inline-block"><Icons.Coffee /></div>
+                                            <h3 className="font-bold text-stone-400 text-lg">No Active Orders</h3>
+                                            <p className="text-stone-400 text-sm">Status: <span className="text-green-500 font-bold">ONLINE</span> & Waiting</p>
                                         </div>
-
-                                        <div className="p-5">
-                                            <p className="font-bold text-brand-dark mb-3 text-lg">{order.customerName}</p>
-                                            <ul className="space-y-2 mb-6">
-                                                {order.items.map((item, idx) => (
-                                                    <li key={idx} className="text-stone-600 flex justify-between text-sm border-b border-stone-50 pb-1 last:border-0">
-                                                        <span>1x {item.name}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                            
-                                            {/* Action Buttons */}
-                                            {order.status === 'pending' && (
-                                                <button 
-                                                    onClick={() => updateOrderStatus(order.id, 'ready')}
-                                                    className="w-full py-3 bg-stone-800 text-white rounded-lg font-bold hover:bg-stone-700 transition"
-                                                >
-                                                    Mark Order Ready
-                                                </button>
-                                            )}
-                                            {order.status === 'ready' && (
-                                                <button 
-                                                    onClick={() => updateOrderStatus(order.id, 'delivered')}
-                                                    className="w-full py-3 bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition flex items-center justify-center gap-2 animate-pulse"
-                                                >
-                                                    <Icons.MapPin /> Run to Car
-                                                </button>
-                                            )}
-                                            {order.status === 'delivered' && (
-                                                <div className="w-full py-3 bg-stone-100 text-stone-400 rounded-lg font-bold text-center flex items-center justify-center gap-2">
-                                                    <Icons.CheckCircle /> Completed
+                                    ) : (
+                                        orders.map(o => (
+                                            <div key={o.id} className="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm relative overflow-hidden group">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <div>
+                                                        <h3 className="text-2xl font-bold text-brand-dark">{o.carModel}</h3>
+                                                        <p className="text-stone-500 font-mono text-sm bg-stone-100 inline-block px-2 rounded mt-1">{o.plate}</p>
+                                                    </div>
+                                                    <span className="bg-orange-100 text-brand-orange px-3 py-1 rounded-full text-xs font-bold tracking-wide">{o.status.toUpperCase()}</span>
                                                 </div>
-                                            )}
+                                                
+                                                <div className="mb-4">
+                                                    <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Pickup</p>
+                                                    <p className="text-lg font-bold text-brand-dark">{o.pickupTime}</p>
+                                                </div>
+
+                                                {o.locationDetails && (
+                                                    <div className="bg-stone-50 p-3 rounded-lg mb-4 text-sm text-stone-600 border-l-2 border-brand-orange">
+                                                        "{o.locationDetails}"
+                                                    </div>
+                                                )}
+
+                                                {o.photo && (
+                                                    <div className="mb-4 h-24 w-full rounded-lg overflow-hidden border border-stone-200">
+                                                        <img src={o.photo} className="w-full h-full object-cover" alt="Customer Location" />
+                                                    </div>
+                                                )}
+                                                
+                                                <div className="bg-stone-50 p-4 rounded-xl mb-4 space-y-2">
+                                                    {o.items.map((i, idx) => (
+                                                        <div key={idx} className="flex justify-between text-sm font-medium text-stone-700 border-b border-stone-100 last:border-0 pb-1 last:pb-0">
+                                                            <span>1x {i.name}</span>
+                                                            <span className="text-stone-400 text-xs self-center">{i.size}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <button className="w-full py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800 transition shadow-lg">Mark Ready</button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {adminTab === 'settings' && (
+                            <div className="animate-fade-in bg-white rounded-3xl p-8 shadow-sm border border-stone-100 max-w-2xl mx-auto">
+                                <h3 className="font-bold text-xl mb-6 text-brand-dark">Curbside Availability</h3>
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
+                                        <div>
+                                            <span className="font-bold block">Service Status</span>
+                                            <span className="text-xs text-green-600 font-bold">● ONLINE</span>
+                                        </div>
+                                        <div className="w-12 h-6 bg-green-500 rounded-full relative cursor-pointer"><div className="w-5 h-5 bg-white rounded-full absolute right-0.5 top-0.5 shadow-md"></div></div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Start Time</label>
+                                            <input type="time" defaultValue="06:00" className="w-full p-3 border border-stone-200 rounded-xl" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">End Time</label>
+                                            <input type="time" defaultValue="14:00" className="w-full p-3 border border-stone-200 rounded-xl" />
                                         </div>
                                     </div>
-                                ))}
+                                    <p className="text-xs text-stone-400 text-center">System will automatically toggle offline outside these hours.</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {adminTab === 'partner' && (
+                            <div className="animate-fade-in bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-stone-100">
+                                <div className="max-w-3xl mx-auto">
+                                    <div className="text-center mb-12">
+                                        <h2 className="text-4xl font-serif font-bold text-brand-dark mb-4">Why Partner with Pull Up?</h2>
+                                        <p className="text-stone-500 text-lg">Turn your curbside into a high-margin revenue stream.</p>
+                                    </div>
+                                    <div className="grid md:grid-cols-3 gap-8 mb-12">
+                                        <div className="text-center p-4">
+                                            <div className="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><Icons.TrendingUp /></div>
+                                            <h3 className="font-bold text-lg mb-2">Increase Revenue</h3>
+                                            <p className="text-sm text-stone-500">Capture the "parents in cars" market you are currently missing.</p>
+                                        </div>
+                                        <div className="text-center p-4">
+                                            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><Icons.Shield /></div>
+                                            <h3 className="font-bold text-lg mb-2">Zero Risk</h3>
+                                            <p className="text-sm text-stone-500">We cover marketing, app security, and hosting.</p>
+                                        </div>
+                                        <div className="text-center p-4">
+                                            <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><Icons.Settings /></div>
+                                            <h3 className="font-bold text-lg mb-2">Full Control</h3>
+                                            <p className="text-sm text-stone-500">Edit your menu instantly. Manage stock. Toggle status with one click.</p>
+                                        </div>
+                                    </div>
+                                    <div className="bg-stone-50 rounded-2xl p-8 border border-stone-200">
+                                        <h3 className="font-bold text-xl mb-4 flex items-center gap-2"><div className="w-2 h-6 bg-brand-orange rounded-full"></div> Transparent Finances</h3>
+                                        <p className="text-stone-600 mb-6 leading-relaxed">
+                                            We use <strong className="text-brand-dark">Stripe Connect</strong>. You never chase invoices. Funds are settled automatically.
+                                        </p>
+                                        <button className="bg-brand-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-stone-800 transition w-full md:w-auto">
+                                            View Sample Contract
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
                 </div>
             );
 
-            // --- RENDER ---
-            return (
-                <div className="font-sans">
-                    {view === 'landing' && <LandingPage />}
-                    {view === 'customer' && <CustomerMenu />}
-                    {view === 'checkout' && <Checkout />}
-                    {view === 'success' && <SuccessView />}
-                    {view === 'cafe' && <CafeDashboard />}
+            if (view === 'landing') return <LandingPage />;
+            if (view === 'location-select') return <LocationSelect />;
+            if (view === 'profile') return <UserProfile />;
+            if (view === 'cafe-login') return <CafeAdmin />;
+            if (view === 'customer') return <CustomerMenu />;
+            if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => setView('customer')} cart={cart} total={getTotal()} />;
+            if (view === 'success') return (
+                <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center p-6 text-white text-center animate-fade-in">
+                    <div className="bg-brand-orange text-white w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-bounce"><Icons.CheckCircle /></div>
+                    <h2 className="text-4xl font-serif italic mb-4">Order Confirmed</h2>
+                    <p className="text-stone-400 text-lg mb-8">We are looking for your <span className="text-white font-bold">{userProfile.carColor} {userProfile.carModel}</span>.</p>
+                    <button onClick={() => { setCart([]); setView('landing'); }} className="text-stone-500 hover:text-white transition underline text-sm tracking-widest uppercase">Done</button>
                 </div>
             );
         };
