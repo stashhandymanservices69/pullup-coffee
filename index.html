@@ -81,7 +81,10 @@
             Clock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
             Alert: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
             FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>,
-            Robot: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+            Robot: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>,
+            Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>,
+            ThumbsDown: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>,
+            Send: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         };
 
         // --- LOCATIONS ---
@@ -101,11 +104,8 @@
             { id: 7, name: 'Signature House Beans', price: 18.00, desc: 'Take our signature blend home', img: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=400&q=80' },
         ];
 
-        const CURBSIDE_FEE = 2.00;
+        // --- SUB-COMPONENTS ---
 
-        // --- SUB-COMPONENTS (Defined Outside App for Stability) ---
-
-        // 1. PRODUCT MODAL
         const ProductModal = ({ item, onClose, onAdd }) => {
             const [size, setSize] = useState('Reg');
             const [milk, setMilk] = useState('Full Cream');
@@ -113,10 +113,7 @@
             const [temp, setTemp] = useState('Hot');
             const [notes, setNotes] = useState('');
             
-            // Baked Goods State
             const [prep, setPrep] = useState('Room Temp');
-
-            // Beans State
             const [beanWeight, setBeanWeight] = useState('250g');
             const [grind, setGrind] = useState('Whole Bean');
 
@@ -130,8 +127,8 @@
                     if(milk === 'Oat' || milk === 'Almond' || milk === 'Soy') price += 0.50;
                 }
                 if (isBeans) {
-                    if(beanWeight === '500g') price = 32.00; // Save $4
-                    if(beanWeight === '1kg') price = 55.00;  // Save $17
+                    if(beanWeight === '500g') price = 32.00; 
+                    if(beanWeight === '1kg') price = 55.00;
                 }
                 return price;
             };
@@ -140,216 +137,65 @@
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in">
                     <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-start mb-6">
-                            <div>
-                                <h3 className="font-serif font-bold text-2xl text-brand-dark">{item.name}</h3>
-                                <p className="text-stone-500 text-sm">Customize your choice</p>
-                            </div>
+                            <div><h3 className="font-serif font-bold text-2xl text-brand-dark">{item.name}</h3><p className="text-stone-500 text-sm">Customize your choice</p></div>
                             <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
                         </div>
-
                         <div className="space-y-6 mb-8">
-                            
                             {!isFood && !isBeans && (
                                 <Fragment>
-                                    {/* Size */}
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Size</label>
-                                        <div className="flex gap-2">
-                                            {['Small', 'Reg', 'Large'].map(opt => (
-                                                <button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
-                                                    {opt}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Milk */}
-                                    {!item.name.includes("Black") && (
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label>
-                                        <select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition">
-                                            <option>Full Cream</option>
-                                            <option>Skim</option>
-                                            <option>Oat (+$0.50)</option>
-                                            <option>Almond (+$0.50)</option>
-                                            <option>Soy (+$0.50)</option>
-                                            <option>Lactose Free</option>
-                                        </select>
-                                    </div>
-                                    )}
-
-                                    {/* Grid */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Sugar</label>
-                                            <select value={sugar} onChange={e => setSugar(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl">
-                                                <option value="0">None</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="Splenda">Splenda</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Temp</label>
-                                            <select value={temp} onChange={e => setTemp(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl">
-                                                <option>Hot</option>
-                                                <option>Extra Hot</option>
-                                                <option>Warm</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Size</label><div className="flex gap-2">{['Small', 'Reg', 'Large'].map(opt => (<button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>{opt}</button>))}</div></div>
+                                    {!item.name.includes("Black") && <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label><select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition"><option>Full Cream</option><option>Skim</option><option>Oat (+$0.50)</option><option>Almond (+$0.50)</option><option>Soy (+$0.50)</option><option>Lactose Free</option></select></div>}
+                                    <div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Sugar</label><select value={sugar} onChange={e => setSugar(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl"><option value="0">None</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="Splenda">Splenda</option></select></div><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Temp</label><select value={temp} onChange={e => setTemp(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl"><option>Hot</option><option>Extra Hot</option><option>Warm</option></select></div></div>
                                 </Fragment>
                             )} 
-                            
-                            {isFood && (
-                                // FOOD OPTIONS
-                                <div>
-                                    <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Preparation</label>
-                                    <div className="flex gap-2">
-                                        {['Room Temp', 'Warmed Up'].map(opt => (
-                                            <button key={opt} onClick={() => setPrep(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${prep === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {isBeans && (
-                                // BEAN OPTIONS
-                                <Fragment>
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Weight</label>
-                                        <div className="flex gap-2">
-                                            {[
-                                                {l: '250g', p: 18},
-                                                {l: '500g', p: 32}, 
-                                                {l: '1kg', p: 55}
-                                            ].map(opt => (
-                                                <button key={opt.l} onClick={() => setBeanWeight(opt.l)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition flex flex-col items-center justify-center ${beanWeight === opt.l ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
-                                                    <span>{opt.l}</span>
-                                                    <span className="text-xs opacity-80">${opt.p}</span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Grind</label>
-                                        <select value={grind} onChange={e => setGrind(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition">
-                                            <option>Whole Bean</option>
-                                            <option>Espresso</option>
-                                            <option>Stovetop</option>
-                                            <option>Plunger / French Press</option>
-                                            <option>Filter / Pour Over</option>
-                                        </select>
-                                    </div>
-                                </Fragment>
-                            )}
-
-                            {/* Notes */}
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">
-                                    {isFood ? 'Dietary Notes / Requests' : isBeans ? 'Machine Details (e.g. Breville Barista)' : 'Barista Notes'}
-                                </label>
-                                <textarea 
-                                    value={notes} 
-                                    onChange={e => setNotes(e.target.value)} 
-                                    placeholder={isFood ? "e.g. No butter, gluten allergy..." : isBeans ? "e.g. For a Breville Express..." : "e.g. 3/4 full, no lid..."} 
-                                    className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm focus:bg-white transition"
-                                ></textarea>
-                            </div>
+                            {isFood && (<div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Preparation</label><div className="flex gap-2">{['Room Temp', 'Warmed Up'].map(opt => (<button key={opt} onClick={() => setPrep(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${prep === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>{opt}</button>))}</div></div>)}
+                            {isBeans && (<Fragment><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Weight</label><div className="flex gap-2">{[{l: '250g', p: 18}, {l: '500g', p: 32}, {l: '1kg', p: 55}].map(opt => (<button key={opt.l} onClick={() => setBeanWeight(opt.l)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition flex flex-col items-center justify-center ${beanWeight === opt.l ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}><span>{opt.l}</span><span className="text-xs opacity-80">${opt.p}</span></button>))}</div></div><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Grind</label><select value={grind} onChange={e => setGrind(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition"><option>Whole Bean</option><option>Espresso</option><option>Stovetop</option><option>Plunger / French Press</option><option>Filter / Pour Over</option></select></div></Fragment>)}
+                            <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">{isFood ? 'Dietary Notes' : isBeans ? 'Machine Details' : 'Barista Notes'}</label><textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder={isFood ? "e.g. No butter..." : isBeans ? "e.g. For a Breville Express..." : "e.g. 3/4 full..."} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm focus:bg-white transition"></textarea></div>
                         </div>
-
-                        <button 
-                            onClick={() => onAdd({ 
-                                ...item, 
-                                size: isFood ? 'Std' : isBeans ? beanWeight : size, 
-                                milk: isFood ? '-' : isBeans ? grind : milk, 
-                                sugar: isFood || isBeans ? '-' : sugar, 
-                                temp: isFood || isBeans ? '-' : temp, 
-                                notes: isFood ? `${prep}. ${notes}` : notes, 
-                                price: getAdjustedPrice() 
-                            })}
-                            className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-stone-800 transition transform active:scale-[0.98]"
-                        >
-                            Add to Order • ${getAdjustedPrice().toFixed(2)}
-                        </button>
+                        <button onClick={() => onAdd({ ...item, size: isFood ? 'Std' : isBeans ? beanWeight : size, milk: isFood ? '-' : isBeans ? grind : milk, sugar: isFood || isBeans ? '-' : sugar, temp: isFood || isBeans ? '-' : temp, notes: isFood ? `${prep}. ${notes}` : notes, price: getAdjustedPrice() })} className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-stone-800 transition transform active:scale-[0.98]">Add to Order • ${getAdjustedPrice().toFixed(2)}</button>
                     </div>
                 </div>
             );
         };
 
-        // 2. LANDING PAGE (Moved Out)
         const LandingPage = ({ setView }) => (
             <div className="flex flex-col min-h-screen bg-brand-dark text-white relative overflow-hidden font-sans">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30"></div>
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/70 via-black/40 to-black/90"></div>
-                
                 <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-brand-orange p-6 rounded-full mb-8 shadow-[0_0_40px_rgba(249,115,22,0.4)] animate-bounce-slow">
-                        <div className="scale-125"><Icons.Car /></div>
-                    </div>
-
-                    <h1 className="text-6xl font-serif italic mb-2 tracking-tight drop-shadow-xl relative inline-block">
-                        Pull Up Coffee<sup className="text-sm not-italic align-top absolute -right-4 top-2 text-stone-400">TM</sup>
-                    </h1>
-                    <p className="text-stone-300 mb-12 text-lg max-w-md font-light leading-relaxed">
-                        Premium coffee. Delivered to your window, from your favourite cafe.
-                    </p>
-
+                    <div className="bg-brand-orange p-6 rounded-full mb-8 shadow-[0_0_40px_rgba(249,115,22,0.4)] animate-bounce-slow"><div className="scale-125"><Icons.Car /></div></div>
+                    <h1 className="text-6xl font-serif italic mb-2 tracking-tight drop-shadow-xl relative inline-block">Pull Up Coffee<sup className="text-sm not-italic align-top absolute -right-4 top-2 text-stone-400">TM</sup></h1>
+                    <p className="text-stone-300 mb-12 text-lg max-w-md font-light leading-relaxed">Premium coffee. Delivered to your window, from your favourite cafe.</p>
                     <div className="flex flex-col gap-4 w-full max-w-sm">
-                        <button onClick={() => setView('location-select')} className="bg-white text-brand-dark py-5 px-8 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-200 transform hover:scale-105 transition shadow-2xl">
-                            <Icons.Car /> Order Now
-                        </button>
-                        <div className="flex gap-4">
-                            <button onClick={() => setView('profile')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Profile</button>
-                            <button onClick={() => setView('cafe-login')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partners</button>
-                        </div>
+                        <button onClick={() => setView('location-select')} className="bg-white text-brand-dark py-5 px-8 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-200 transform hover:scale-105 transition shadow-2xl"><Icons.Car /> Order Now</button>
+                        <div className="flex gap-4"><button onClick={() => setView('profile')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Profile</button><button onClick={() => setView('cafe-login')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partners</button></div>
                     </div>
                 </div>
-
                 <div className="relative z-10 bg-black/40 backdrop-blur-lg border-t border-white/10 p-6 md:p-8">
                     <div className="max-w-xl mx-auto flex gap-4 items-start">
-                        <div className="shrink-0 pt-1">
-                            <img src="creatorpullup.jpg" alt="Steven" 
-                                    onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Steven+Weir&background=f97316&color=fff"; }}
-                                    className="w-12 h-12 rounded-full border border-white/20 shadow-lg secure-img bg-stone-800 object-cover object-center" />
-                        </div>
-                        <div className="text-left">
-                            <p className="text-stone-300 text-xs leading-relaxed italic opacity-90">
-                                "Becoming a new dad brought so many joyful moments, and one very familiar routine: those gentle drives to help my baby drift off to sleep. The only challenge? Craving a great cup of coffee without disturbing that precious nap or stepping out in my pajamas. That’s why I created Pull Up Coffee™."
-                            </p>
-                            <p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mt-2">– Steven Weir, Founder</p>
-                        </div>
+                        <div className="shrink-0 pt-1"><img src="creatorpullup.jpg" alt="Steven" onError={(e) => { e.target.onerror = null; e.target.src = "https://ui-avatars.com/api/?name=Steven+Weir&background=f97316&color=fff"; }} className="w-12 h-12 rounded-full border border-white/20 shadow-lg secure-img bg-stone-800 object-cover object-center" /></div>
+                        <div className="text-left"><p className="text-stone-300 text-xs leading-relaxed italic opacity-90">"Becoming a new dad brought so many joyful moments, and one very familiar routine: those gentle drives to help my baby drift off to sleep. The only challenge? Craving a great cup of coffee without disturbing that precious nap or stepping out in my pajamas. That’s why I created Pull Up Coffee™."</p><p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mt-2">– Steven Weir, Founder</p></div>
                     </div>
                 </div>
             </div>
         );
 
-        // 3. USER PROFILE (Moved Out - Fixing Typing Bug)
         const UserProfile = ({ userProfile, setUserProfile, setView }) => {
-            const handleChange = (field, value) => {
-                setUserProfile(prev => ({ ...prev, [field]: value }));
-            };
-
+            const handleChange = (field, value) => { setUserProfile(prev => ({ ...prev, [field]: value })); };
             return (
                 <div className="min-h-screen bg-stone-50 p-6 flex flex-col items-center animate-fade-in">
                     <div className="w-full max-w-md">
                         <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-500 hover:text-brand-dark"><Icons.X /> Back</button>
                         <h2 className="text-3xl font-serif font-bold text-brand-dark mb-6">My Profile</h2>
-                        
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
                             <h3 className="font-bold mb-4">Saved Details</h3>
                             <p className="text-sm text-stone-500 mb-4">We'll auto-fill these when you order.</p>
-                            
                             <div className="space-y-4">
                                 <input type="text" placeholder="My Name" value={userProfile.name} onChange={e => handleChange('name', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
                                 <input type="text" placeholder="My Car Model" value={userProfile.carModel} onChange={e => handleChange('carModel', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
                                 <input type="text" placeholder="My Car Color" value={userProfile.carColor} onChange={e => handleChange('carColor', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
                                 <input type="text" placeholder="My License Plate (Full)" value={userProfile.plate} onChange={e => handleChange('plate', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl uppercase font-mono tracking-widest focus:bg-white transition" />
                             </div>
-                            
                             <button onClick={() => { alert('Profile Saved!'); setView('landing'); }} className="w-full mt-6 bg-brand-dark text-white py-3 rounded-xl font-bold hover:bg-stone-800 transition">Save Profile</button>
                         </div>
                     </div>
@@ -357,619 +203,319 @@
             );
         };
 
-        // 4. CAFE ADMIN (Moved Out)
-        const CafeAdmin = ({ orders, updateOrderStatus, setView }) => {
+        const CafeAdmin = ({ orders, updateOrderStatus, setView, rejectOrder, curbsideFee, setCurbsideFee }) => {
             const [adminTab, setAdminTab] = useState('orders'); 
             const [isOnline, setIsOnline] = useState(true);
             const [showContract, setShowContract] = useState(false);
-            
-            // New State for Order Pacing
-            const [orderLimitType, setOrderLimitType] = useState('unlimited'); // 'unlimited' | 'limited'
+            const [orderLimitType, setOrderLimitType] = useState('unlimited');
             const [maxOrdersPerWindow, setMaxOrdersPerWindow] = useState(5);
             const [timeWindowMins, setTimeWindowMins] = useState(15);
+            const [botChat, setBotChat] = useState([{ type: 'bot', text: 'Hi! I am the Partner Support AI. Type a question or ask me anything about running your cafe on Pull Up.' }]);
+            const [botInput, setBotInput] = useState('');
 
-            // BOT STATE
-            const [botChat, setBotChat] = useState([{ type: 'bot', text: 'Hi! I am the Partner Support AI. Ask me anything about running your cafe on Pull Up.' }]);
+            const handleBotSubmit = (e) => {
+                e.preventDefault();
+                if(!botInput.trim()) return;
+                handleBotQuestion(botInput);
+                setBotInput('');
+            };
 
-            // Bot Logic
             const handleBotQuestion = (question) => {
                 setBotChat(prev => [...prev, { type: 'user', text: question }]);
-                
+                const q = question.toLowerCase();
                 setTimeout(() => {
-                    let answer = "";
-                    if (question.includes("Fees")) answer = "We use a transparent 80/20 split on the 'Curbside Fee'. You keep 100% of your coffee price + 80% of the service fee. We take just 20% of the fee to run the app.";
-                    if (question.includes("busy")) answer = "No problem! Go to 'Settings' and toggle your status to OFFLINE instantly. You can also set a 'Flow Limit' to cap orders (e.g. max 5 orders every 15 mins).";
-                    if (question.includes("Paid")) answer = " payouts are automatic via Stripe Connect. Funds arrive in your bank account daily on a rolling T+2 basis.";
-                    if (question.includes("Contract")) answer = "Our partnership is 'at-will'. No lock-in contracts. You can leave anytime. We want you to stay because you're making money, not because you signed a paper.";
-                    
+                    let answer = "I'm not sure about that one yet. Please contact Steven for urgent queries.";
+                    if (q.includes("fee") || q.includes("price") || q.includes("cost") || q.includes("money")) {
+                        answer = "You have full control over the 'Curbside Fee'. Set it to $0 for promos or raise it during peak times. We take a flat 20% commission on the fee only (you keep 100% of product revenue + 80% of the fee).";
+                    } else if (q.includes("insurance") || q.includes("liability") || q.includes("cover")) {
+                        answer = "Currently, deliveries fall under your existing business public liability insurance (like running food to a table). As we grow, Pull Up aims to provide blanket coverage for all partners.";
+                    } else if (q.includes("early") || q.includes("benefit") || q.includes("join")) {
+                        answer = "Early adopters get locked-in low commission rates and featured placement on the map. We reward those who help us build the network first.";
+                    } else if (q.includes("hardware") || q.includes("device") || q.includes("phone")) {
+                        answer = "All you need is a smartphone or iPad with internet connection. No expensive POS integration required to start.";
+                    } else if (q.includes("menu") || q.includes("food") || q.includes("item")) {
+                        answer = "You can list your whole menu or just 1 item (like coffee). We recommend items that travel well. Remember to update prep times for cooked food vs simple drinks.";
+                    } else if (q.includes("busy") || q.includes("rush")) {
+                        answer = "If you get slammed, just toggle 'OFFLINE' instantly in settings, or use the 'Flow Limit' feature to cap orders at 5 per 15 mins.";
+                    }
                     setBotChat(prev => [...prev, { type: 'bot', text: answer }]);
                 }, 600);
             };
 
-            // Simulating a notification function
-            const notifyCustomer = (msg) => {
-                alert(`SIMULATED SMS TO CUSTOMER:\n"${msg}"`);
-            };
-
-            const getNextStatus = (currentStatus) => {
-                const flow = ['pending', 'accepted', 'preparing', 'delivering', 'completed'];
-                const idx = flow.indexOf(currentStatus);
-                return idx < flow.length - 1 ? flow[idx + 1] : 'completed';
-            };
-
-            const getButtonText = (status) => {
-                switch(status) {
-                    case 'pending': return 'Accept Order';
-                    case 'accepted': return 'Start Making';
-                    case 'preparing': return 'Run to Car';
-                    case 'delivering': return 'Complete Order';
-                    default: return 'Completed';
-                }
-            };
+            const notifyCustomer = (msg) => { alert(`SIMULATED SMS TO CUSTOMER:\n"${msg}"`); };
+            const getNextStatus = (currentStatus) => { const flow = ['pending', 'accepted', 'preparing', 'delivering', 'completed']; const idx = flow.indexOf(currentStatus); return idx < flow.length - 1 ? flow[idx + 1] : 'completed'; };
+            const getButtonText = (status) => { switch(status) { case 'pending': return 'Accept Order'; case 'accepted': return 'Start Making'; case 'preparing': return 'Run to Car'; case 'delivering': return 'Complete Order'; default: return 'Completed'; } };
 
             return (
                 <div className="min-h-screen bg-stone-50 flex flex-col p-6 animate-fade-in relative">
                     <div className="max-w-5xl mx-auto w-full">
                         <div className="flex flex-col md:flex-row justify-between items-center mb-10 pb-6 border-b border-stone-200">
-                            <div className="text-center md:text-left mb-4 md:mb-0">
-                                <h2 className="text-3xl font-serif font-bold text-brand-dark flex items-center gap-2">
-                                    <span className={`text-4xl ${isOnline ? 'text-green-500' : 'text-red-500'}`}>●</span> Owner Portal
-                                </h2>
-                                <p className="text-stone-500 mt-1">Grounds Keeper Willie (Demo Mode)</p>
-                            </div>
-                            <div className="flex gap-4">
-                                <button onClick={() => setAdminTab('orders')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'orders' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Live Orders</button>
-                                <button onClick={() => setAdminTab('settings')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'settings' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Settings</button>
-                                <button onClick={() => setAdminTab('partner')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'partner' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Partner Hub</button>
-                                <button onClick={() => setView('landing')} className="px-6 py-2 text-stone-400 hover:text-red-500 font-medium">Log Out</button>
-                            </div>
+                            <div className="text-center md:text-left mb-4 md:mb-0"><h2 className="text-3xl font-serif font-bold text-brand-dark flex items-center gap-2"><span className={`text-4xl ${isOnline ? 'text-green-500' : 'text-red-500'}`}>●</span> Owner Portal</h2><p className="text-stone-500 mt-1">Grounds Keeper Willie (Demo Mode)</p></div>
+                            <div className="flex gap-4"><button onClick={() => setAdminTab('orders')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'orders' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Live Orders</button><button onClick={() => setAdminTab('settings')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'settings' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Settings</button><button onClick={() => setAdminTab('partner')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'partner' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Partner Hub</button><button onClick={() => setView('landing')} className="px-6 py-2 text-stone-400 hover:text-red-500 font-medium">Log Out</button></div>
                         </div>
-
                         {adminTab === 'orders' && (
                             <div className="animate-fade-in">
                                 <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                    {orders.length === 0 ? (
-                                        <div className="col-span-full py-16 text-center border-2 border-dashed border-stone-200 rounded-2xl bg-white">
-                                            <div className="text-stone-300 mb-4 scale-150 inline-block"><Icons.Coffee /></div>
-                                            <h3 className="font-bold text-stone-400 text-lg">No Active Orders</h3>
-                                            <p className="text-stone-400 text-sm">Status: <span className={isOnline ? "text-green-500 font-bold" : "text-red-500 font-bold"}>{isOnline ? 'ONLINE' : 'OFFLINE'}</span> & Waiting</p>
-                                        </div>
-                                    ) : (
+                                    {orders.length === 0 ? <div className="col-span-full py-16 text-center border-2 border-dashed border-stone-200 rounded-2xl bg-white"><div className="text-stone-300 mb-4 scale-150 inline-block"><Icons.Coffee /></div><h3 className="font-bold text-stone-400 text-lg">No Active Orders</h3><p className="text-stone-400 text-sm">Status: <span className={isOnline ? "text-green-500 font-bold" : "text-red-500 font-bold"}>{isOnline ? 'ONLINE' : 'OFFLINE'}</span> & Waiting</p></div> : 
                                         orders.map(o => (
-                                            <div key={o.id} className="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm relative overflow-hidden group">
+                                            <div key={o.id} className={`bg-white p-6 rounded-2xl border border-stone-100 shadow-sm relative overflow-hidden group ${o.status === 'rejected' ? 'opacity-50 grayscale' : ''}`}>
+                                                {o.isFlagged && <div className="bg-red-500 text-white text-xs font-bold px-2 py-1 absolute top-0 left-0 rounded-br-lg z-10">⚠️ FLAGGED CUSTOMER</div>}
                                                 <div className="flex justify-between items-start mb-4">
-                                                    <div>
-                                                        <h3 className="text-2xl font-bold text-brand-dark">{o.carModel}</h3>
-                                                        <p className="text-stone-500 font-mono text-sm bg-stone-100 inline-block px-2 rounded mt-1">{o.plate}</p>
-                                                    </div>
+                                                    <div><h3 className="text-2xl font-bold text-brand-dark">{o.carModel}</h3><p className="text-stone-500 font-mono text-sm bg-stone-100 inline-block px-2 rounded mt-1">{o.plate}</p></div>
                                                     <span className="bg-orange-100 text-brand-orange px-3 py-1 rounded-full text-xs font-bold tracking-wide">{o.status.toUpperCase()}</span>
                                                 </div>
-                                                
-                                                <div className="mb-4">
-                                                    <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Pickup: <span className="text-brand-dark text-base">{o.pickupTime}</span></p>
-                                                </div>
-
-                                                {o.locationDetails && (
-                                                    <div className="bg-stone-50 p-3 rounded-lg mb-4 text-sm text-stone-600 border-l-2 border-brand-orange">
-                                                        "{o.locationDetails}"
+                                                <div className="mb-4"><p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Pickup: <span className="text-brand-dark text-base">{o.pickupTime}</span></p></div>
+                                                {o.locationDetails && <div className="bg-stone-50 p-3 rounded-lg mb-4 text-sm text-stone-600 border-l-2 border-brand-orange">"{o.locationDetails}"</div>}
+                                                <div className="bg-stone-50 p-4 rounded-xl mb-4 space-y-2">{o.items.map((i, idx) => (<div key={idx} className="flex justify-between text-sm font-medium text-stone-700 border-b border-stone-100 last:border-0 pb-1 last:pb-0"><span>1x {i.name}</span><span className="text-stone-400 text-xs self-center">{i.size || i.prep || i.beanWeight}</span></div>))}</div>
+                                                {o.status !== 'completed' && o.status !== 'rejected' && (
+                                                    <div className="space-y-2">
+                                                        <button onClick={() => updateOrderStatus(o.id, getNextStatus(o.status))} className="w-full py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800 transition shadow-lg">{getButtonText(o.status)}</button>
+                                                        {o.status === 'pending' && <button onClick={() => rejectOrder(o.id)} className="w-full py-2 bg-red-100 text-red-600 rounded-xl font-bold hover:bg-red-200 transition text-sm">Reject Order</button>}
+                                                        <button onClick={() => notifyCustomer("Sorry, we are running 5 minutes behind!")} className="w-full py-2 bg-stone-100 text-stone-500 rounded-xl font-bold hover:bg-stone-200 transition text-sm flex items-center justify-center gap-2"><Icons.Alert /> Notify Delay</button>
                                                     </div>
                                                 )}
-                                                
-                                                <div className="bg-stone-50 p-4 rounded-xl mb-4 space-y-2">
-                                                    {o.items.map((i, idx) => (
-                                                        <div key={idx} className="flex justify-between text-sm font-medium text-stone-700 border-b border-stone-100 last:border-0 pb-1 last:pb-0">
-                                                            <span>1x {i.name}</span>
-                                                            <span className="text-stone-400 text-xs self-center">{i.size || i.prep || i.beanWeight}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    {o.status !== 'completed' && (
-                                                        <button 
-                                                            onClick={() => updateOrderStatus(o.id, getNextStatus(o.status))}
-                                                            className="w-full py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800 transition shadow-lg"
-                                                        >
-                                                            {getButtonText(o.status)}
-                                                        </button>
-                                                    )}
-                                                    {o.status !== 'completed' && (
-                                                        <button 
-                                                            onClick={() => notifyCustomer("Sorry, we are running 5 minutes behind!")}
-                                                            className="w-full py-2 bg-stone-100 text-stone-500 rounded-xl font-bold hover:bg-stone-200 transition text-sm flex items-center justify-center gap-2"
-                                                        >
-                                                            <Icons.Alert /> Notify Delay
-                                                        </button>
-                                                    )}
-                                                </div>
+                                                {o.status === 'completed' && <button onClick={() => alert("Customer Rated!")} className="w-full py-2 bg-stone-100 text-stone-500 rounded-xl font-bold hover:bg-stone-200 transition text-sm flex items-center justify-center gap-2"><Icons.ThumbsDown /> Rate Customer</button>}
                                             </div>
                                         ))
-                                    )}
+                                    }
                                 </div>
                             </div>
                         )}
-
                         {adminTab === 'settings' && (
                             <div className="animate-fade-in bg-white rounded-3xl p-8 shadow-sm border border-stone-100 max-w-2xl mx-auto">
                                 <h3 className="font-bold text-xl mb-6 text-brand-dark">Curbside Availability</h3>
                                 <div className="space-y-6">
-                                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
-                                        <div>
-                                            <span className="font-bold block">Service Status</span>
-                                            <span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-500'}`}>{isOnline ? '● ONLINE' : '● OFFLINE'}</span>
-                                        </div>
-                                        {/* WORKING TOGGLE */}
-                                        <div 
-                                            onClick={() => setIsOnline(!isOnline)}
-                                            className={`w-14 h-8 rounded-full relative cursor-pointer transition-colors duration-300 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}
-                                        >
-                                            <div className={`w-6 h-6 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isOnline ? 'left-7' : 'left-1'}`}></div>
-                                        </div>
-                                    </div>
+                                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl"><div><span className="font-bold block">Service Status</span><span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-500'}`}>{isOnline ? '● ONLINE' : '● OFFLINE'}</span></div><div onClick={() => setIsOnline(!isOnline)} className={`w-14 h-8 rounded-full relative cursor-pointer transition-colors duration-300 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}><div className={`w-6 h-6 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isOnline ? 'left-7' : 'left-1'}`}></div></div></div>
+                                    <div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Start Time</label><input type="time" defaultValue="06:00" className="w-full p-3 border border-stone-200 rounded-xl" /></div><div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">End Time</label><input type="time" defaultValue="14:00" className="w-full p-3 border border-stone-200 rounded-xl" /></div></div>
                                     
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Start Time</label>
-                                            <input type="time" defaultValue="06:00" className="w-full p-3 border border-stone-200 rounded-xl" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">End Time</label>
-                                            <input type="time" defaultValue="14:00" className="w-full p-3 border border-stone-200 rounded-xl" />
-                                        </div>
-                                    </div>
-                                    <p className="text-xs text-stone-400 text-center">System will automatically toggle offline outside these hours.</p>
-
-                                    {/* Order Pacing Section */}
                                     <div className="pt-6 border-t border-stone-100">
-                                        <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4>
-                                        <div className="flex gap-2 mb-4">
-                                            <button 
-                                                onClick={() => setOrderLimitType('unlimited')}
-                                                className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}
-                                            >
-                                                Unlimited
-                                            </button>
-                                            <button 
-                                                onClick={() => setOrderLimitType('limited')}
-                                                className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'limited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}
-                                            >
-                                                Limit Flow
-                                            </button>
-                                        </div>
-
-                                        {orderLimitType === 'limited' && (
-                                            <div className="bg-stone-50 p-4 rounded-xl animate-fade-in">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <span className="text-stone-600 font-medium">Max Orders</span>
-                                                    <div className="flex items-center gap-3">
-                                                        <button onClick={() => setMaxOrdersPerWindow(Math.max(1, maxOrdersPerWindow - 1))} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">-</button>
-                                                        <span className="font-bold text-xl w-8 text-center">{maxOrdersPerWindow}</span>
-                                                        <button onClick={() => setMaxOrdersPerWindow(maxOrdersPerWindow + 1)} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">+</button>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-stone-600 font-medium">Time Window</span>
-                                                    <select 
-                                                        value={timeWindowMins} 
-                                                        onChange={(e) => setTimeWindowMins(Number(e.target.value))}
-                                                        className="p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold"
-                                                    >
-                                                        <option value={10}>Every 10 mins</option>
-                                                        <option value={15}>Every 15 mins</option>
-                                                        <option value={20}>Every 20 mins</option>
-                                                        <option value={30}>Every 30 mins</option>
-                                                        <option value={60}>Every Hour</option>
-                                                    </select>
-                                                </div>
-                                                <p className="text-xs text-stone-400 mt-3 leading-relaxed">
-                                                    System will automatically mark store as "Busy" if {maxOrdersPerWindow} orders are received within {timeWindowMins} minutes.
-                                                </p>
+                                        <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Pricing</h4>
+                                        <div>
+                                            <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Curbside Fee ($)</label>
+                                            <div className="flex gap-4 items-center">
+                                                <input type="range" min="0" max="10" step="0.50" value={curbsideFee} onChange={(e) => setCurbsideFee(Number(e.target.value))} className="flex-1 h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-brand-orange" />
+                                                <span className="font-bold text-xl w-16 text-right">${curbsideFee.toFixed(2)}</span>
                                             </div>
-                                        )}
+                                            <p className="text-xs text-stone-400 mt-2">Adjust based on demand. Set to $0.00 for promotions.</p>
+                                        </div>
                                     </div>
+
+                                    <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4><div className="flex gap-2 mb-4"><button onClick={() => setOrderLimitType('unlimited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Unlimited</button><button onClick={() => setOrderLimitType('limited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'limited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Limit Flow</button></div>{orderLimitType === 'limited' && <div className="bg-stone-50 p-4 rounded-xl animate-fade-in"><div className="flex items-center justify-between mb-2"><span className="text-stone-600 font-medium">Max Orders</span><div className="flex items-center gap-3"><button onClick={() => setMaxOrdersPerWindow(Math.max(1, maxOrdersPerWindow - 1))} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">-</button><span className="font-bold text-xl w-8 text-center">{maxOrdersPerWindow}</span><button onClick={() => setMaxOrdersPerWindow(maxOrdersPerWindow + 1)} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">+</button></div></div><div className="flex items-center justify-between"><span className="text-stone-600 font-medium">Time Window</span><select value={timeWindowMins} onChange={(e) => setTimeWindowMins(Number(e.target.value))} className="p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold"><option value={10}>Every 10 mins</option><option value={15}>Every 15 mins</option><option value={20}>Every 20 mins</option><option value={30}>Every 30 mins</option><option value={60}>Every Hour</option></select></div></div>}</div>
                                 </div>
                             </div>
                         )}
-
                         {adminTab === 'partner' && (
                             <div className="animate-fade-in bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-stone-100">
                                 <div className="max-w-4xl mx-auto">
-                                    {/* AI CHAT BOT SECTION */}
                                     <div className="mb-12 bg-stone-900 rounded-2xl p-6 text-white shadow-2xl border border-stone-700">
-                                        <div className="flex items-center gap-3 border-b border-stone-700 pb-4 mb-4">
-                                            <div className="bg-brand-orange p-2 rounded-lg text-white animate-pulse"><Icons.Robot /></div>
-                                            <div>
-                                                <h3 className="font-bold">Partner AI Support</h3>
-                                                <p className="text-xs text-stone-400">Ask me anything about the business.</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="h-48 overflow-y-auto space-y-3 mb-4 pr-2 scrollbar-thin">
-                                            {botChat.map((msg, idx) => (
-                                                <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                                    <div className={`p-3 rounded-2xl max-w-[80%] text-sm ${msg.type === 'user' ? 'bg-brand-orange text-white rounded-br-none' : 'bg-stone-800 text-stone-200 rounded-bl-none'}`}>
-                                                        {msg.text}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                                            {['What about Fees?', 'What if I am busy?', 'How do I get Paid?', 'Is there a Contract?'].map(q => (
-                                                <button 
-                                                    key={q}
-                                                    onClick={() => handleBotQuestion(q)}
-                                                    className="whitespace-nowrap px-4 py-2 bg-stone-800 hover:bg-stone-700 rounded-full text-xs font-bold transition border border-stone-600"
-                                                >
-                                                    {q}
-                                                </button>
-                                            ))}
-                                        </div>
+                                        <div className="flex items-center gap-3 border-b border-stone-700 pb-4 mb-4"><div className="bg-brand-orange p-2 rounded-lg text-white animate-pulse"><Icons.Robot /></div><div><h3 className="font-bold">Partner AI Support</h3><p className="text-xs text-stone-400">Ask me anything about the business (Fees, Insurance, Hardware...).</p></div></div>
+                                        <div className="h-48 overflow-y-auto space-y-3 mb-4 pr-2 scrollbar-thin">{botChat.map((msg, idx) => (<div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`p-3 rounded-2xl max-w-[80%] text-sm ${msg.type === 'user' ? 'bg-brand-orange text-white rounded-br-none' : 'bg-stone-800 text-stone-200 rounded-bl-none'}`}>{msg.text}</div></div>))}</div>
+                                        <form onSubmit={handleBotSubmit} className="flex gap-2">
+                                            <input type="text" value={botInput} onChange={e => setBotInput(e.target.value)} placeholder="Type a question..." className="flex-1 bg-stone-800 border-none rounded-xl px-4 py-3 text-sm text-white focus:ring-1 focus:ring-brand-orange placeholder-stone-500" />
+                                            <button type="submit" className="bg-brand-orange p-3 rounded-xl text-white hover:bg-orange-600 transition"><Icons.Send /></button>
+                                        </form>
+                                        <div className="flex gap-2 overflow-x-auto pt-4 pb-2 no-scrollbar">{['What about Fees?', 'Insurance?', 'Hardware needs?', 'Menu Strategy'].map(q => (<button key={q} onClick={() => handleBotQuestion(q)} className="whitespace-nowrap px-4 py-2 bg-stone-800 hover:bg-stone-700 rounded-full text-xs font-bold transition border border-stone-600">{q}</button>))}</div>
                                     </div>
-
-                                    <div className="text-center mb-12">
-                                        <h2 className="text-4xl font-serif font-bold text-brand-dark mb-4">Why Partner with Pull Up?</h2>
-                                        <p className="text-stone-500 mb-8 text-lg">Turn your curbside into a high-margin revenue stream.</p>
-                                    </div>
-                                    
-                                    <div className="grid md:grid-cols-3 gap-8 mb-12 text-left">
-                                        <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                                            <div className="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-3"><Icons.TrendingUp /></div>
-                                            <h3 className="font-bold text-lg mb-1">Increase Revenue</h3>
-                                            <p className="text-sm text-stone-500">Capture the "parents in cars" market you are currently missing. Upsell premium convenience.</p>
-                                        </div>
-                                        <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                                            <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-3"><Icons.Shield /></div>
-                                            <h3 className="font-bold text-lg mb-1">Zero Risk</h3>
-                                            <p className="text-sm text-stone-500">We cover marketing, app security, and hosting. You simply turn it ON when you have staff, OFF when busy.</p>
-                                        </div>
-                                        <div className="p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                                            <div className="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-3"><Icons.Settings /></div>
-                                            <h3 className="font-bold text-lg mb-1">Full Control</h3>
-                                            <p className="text-sm text-stone-500">Edit your menu instantly. Manage stock. Toggle your "Online" status with one click.</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-brand-dark text-white rounded-2xl p-8 border border-stone-800 text-left">
-                                        <h3 className="font-bold text-xl mb-4 flex items-center gap-2"><div className="w-2 h-6 bg-brand-orange rounded-full"></div> Transparent Finances</h3>
-                                        <p className="text-stone-300 mb-6 leading-relaxed">
-                                            We use <strong className="text-white">Stripe Connect</strong>, the industry standard for platform payments. 
-                                            <br/><br/>
-                                            • Customer pays via app.<br/>
-                                            • You get 100% of product price sent instantly to your bank.<br/>
-                                            • The "Curbside Fee" (e.g. $2.00) is split: <strong>You keep 80%</strong>.<br/>
-                                            <br/>
-                                            You never chase invoices. Funds are settled automatically and securely every day.
-                                        </p>
-                                        <button onClick={() => setShowContract(true)} className="bg-white text-brand-dark px-8 py-4 rounded-xl font-bold hover:bg-stone-200 transition w-full md:w-auto flex items-center justify-center gap-2">
-                                            <Icons.FileText /> View Sample Contract
-                                        </button>
-                                    </div>
+                                    <div className="text-center mb-12"><h2 className="text-4xl font-serif font-bold text-brand-dark mb-4">Why Partner with Pull Up?</h2><p className="text-stone-500 mb-8 text-lg">Turn your curbside into a high-margin revenue stream.</p></div>
+                                    <div className="grid md:grid-cols-3 gap-8 mb-12 text-left"><div className="p-4 bg-stone-50 rounded-2xl border border-stone-100"><div className="w-10 h-10 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-3"><Icons.TrendingUp /></div><h3 className="font-bold text-lg mb-1">Increase Revenue</h3><p className="text-sm text-stone-500">Capture the "parents in cars" market you are currently missing. Upsell premium convenience.</p></div><div className="p-4 bg-stone-50 rounded-2xl border border-stone-100"><div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-3"><Icons.Shield /></div><h3 className="font-bold text-lg mb-1">Zero Risk</h3><p className="text-sm text-stone-500">We cover marketing, app security, and hosting. You simply turn it ON when you have staff, OFF when busy.</p></div><div className="p-4 bg-stone-50 rounded-2xl border border-stone-100"><div className="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-3"><Icons.Settings /></div><h3 className="font-bold text-lg mb-1">Full Control</h3><p className="text-sm text-stone-500">Edit your menu instantly. Manage stock. Toggle your "Online" status with one click.</p></div></div>
+                                    <div className="bg-brand-dark text-white rounded-2xl p-8 border border-stone-800 text-left"><h3 className="font-bold text-xl mb-4 flex items-center gap-2"><div className="w-2 h-6 bg-brand-orange rounded-full"></div> Transparent Finances</h3><p className="text-stone-300 mb-6 leading-relaxed">We use <strong className="text-white">Stripe Connect</strong>, the industry standard for platform payments.<br/><br/>• Customer pays via app.<br/>• You get 100% of product price sent instantly to your bank.<br/>• The "Curbside Fee" (e.g. $2.00) is split: <strong>You keep 80%</strong>.<br/><br/>You never chase invoices. Funds are settled automatically and securely every day.</p><button onClick={() => setShowContract(true)} className="bg-white text-brand-dark px-8 py-4 rounded-xl font-bold hover:bg-stone-200 transition w-full md:w-auto flex items-center justify-center gap-2"><Icons.FileText /> View Sample Contract</button></div>
                                 </div>
                             </div>
                         )}
-
-                        {/* CONTRACT MODAL */}
                         {showContract && (
-                            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-fade-in">
-                                <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl h-[80vh] flex flex-col">
-                                    <div className="p-6 border-b border-stone-200 flex justify-between items-center">
-                                        <div>
-                                            <h3 className="font-serif font-bold text-2xl text-brand-dark">Partnership Agreement</h3>
-                                            <p className="text-stone-500 text-sm uppercase tracking-widest">Sample Draft</p>
-                                        </div>
-                                        <button onClick={() => setShowContract(false)} className="p-2 hover:bg-stone-100 rounded-full"><Icons.X /></button>
-                                    </div>
-                                    <div className="p-8 overflow-y-auto font-serif leading-relaxed text-stone-700 space-y-6">
-                                        <div className="p-4 bg-stone-50 border border-stone-200 rounded-xl text-sm font-sans mb-6">
-                                            <strong>Note:</strong> This is a standard non-exclusive agreement. You retain full ownership of your brand and customer relationships.
-                                        </div>
-                                        
-                                        <section>
-                                            <h4 className="font-bold text-lg text-brand-dark mb-2">1. The Service</h4>
-                                            <p>Pull Up Coffee ("Platform") provides a technology interface connecting Cafe Partners ("You") with customers in vehicles. We handle the ordering, payment processing, and geolocation notification.</p>
-                                        </section>
-
-                                        <section>
-                                            <h4 className="font-bold text-lg text-brand-dark mb-2">2. Fee Structure & Payments</h4>
-                                            <ul className="list-disc pl-5 space-y-1">
-                                                <li><strong>Product Revenue:</strong> You receive 100% of the listed price for all food and beverage items.</li>
-                                                <li><strong>Platform Fee:</strong> The customer pays a "Curbside Fee" (e.g. $2.00+). You (the Cafe) keep **80%** of this fee. The Platform retains just 20% to cover operations.</li>
-                                                <li><strong>Payouts:</strong> All payments are processed via Stripe Connect. Funds are settled to your nominated bank account daily (T+2 rolling basis).</li>
-                                            </ul>
-                                        </section>
-
-                                        <section>
-                                            <h4 className="font-bold text-lg text-brand-dark mb-2">3. Obligations</h4>
-                                            <p>You agree to prepare orders promptly upon acceptance and deliver them to the customer's vehicle curbside in a safe manner. You maintain the right to refuse service or toggle "Offline" at any time.</p>
-                                        </section>
-
-                                        <section>
-                                            <h4 className="font-bold text-lg text-brand-dark mb-2">4. Termination</h4>
-                                            <p>This agreement is "at-will". You may cancel your partnership at any time with 24 hours written notice. There are no lock-in contracts or exit fees.</p>
-                                        </section>
-                                    </div>
-                                    <div className="p-6 border-t border-stone-200 bg-stone-50 rounded-b-2xl flex justify-end gap-3">
-                                        <button onClick={() => setShowContract(false)} className="px-6 py-3 rounded-xl font-bold text-stone-500 hover:bg-stone-200 transition">Close</button>
-                                        <button className="px-6 py-3 rounded-xl font-bold bg-brand-dark text-white shadow-lg hover:bg-stone-800 transition">Sign & Join</button>
-                                    </div>
-                                </div>
-                            </div>
+                            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-fade-in"><div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl h-[80vh] flex flex-col"><div className="p-6 border-b border-stone-200 flex justify-between items-center"><div><h3 className="font-serif font-bold text-2xl text-brand-dark">Partnership Agreement</h3><p className="text-stone-500 text-sm uppercase tracking-widest">Sample Draft</p></div><button onClick={() => setShowContract(false)} className="p-2 hover:bg-stone-100 rounded-full"><Icons.X /></button></div><div className="p-8 overflow-y-auto font-serif leading-relaxed text-stone-700 space-y-6"><div className="p-4 bg-stone-50 border border-stone-200 rounded-xl text-sm font-sans mb-6"><strong>Note:</strong> This is a standard non-exclusive agreement. You retain full ownership of your brand and customer relationships.</div><section><h4 className="font-bold text-lg text-brand-dark mb-2">1. The Service</h4><p>Pull Up Coffee ("Platform") provides a technology interface connecting Cafe Partners ("You") with customers in vehicles. We handle the ordering, payment processing, and geolocation notification.</p></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">2. Fee Structure & Payments</h4><ul className="list-disc pl-5 space-y-1"><li><strong>Product Revenue:</strong> You receive 100% of the listed price for all food and beverage items.</li><li><strong>Platform Fee:</strong> The customer pays a "Curbside Fee" (e.g. $2.00+). You (the Cafe) keep **80%** of this fee. The Platform retains just 20% to cover operations.</li><li><strong>Payouts:</strong> All payments are processed via Stripe Connect. Funds are settled to your nominated bank account daily (T+2 rolling basis).</li></ul></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">3. Obligations</h4><p>You agree to prepare orders promptly upon acceptance and deliver them to the customer's vehicle curbside in a safe manner. You maintain the right to refuse service or toggle "Offline" at any time.</p></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">4. Termination</h4><p>This agreement is "at-will". You may cancel your partnership at any time with 24 hours written notice. There are no lock-in contracts or exit fees.</p></section></div><div className="p-6 border-t border-stone-200 bg-stone-50 rounded-b-2xl flex justify-end gap-3"><button onClick={() => setShowContract(false)} className="px-6 py-3 rounded-xl font-bold text-stone-500 hover:bg-stone-200 transition">Close</button><button className="px-6 py-3 rounded-xl font-bold bg-brand-dark text-white shadow-lg hover:bg-stone-800 transition">Sign & Join</button></div></div></div>
                         )}
                     </div>
                 </div>
             );
         };
 
-        // 5. CHECKOUT FORM (Moved Out)
-        const CheckoutForm = ({ user, setUser, onSubmit, onBack, cart, total }) => {
+        const CheckoutForm = ({ user, setUser, onSubmit, onBack, cart, total, curbsideFee }) => {
             const [pickupType, setPickupType] = useState('ASAP');
             const [customTime, setCustomTime] = useState('');
             const [details, setDetails] = useState('');
             const [carPhoto, setCarPhoto] = useState(null);
+            const [agreed, setAgreed] = useState(false);
             
             const fileInputRef = useRef(null);
 
-            const handleChange = (field, value) => {
-                setUser(prev => ({ ...prev, [field]: value }));
-            };
-
-            const handlePhotoUpload = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        setCarPhoto(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-
-            useEffect(() => {
-                const now = new Date();
-                now.setMinutes(now.getMinutes() + 15);
-                setCustomTime(now.toTimeString().slice(0, 5));
-            }, []);
+            const handleChange = (field, value) => { setUser(prev => ({ ...prev, [field]: value })); };
+            const handlePhotoUpload = (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onloadend = () => { setCarPhoto(reader.result); }; reader.readAsDataURL(file); } };
+            useEffect(() => { const now = new Date(); now.setMinutes(now.getMinutes() + 15); setCustomTime(now.toTimeString().slice(0, 5)); }, []);
 
             return (
                 <div className="min-h-screen bg-stone-50 p-6 animate-fade-in pb-24">
                     <div className="max-w-lg mx-auto">
-                        <button onClick={onBack} className="mb-6 flex items-center text-stone-500 font-medium hover:text-brand-dark transition">
-                            <Icons.X /> <span className="ml-2">Back to Menu</span>
-                        </button>
-
+                        <button onClick={onBack} className="mb-6 flex items-center text-stone-500 font-medium hover:text-brand-dark transition"><Icons.X /> <span className="ml-2">Back to Menu</span></button>
                         <h2 className="text-3xl font-serif font-bold text-brand-dark mb-2">Final Details</h2>
                         <p className="text-stone-500 mb-8">Tell us when and where to find you.</p>
-
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-5 mb-6">
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Pickup Time</label>
-                                <div className="flex gap-2 mb-3">
-                                    <button onClick={() => setPickupType('ASAP')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'ASAP' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}><Icons.TrendingUp /> ASAP</button>
-                                    <button onClick={() => setPickupType('LATER')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'LATER' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}><Icons.Clock /> Pick Time</button>
-                                </div>
-                                {pickupType === 'LATER' && <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-lg font-bold text-center" />}
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label>
-                                <input type="text" value={user.name} onChange={e => handleChange('name', e.target.value)} placeholder="e.g. Alex" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Car Model</label>
-                                    <input type="text" value={user.carModel} onChange={e => handleChange('carModel', e.target.value)} placeholder="e.g. Tesla" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Color</label>
-                                    <input type="text" value={user.carColor} onChange={e => handleChange('carColor', e.target.value)} placeholder="e.g. White" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">License Plate (Full)</label>
-                                <input type="text" value={user.plate} onChange={e => handleChange('plate', e.target.value)} placeholder="e.g. 123-ABC" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium uppercase font-mono tracking-widest transition" />
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Parking Spot / Location Details</label>
-                                <textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="e.g. Parked near the big tree, hazards on..." className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm mb-3 focus:bg-white transition"></textarea>
-                                <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />
-                                {carPhoto ? (
-                                    <div className="relative w-full h-32 rounded-xl overflow-hidden border border-stone-200">
-                                        <img src={carPhoto} alt="Car Preview" className="w-full h-full object-cover" />
-                                        <button onClick={() => setCarPhoto(null)} className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full"><Icons.X /></button>
-                                    </div>
-                                ) : (
-                                    <button onClick={() => fileInputRef.current.click()} className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 font-bold flex items-center justify-center gap-2 hover:bg-stone-50 transition"><Icons.Camera /> Snap Photo of Spot</button>
-                                )}
-                            </div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Pickup Time</label><div className="flex gap-2 mb-3"><button onClick={() => setPickupType('ASAP')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'ASAP' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}><Icons.TrendingUp /> ASAP</button><button onClick={() => setPickupType('LATER')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'LATER' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}><Icons.Clock /> Pick Time</button></div>{pickupType === 'LATER' && <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-lg font-bold text-center" />}</div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label><input type="text" value={user.name} onChange={e => handleChange('name', e.target.value)} placeholder="e.g. Alex" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div>
+                            <div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Car Model</label><input type="text" value={user.carModel} onChange={e => handleChange('carModel', e.target.value)} placeholder="e.g. Tesla" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div><div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Color</label><input type="text" value={user.carColor} onChange={e => handleChange('carColor', e.target.value)} placeholder="e.g. White" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div></div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">License Plate (Full)</label><input type="text" value={user.plate} onChange={e => handleChange('plate', e.target.value)} placeholder="e.g. 123-ABC" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium uppercase font-mono tracking-widest transition" /></div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Parking Spot / Location Details</label><textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="e.g. Parked near the big tree, hazards on..." className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm mb-3 focus:bg-white transition"></textarea><input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />{carPhoto ? (<div className="relative w-full h-32 rounded-xl overflow-hidden border border-stone-200"><img src={carPhoto} alt="Car Preview" className="w-full h-full object-cover" /><button onClick={() => setCarPhoto(null)} className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full"><Icons.X /></button></div>) : (<button onClick={() => fileInputRef.current.click()} className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 font-bold flex items-center justify-center gap-2 hover:bg-stone-50 transition"><Icons.Camera /> Snap Photo of Spot</button>)}</div>
                         </div>
-
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8">
-                            <h3 className="font-bold text-stone-900 mb-4 text-xs uppercase tracking-wider">Order Summary</h3>
-                            <div className="space-y-3">
-                                {cart.map((item, idx) => (
-                                    <div key={item.cartId} className="flex justify-between text-sm text-stone-600 border-b border-stone-50 pb-2">
-                                        <div>
-                                            <span className="font-semibold text-stone-800">{item.name}</span>
-                                            <span className="block text-xs text-stone-500 mt-0.5">{item.size}{item.milk !== '-' ? `, ${item.milk}` : ''}</span>
-                                            {item.notes && <span className="block text-xs text-brand-orange italic mt-0.5">"{item.notes}"</span>}
-                                        </div>
-                                        <span>${item.price.toFixed(2)}</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex justify-between text-sm text-brand-orange font-medium mt-4">
-                                <span>Curbside Convenience Fee</span>
-                                <span>${CURBSIDE_FEE.toFixed(2)}</span>
-                            </div>
-                            <div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4 pt-4 border-t border-stone-100">
-                                <span>Total</span>
-                                <span>${total}</span>
-                            </div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8"><h3 className="font-bold text-stone-900 mb-4 text-xs uppercase tracking-wider">Order Summary</h3><div className="space-y-3">{cart.map((item, idx) => (<div key={item.cartId} className="flex justify-between text-sm text-stone-600 border-b border-stone-50 pb-2"><div><span className="font-semibold text-stone-800">{item.name}</span><span className="block text-xs text-stone-500 mt-0.5">{item.size}{item.milk !== '-' ? `, ${item.milk}` : ''}</span>{item.notes && <span className="block text-xs text-brand-orange italic mt-0.5">"{item.notes}"</span>}</div><span>${item.price.toFixed(2)}</span></div>))}</div><div className="flex justify-between text-sm text-brand-orange font-medium mt-4"><span>Curbside Convenience Fee</span><span>${curbsideFee.toFixed(2)}</span></div><div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4 pt-4 border-t border-stone-100"><span>Total</span><span>${total}</span></div></div>
+                        <div className="mb-6 p-4 bg-stone-100 rounded-xl border border-stone-200 text-sm flex gap-3 items-start">
+                            <input type="checkbox" id="refund-policy" className="mt-1 w-5 h-5 accent-brand-orange" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
+                            <label htmlFor="refund-policy" className="text-stone-600">I agree to be curbside within 10 minutes of my time. I understand late arrivals <span className="font-bold text-stone-800">forfeit the order with no refunds</span>.</label>
                         </div>
-
-                        <button onClick={() => onSubmit({ pickupType, customTime, details, carPhoto })} className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2"><Icons.ChevronRight /> Pay & Pull Up</button>
+                        <div className="mb-6 text-xs text-stone-500 text-center italic">
+                            Payment is processed securely <strong>only after</strong> the cafe accepts your order.
+                        </div>
+                        <button disabled={!agreed} onClick={() => onSubmit({ pickupType, customTime, details, carPhoto })} className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"><Icons.ChevronRight /> Pay & Pull Up</button>
                     </div>
                 </div>
             );
         };
 
-        // 6. LOCATION SELECT (Moved Out)
-        const LocationSelect = ({ setView, setSelectedLocation }) => (
-            <div className="min-h-screen bg-stone-900 text-white p-6 animate-fade-in flex flex-col">
-                <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-400 hover:text-white transition w-fit"><Icons.X /> <span className="ml-2">Back</span></button>
-                <h2 className="text-3xl font-serif font-bold mb-2">Select Location</h2>
-                <p className="text-stone-400 mb-8">Find a partner cafe near you.</p>
-
-                <div className="space-y-4 max-w-lg mx-auto w-full">
-                    {LOCATIONS.map(loc => (
-                        <button 
-                            key={loc.id}
-                            disabled={loc.status === 'closed'}
-                            onClick={() => { setSelectedLocation(loc); setView('customer'); }}
-                            className={`w-full p-4 rounded-2xl flex justify-between items-center transition border text-left group relative overflow-hidden
-                                ${loc.status === 'open' ? 'bg-stone-800 border-stone-700 hover:border-brand-orange hover:bg-stone-750 cursor-pointer' : 'bg-stone-900 border-stone-800 opacity-60 cursor-not-allowed'}`}
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0 border border-stone-600">
-                                    <img src={loc.logo} alt={loc.name} 
-                                            onError={(e) => { e.target.onerror = null; e.target.parentElement.innerHTML = '<span style="font-size:20px">☕</span>'; }}
-                                            className="w-full h-full object-contain" />
-                                </div>
-                                <div>
-                                    <span className={`font-bold block text-lg ${loc.status === 'open' ? 'text-white group-hover:text-brand-orange' : 'text-stone-500'}`}>{loc.name}</span>
-                                    <div className="flex items-center gap-1 text-xs text-stone-400 mt-1">
-                                        <div className="w-3"><Icons.MapPin /></div> {loc.address}
+        const LocationSelect = ({ setView, setSelectedLocation }) => {
+            const [favorites, setFavorites] = useState([]);
+            const toggleFavorite = (e, id) => { e.stopPropagation(); if(favorites.includes(id)) setFavorites(favorites.filter(fid => fid !== id)); else setFavorites([...favorites, id]); };
+            return (
+                <div className="min-h-screen bg-stone-900 text-white p-6 animate-fade-in flex flex-col">
+                    <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-400 hover:text-white transition w-fit"><Icons.X /> <span className="ml-2">Back</span></button>
+                    <h2 className="text-3xl font-serif font-bold mb-2">Select Location</h2>
+                    <p className="text-stone-400 mb-8">Find a partner cafe near you.</p>
+                    <div className="space-y-4 max-w-lg mx-auto w-full">
+                        {LOCATIONS.map(loc => (
+                            <div key={loc.id} className="relative group">
+                                <button onClick={(e) => toggleFavorite(e, loc.id)} className={`absolute top-4 right-4 z-10 p-2 rounded-full transition ${favorites.includes(loc.id) ? 'text-red-500' : 'text-stone-600 hover:text-red-400'}`}><Icons.Heart /></button>
+                                <button disabled={loc.status === 'closed'} onClick={() => { setSelectedLocation(loc); setView('customer'); }} className={`w-full p-4 rounded-2xl flex justify-between items-center transition border text-left relative overflow-hidden ${loc.status === 'open' ? 'bg-stone-800 border-stone-700 hover:border-brand-orange hover:bg-stone-750 cursor-pointer' : 'bg-stone-900 border-stone-800 opacity-60 cursor-not-allowed'}`}>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0 border border-stone-600"><img src={loc.logo} alt={loc.name} onError={(e) => { e.target.onerror = null; e.target.parentElement.innerHTML = '<span style="font-size:20px">☕</span>'; }} className="w-full h-full object-contain" /></div>
+                                        <div><span className={`font-bold block text-lg ${loc.status === 'open' ? 'text-white group-hover:text-brand-orange' : 'text-stone-500'}`}>{loc.name}</span><div className="flex items-center gap-1 text-xs text-stone-400 mt-1"><div className="w-3"><Icons.MapPin /></div> {loc.address}</div></div>
                                     </div>
-                                </div>
+                                    <div className="pl-2 mr-8">{loc.status === 'open' ? <span className="text-green-400 text-[10px] font-bold px-2 py-1 bg-green-900/30 rounded-full border border-green-800">OPEN</span> : <span className="text-stone-500 text-[10px] font-bold px-2 py-1 bg-stone-800 rounded-full">CLOSED</span>}</div>
+                                </button>
+                                {favorites.includes(loc.id) && <div className="mt-2 flex items-center gap-2 px-2"><div className="w-8 h-4 bg-green-600 rounded-full relative cursor-pointer"><div className="w-4 h-4 bg-white rounded-full absolute right-0 top-0"></div></div><span className="text-xs text-stone-400">Notify via SMS when active</span></div>}
                             </div>
-                            <div className="pl-2">
-                                {loc.status === 'open' ? <span className="text-green-400 text-[10px] font-bold px-2 py-1 bg-green-900/30 rounded-full border border-green-800">OPEN</span> : <span className="text-stone-500 text-[10px] font-bold px-2 py-1 bg-stone-800 rounded-full">CLOSED</span>}
-                            </div>
-                        </button>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        };
 
-        // 7. CUSTOMER MENU (Moved Out)
         const CustomerMenu = ({ selectedLocation, menu, cart, addToCart, setView, getTotal }) => {
             const [modalItem, setModalItem] = useState(null);
-
             return (
                 <div className="min-h-screen bg-stone-50 pb-32 animate-fade-in">
                     <div className="bg-white p-4 shadow-sm sticky top-0 z-20 flex justify-between items-center border-b border-stone-100">
                         <button onClick={() => setView('location-select')} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
-                        <div className="text-center">
-                            <h2 className="font-serif font-bold text-xl text-brand-dark">{selectedLocation?.name}</h2>
-                            <span className="text-xs text-green-600 font-bold tracking-widest uppercase">● Accepting Orders</span>
-                        </div>
-                        <div className="w-8"></div>
+                        <div className="text-center"><h2 className="font-serif font-bold text-xl text-brand-dark">{selectedLocation?.name}</h2><span className="text-xs text-green-600 font-bold tracking-widest uppercase">● Accepting Orders</span></div><div className="w-8"></div>
                     </div>
-
-                    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                        {menu.map(item => (
-                            <div key={item.id} onClick={() => setModalItem(item)} className="group bg-white rounded-2xl p-3 shadow-sm hover:shadow-md transition border border-stone-100 flex gap-4 overflow-hidden cursor-pointer">
-                                <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 relative">
-                                    <img src={item.img} alt={item.name} 
-                                         onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=400&q=80"; }}
-                                         className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
-                                </div>
-                                <div className="flex flex-col justify-center flex-1">
-                                    <h3 className="font-serif font-bold text-lg text-brand-dark">{item.name}</h3>
-                                    <p className="text-stone-500 text-sm mb-2">{item.desc}</p>
-                                    <div className="flex justify-between items-center mt-auto">
-                                        <span className="font-bold text-brand-orange">${item.price.toFixed(2)}</span>
-                                        <span className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 group-hover:bg-brand-dark group-hover:text-white transition"><Icons.Plus /></span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {cart.length > 0 && (
-                        <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent z-30 animate-slide-up">
-                            <div className="max-w-md mx-auto">
-                                <button onClick={() => setView('checkout')} className="w-full bg-brand-dark text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center font-bold text-lg transform hover:scale-[1.02] transition">
-                                    <div className="flex items-center gap-3">
-                                        <span className="bg-brand-orange text-white px-2 py-0.5 rounded-md text-sm">{cart.length}</span>
-                                        <span>View Order</span>
-                                    </div>
-                                    <span>${getTotal()}</span>
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
+                    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">{menu.map(item => (<div key={item.id} onClick={() => setModalItem(item)} className="group bg-white rounded-2xl p-3 shadow-sm hover:shadow-md transition border border-stone-100 flex gap-4 overflow-hidden cursor-pointer"><div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 relative"><img src={item.img} alt={item.name} onError={(e) => { e.target.onerror = null; e.target.src = "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=400&q=80"; }} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" /></div><div className="flex flex-col justify-center flex-1"><h3 className="font-serif font-bold text-lg text-brand-dark">{item.name}</h3><p className="text-stone-500 text-sm mb-2">{item.desc}</p><div className="flex justify-between items-center mt-auto"><span className="font-bold text-brand-orange">${item.price.toFixed(2)}</span><span className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 group-hover:bg-brand-dark group-hover:text-white transition"><Icons.Plus /></span></div></div></div>))}</div>
+                    {cart.length > 0 && (<div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent z-30 animate-slide-up"><div className="max-w-md mx-auto"><button onClick={() => setView('checkout')} className="w-full bg-brand-dark text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center font-bold text-lg transform hover:scale-[1.02] transition"><div className="flex items-center gap-3"><span className="bg-brand-orange text-white px-2 py-0.5 rounded-md text-sm">{cart.length}</span><span>View Order</span></div><span>${getTotal()}</span></button></div></div>)}
                     {modalItem && <ProductModal item={modalItem} onClose={() => setModalItem(null)} onAdd={(item) => { addToCart(item); setModalItem(null); }} />}
                 </div>
             );
         };
 
-        // --- MAIN APP COMPONENT ---
+        const SuccessScreen = ({ setView, userProfile }) => {
+            const [timeLeft, setTimeLeft] = useState(90);
+            const [status, setStatus] = useState('active');
+
+            useEffect(() => {
+                if (status !== 'active') return;
+                const timer = setInterval(() => {
+                    setTimeLeft((prev) => {
+                        if (prev <= 1) {
+                            clearInterval(timer);
+                            return 0;
+                        }
+                        return prev - 1;
+                    });
+                }, 1000);
+                return () => clearInterval(timer);
+            }, [status]);
+
+            const handleCancel = () => {
+                if(confirm("Are you sure you want to cancel? Refunds are processed instantly.")) {
+                    setStatus('cancelled');
+                }
+            };
+
+            if (status === 'cancelled') {
+                return (
+                    <div className="min-h-screen bg-stone-100 flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+                        <div className="bg-red-100 text-red-500 w-20 h-20 rounded-full flex items-center justify-center mb-6"><Icons.X /></div>
+                        <h2 className="text-3xl font-bold text-stone-800 mb-2">Order Cancelled</h2>
+                        <p className="text-stone-500 mb-8">Your transaction has been voided. No funds were taken.</p>
+                        <button onClick={() => setView('landing')} className="bg-stone-800 text-white px-8 py-3 rounded-xl font-bold">Back to Home</button>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center p-6 text-white text-center animate-fade-in relative">
+                    <div className="max-w-md w-full">
+                        <div className="bg-brand-orange text-white w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-bounce mx-auto"><Icons.CheckCircle /></div>
+                        <h2 className="text-4xl font-serif italic mb-4">Order Sent!</h2>
+                        <p className="text-stone-400 text-lg mb-8">
+                            We are looking for your <span className="text-white font-bold">{userProfile.carColor} {userProfile.carModel}</span>.
+                        </p>
+                        
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 mb-8">
+                            <h3 className="font-bold text-brand-orange text-sm uppercase tracking-widest mb-2">Next Steps</h3>
+                            <p className="text-sm leading-relaxed">
+                                Please <strong>WAIT</strong> for order acceptance notification before driving to the cafe.
+                            </p>
+                        </div>
+
+                        {timeLeft > 0 ? (
+                            <button onClick={handleCancel} className="text-red-400 hover:text-red-300 text-sm font-bold border border-red-400/30 bg-red-400/10 px-6 py-3 rounded-xl w-full mb-4">
+                                Cancel Order (Undo) - {timeLeft}s
+                            </button>
+                        ) : (
+                            <div className="text-stone-500 text-xs mb-4">Order Locked. Preparing...</div>
+                        )}
+
+                        <button onClick={() => setView('landing')} className="text-stone-500 hover:text-white transition underline text-sm tracking-widest uppercase">Done</button>
+                    </div>
+                </div>
+            );
+        };
+
         const App = () => {
             const [view, setView] = useState('landing');
             const [selectedLocation, setSelectedLocation] = useState(null);
             const [cart, setCart] = useState([]);
             const [orders, setOrders] = useState([]);
             const [userProfile, setUserProfile] = useState({ name: '', carModel: '', carColor: '', plate: '' });
-            
-            // Menu state
             const [menu, setMenu] = useState(DEFAULT_MENU);
+            const [curbsideFee, setCurbsideFee] = useState(2.00);
 
-            // Derived
+            useEffect(() => {
+                const handlePopState = (event) => { if (event.state && event.state.view) { setView(event.state.view); } else { setView('landing'); } };
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
+            const navigate = (newView) => { window.history.pushState({ view: newView }, '', `#${newView}`); setView(newView); };
             const getSubtotal = () => cart.reduce((sum, item) => sum + item.price, 0);
-            const getTotal = () => (getSubtotal() + CURBSIDE_FEE).toFixed(2);
-
-            // Actions
-            const addToCart = (customizedItem) => {
-                setCart([...cart, { ...customizedItem, cartId: Math.random() }]);
-            };
+            const getTotal = () => (getSubtotal() + curbsideFee).toFixed(2);
+            const addToCart = (customizedItem) => { setCart([...cart, { ...customizedItem, cartId: Math.random() }]); };
 
             const placeOrder = (extraDetails) => {
-                if (!userProfile.name || !userProfile.carModel || !userProfile.carColor) {
-                    alert("Please fill in all details!"); return;
-                }
+                if (!userProfile.name || !userProfile.carModel || !userProfile.carColor) { alert("Please fill in all details!"); return; }
                 const pickupTime = extraDetails.pickupType === 'ASAP' ? 'ASAP' : extraDetails.customTime;
-                const newOrder = {
-                    id: Math.floor(Math.random() * 9000) + 1000,
-                    ...userProfile,
-                    items: cart,
-                    total: getTotal(),
-                    status: 'pending',
-                    locationId: selectedLocation ? selectedLocation.id : 1,
-                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    pickupTime: pickupTime,
-                    locationDetails: extraDetails.details,
-                    photo: extraDetails.carPhoto
-                };
+                const newOrder = { id: Math.floor(Math.random() * 9000) + 1000, ...userProfile, items: cart, total: getTotal(), status: 'pending', locationId: selectedLocation ? selectedLocation.id : 1, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), pickupTime: pickupTime, locationDetails: extraDetails.details, photo: extraDetails.carPhoto, isFlagged: userProfile.name.toLowerCase() === 'karen' };
                 setOrders([newOrder, ...orders]);
                 setCart([]);
-                setView('success');
+                navigate('success');
             };
 
-            const updateOrderStatus = (id, newStatus) => {
-                setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o));
-            };
+            const updateOrderStatus = (id, newStatus) => { setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o)); };
+            const rejectOrder = (id) => { setOrders(orders.map(o => o.id === id ? { ...o, status: 'rejected' } : o)); };
 
-            // RENDER SWITCH
-            if (view === 'landing') return <LandingPage setView={setView} />;
-            if (view === 'location-select') return <LocationSelect setView={setView} setSelectedLocation={setSelectedLocation} />;
-            if (view === 'profile') return <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} setView={setView} />;
-            if (view === 'cafe-login') return <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={setView} />;
-            if (view === 'customer') return <CustomerMenu selectedLocation={selectedLocation} menu={menu} cart={cart} addToCart={addToCart} setView={setView} getTotal={getTotal} />;
-            if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => setView('customer')} cart={cart} total={getTotal()} />;
-            if (view === 'success') return (
-                <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center p-6 text-white text-center animate-fade-in">
-                    <div className="bg-brand-orange text-white w-24 h-24 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-bounce"><Icons.CheckCircle /></div>
-                    <h2 className="text-4xl font-serif italic mb-4">Order Confirmed</h2>
-                    <p className="text-stone-400 text-lg mb-8">We are looking for your <span className="text-white font-bold">{userProfile.carColor} {userProfile.carModel}</span>.</p>
-                    <button onClick={() => { setCart([]); setView('landing'); }} className="text-stone-500 hover:text-white transition underline text-sm tracking-widest uppercase">Done</button>
-                </div>
-            );
+            if (view === 'landing') return <LandingPage setView={navigate} />;
+            if (view === 'location-select') return <LocationSelect setView={navigate} setSelectedLocation={setSelectedLocation} />;
+            if (view === 'profile') return <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} setView={navigate} />;
+            if (view === 'cafe-login') return <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} />;
+            if (view === 'customer') return <CustomerMenu selectedLocation={selectedLocation} menu={menu} cart={cart} addToCart={addToCart} setView={navigate} getTotal={getTotal} />;
+            if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => navigate('customer')} cart={cart} total={getTotal()} curbsideFee={curbsideFee} />;
+            if (view === 'success') return <SuccessScreen setView={navigate} userProfile={userProfile} />;
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
