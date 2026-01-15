@@ -317,6 +317,25 @@
                                 </div>
 
                                 <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Pricing</h4><div className="flex gap-4 items-center bg-stone-50 p-4 rounded-xl"><input type="range" min="0" max="10" step="0.5" value={curbsideFee} onChange={(e) => setCurbsideFee(Number(e.target.value))} className="flex-1 accent-brand-orange h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer" /><span className="font-bold text-2xl w-16 text-right">${curbsideFee.toFixed(2)}</span></div><p className="text-xs text-stone-400 mt-2 italic text-center">Tip: Set to $0.00 to boost order volume during slow hours.</p></div>
+
+                                <div className="flex items-center justify-between p-3 bg-white border border-stone-200 rounded-lg">
+                                    <div><span className="font-bold text-sm flex items-center gap-2"><Icons.Megaphone /> New Customer Promo</span><p className="text-xs text-stone-400">Waive fee ($0.00) to attract new users.</p></div>
+                                    <div onClick={() => setIsPromoActive(!isPromoActive)} className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors duration-300 ${isPromoActive ? 'bg-brand-orange' : 'bg-stone-300'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isPromoActive ? 'left-7' : 'left-1'}`}></div></div>
+                                </div>
+
+                                <div className="bg-white border border-stone-200 rounded-lg p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div><span className="font-bold text-sm flex items-center gap-2"><Icons.Heart /> Local's Rate</span><p className="text-xs text-stone-400">Cap fee at $1.00 for loyal customers.</p></div>
+                                        <div onClick={() => setIsLoyaltyActive(!isLoyaltyActive)} className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors duration-300 ${isLoyaltyActive ? 'bg-green-500' : 'bg-stone-300'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isLoyaltyActive ? 'left-7' : 'left-1'}`}></div></div>
+                                    </div>
+                                    {isLoyaltyActive && (
+                                        <div className="mt-3 pt-3 border-t border-stone-100 space-y-3">
+                                            <div className="flex gap-2"><input type="text" placeholder="Add Local (Name/Phone)" value={localName} onChange={e => setLocalName(e.target.value)} className="flex-1 p-2 text-sm border rounded bg-stone-50" /><button onClick={() => { setLocalName(''); alert('Local Added'); }} className="bg-stone-800 text-white px-3 text-xs rounded font-bold">Add</button></div>
+                                            <div className="flex items-center gap-2"><input type="checkbox" className="accent-green-500" defaultChecked /><span className="text-xs text-stone-500">Auto-apply for 10+ orders/month</span></div>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4><div className="flex gap-2 mb-4"><button onClick={() => setOrderLimitType('unlimited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Unlimited</button><button onClick={() => setOrderLimitType('limited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'limited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Limit Flow</button></div>{orderLimitType === 'limited' && <div className="bg-stone-50 p-4 rounded-xl animate-fade-in"><div className="flex items-center justify-between mb-2"><span className="text-stone-600 font-medium">Max Orders</span><div className="flex items-center gap-3"><button onClick={() => setMaxOrdersPerWindow(Math.max(1, maxOrdersPerWindow - 1))} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">-</button><span className="font-bold text-xl w-8 text-center">{maxOrdersPerWindow}</span><button onClick={() => setMaxOrdersPerWindow(maxOrdersPerWindow + 1)} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">+</button></div></div><div className="flex items-center justify-between mb-3"><span className="text-stone-600 font-medium">Time Window</span><select value={timeWindowMins} onChange={(e) => setTimeWindowMins(Number(e.target.value))} className="p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold"><option value={10}>Every 10 mins</option><option value={15}>Every 15 mins</option><option value={20}>Every 20 mins</option><option value={30}>Every 30 mins</option><option value={60}>Every Hour</option></select></div><div className="flex items-center gap-2 pt-3 border-t border-stone-200"><input type="checkbox" className="accent-brand-orange" checked={autoSurge} onChange={(e) => setAutoSurge(e.target.checked)} /><span className="text-xs text-stone-500 font-bold">Auto-Surge: Increase Fee if limit reached</span></div></div>}</div>
                             </div>
                         )}
@@ -581,13 +600,12 @@
             const updateOrderStatus = (id, newStatus) => { setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o)); };
             const rejectOrder = (id) => { setOrders(orders.map(o => o.id === id ? { ...o, status: 'rejected' } : o)); };
 
-            if (!isAuthenticated && view === 'cafe-login') return <LockScreen onUnlock={() => { setIsAuthenticated(true); navigate('cafe-login'); }} />;
-            // Removed view === logout case here since handleLogout sets view to cafe-login
-
+            if (!isAuthenticated) return <LockScreen onUnlock={() => setIsAuthenticated(true)} />;
+            
             if (view === 'landing') return <LandingPage setView={navigate} />;
             if (view === 'location-select') return <LocationSelect setView={navigate} setSelectedLocation={setSelectedLocation} isPromoActive={isPromoActive} userProfile={userProfile} />;
             if (view === 'profile') return <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} setView={navigate} />;
-            if (view === 'cafe-login') return isAuthenticated ? <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} menu={menu} setMenu={setMenu} isPromoActive={isPromoActive} setIsPromoActive={setIsPromoActive} isLoyaltyActive={isLoyaltyActive} setIsLoyaltyActive={setIsLoyaltyActive} autoSurge={autoSurge} setAutoSurge={setAutoSurge} /> : <LockScreen onUnlock={() => setIsAuthenticated(true)} />;
+            if (view === 'cafe-login') return <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} menu={menu} setMenu={setMenu} isPromoActive={isPromoActive} setIsPromoActive={setIsPromoActive} isLoyaltyActive={isLoyaltyActive} setIsLoyaltyActive={setIsLoyaltyActive} autoSurge={autoSurge} setAutoSurge={setAutoSurge} />;
             if (view === 'customer') return <CustomerMenu selectedLocation={selectedLocation} menu={menu} cart={cart} addToCart={addToCart} setView={navigate} getTotal={getTotal} />;
             if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => navigate('customer')} cart={cart} total={getTotal()} curbsideFee={curbsideFee} isPromoActive={isPromoActive} isLoyaltyActive={isLoyaltyActive} />;
             if (view === 'success') return <SuccessScreen setView={navigate} userProfile={userProfile} />;
