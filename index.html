@@ -25,10 +25,12 @@
                         'fade-in': 'fadeIn 0.4s ease-out',
                         'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                         'bounce-slow': 'bounce 2s infinite',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } }
                     }
                 }
             }
@@ -83,7 +85,10 @@
             Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>,
             ThumbsDown: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>,
             Send: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-            Mail: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Mail: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
+            Edit: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+            Upload: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
+            Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         };
 
         const CONTACT_EMAIL = "hello@pullupcoffee.com";
@@ -106,6 +111,50 @@
         ];
 
         // --- SUB-COMPONENTS ---
+
+        const LockScreen = ({ onUnlock }) => {
+            const [code, setCode] = useState('');
+            const [error, setError] = useState(false);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (code === '4551') {
+                    onUnlock();
+                } else {
+                    setError(true);
+                    setTimeout(() => setError(false), 500);
+                }
+            };
+
+            return (
+                <div className="flex flex-col min-h-screen bg-brand-dark text-white items-center justify-center p-6 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30 blur-sm"></div>
+                    <div className="relative z-10 w-full max-w-sm text-center">
+                        <div className="bg-brand-orange w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl animate-bounce-slow">
+                            <Icons.Lock />
+                        </div>
+                        <h1 className="text-3xl font-serif font-bold mb-2">Pull Up Coffee™</h1>
+                        <p className="text-stone-400 mb-8 text-sm uppercase tracking-widest">Beta Access Restricted</p>
+                        
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <input 
+                                type="password" 
+                                inputMode="numeric" 
+                                pattern="[0-9]*"
+                                value={code} 
+                                onChange={(e) => setCode(e.target.value)} 
+                                placeholder="Enter Access Code" 
+                                className={`w-full p-4 bg-white/10 backdrop-blur-md border rounded-xl text-center text-xl tracking-widest focus:outline-none transition ${error ? 'border-red-500 animate-shake' : 'border-white/20 focus:border-brand-orange'}`}
+                                autoFocus
+                            />
+                            <button type="submit" className="w-full bg-brand-orange text-white py-4 rounded-xl font-bold text-lg hover:bg-orange-600 transition shadow-lg">
+                                Unlock
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
 
         const ProductModal = ({ item, onClose, onAdd }) => {
             const [size, setSize] = useState('Reg');
@@ -207,15 +256,19 @@
             );
         };
 
-        const CafeAdmin = ({ orders, updateOrderStatus, setView, rejectOrder, curbsideFee, setCurbsideFee }) => {
+        const CafeAdmin = ({ orders, updateOrderStatus, setView, rejectOrder, curbsideFee, setCurbsideFee, menu, setMenu }) => {
             const [adminTab, setAdminTab] = useState('orders'); 
             const [isOnline, setIsOnline] = useState(true);
             const [showContract, setShowContract] = useState(false);
             const [orderLimitType, setOrderLimitType] = useState('unlimited');
             const [maxOrdersPerWindow, setMaxOrdersPerWindow] = useState(5);
             const [timeWindowMins, setTimeWindowMins] = useState(15);
-            const [botChat, setBotChat] = useState([{ type: 'bot', text: 'Hi! I am the Partner Support AI. Type a question or ask me anything about running your cafe on Pull Up.' }]);
+            const [botChat, setBotChat] = useState([{ type: 'bot', text: 'Hi! I am your Instant Partner Support. Ask me anything about fees, menu setup, or hardware.' }]);
             const [botInput, setBotInput] = useState('');
+            
+            // New Menu Item State
+            const [newItem, setNewItem] = useState({ name: '', desc: '', price: '', img: null });
+            const fileInputRef = useRef(null);
 
             const handleBotSubmit = (e) => { e.preventDefault(); if(!botInput.trim()) return; handleBotQuestion(botInput); setBotInput(''); };
             const handleBotQuestion = (question) => {
@@ -227,10 +280,34 @@
                     else if (q.includes("insurance") || q.includes("liability")) { answer = "Initially, deliveries are covered by your business public liability. As we scale, Pull Up Coffee will assume wider insurance coverage to protect our partners."; }
                     else if (q.includes("hardware") || q.includes("phone") || q.includes("ipad")) { answer = "No expensive kits needed. Just any smartphone or tablet with an internet connection. We provide the virtual infrastructure."; }
                     else if (q.includes("early") || q.includes("benefit")) { answer = "Early adopters receive lifetime low commission rates and premium placement on our maps to drive more traffic to your cafe."; }
+                    else if (q.includes("menu") || q.includes("add") || q.includes("change")) { answer = "You can now update your menu instantly in the 'Settings' tab! Just scroll down to 'Menu Management' to add photos, change prices, or remove items."; }
                     setBotChat(prev => [...prev, { type: 'bot', text: answer }]);
                 }, 600);
             };
 
+            const handleImageUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => { setNewItem(prev => ({ ...prev, img: reader.result })); };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const handleAddItem = () => {
+                if (!newItem.name || !newItem.price) { alert("Name and Price are required."); return; }
+                const item = {
+                    id: Date.now(),
+                    name: newItem.name,
+                    desc: newItem.desc || 'Freshly added item.',
+                    price: parseFloat(newItem.price),
+                    img: newItem.img || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80'
+                };
+                setMenu([...menu, item]);
+                setNewItem({ name: '', desc: '', price: '', img: null });
+            };
+
+            const handleDeleteItem = (id) => { if(confirm('Remove this item from the live menu?')) { setMenu(menu.filter(m => m.id !== id)); } };
             const notifyCustomer = (msg) => { alert(`SIMULATED SMS TO CUSTOMER:\n"${msg}"`); };
             const getNextStatus = (currentStatus) => { const flow = ['pending', 'accepted', 'preparing', 'delivering', 'completed']; const idx = flow.indexOf(currentStatus); return idx < flow.length - 1 ? flow[idx + 1] : 'completed'; };
             const getButtonText = (status) => { switch(status) { case 'pending': return 'Accept Order'; case 'accepted': return 'Start Making'; case 'preparing': return 'Run to Car'; case 'delivering': return 'Complete Order'; default: return 'Completed'; } };
@@ -274,17 +351,48 @@
                             <div className="animate-fade-in bg-white rounded-3xl p-8 shadow-sm border border-stone-100 max-w-2xl mx-auto space-y-8">
                                 <h3 className="font-bold text-xl mb-6 text-brand-dark">Store Configuration</h3>
                                 <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl"><div><span className="font-bold block">Service Status</span><span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-500'}`}>{isOnline ? '● ONLINE' : '● OFFLINE'}</span></div><div onClick={() => setIsOnline(!isOnline)} className={`w-14 h-8 rounded-full relative cursor-pointer transition-colors duration-300 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}><div className={`w-6 h-6 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isOnline ? 'left-7' : 'left-1'}`}></div></div></div>
+                                
+                                <div className="pt-6 border-t border-stone-100">
+                                    <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Menu Management</h4>
+                                    <div className="space-y-3 mb-6 max-h-60 overflow-y-auto pr-2">
+                                        {menu.map(item => (
+                                            <div key={item.id} className="flex justify-between items-center p-3 bg-stone-50 rounded-lg border border-stone-100">
+                                                <div className="flex items-center gap-3">
+                                                    <img src={item.img} className="w-10 h-10 rounded-md object-cover" />
+                                                    <span className="font-medium text-sm text-brand-dark">{item.name} (${item.price.toFixed(2)})</span>
+                                                </div>
+                                                <button onClick={() => handleDeleteItem(item.id)} className="text-red-400 hover:text-red-600 p-2 rounded hover:bg-red-50"><Icons.Trash2 /></button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                                        <p className="text-xs font-bold text-brand-dark uppercase mb-3">Add New Item</p>
+                                        <div className="space-y-3">
+                                            <input type="text" placeholder="Item Name" value={newItem.name} onChange={e => setNewItem({...newItem, name: e.target.value})} className="w-full p-2 text-sm border rounded-lg" />
+                                            <div className="flex gap-2">
+                                                <input type="number" placeholder="Price" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} className="w-24 p-2 text-sm border rounded-lg" />
+                                                <input type="text" placeholder="Description" value={newItem.desc} onChange={e => setNewItem({...newItem, desc: e.target.value})} className="flex-1 p-2 text-sm border rounded-lg" />
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleImageUpload} />
+                                                <button onClick={() => fileInputRef.current.click()} className="flex-1 py-2 border border-dashed border-stone-300 rounded-lg text-xs font-bold text-stone-500 hover:bg-white transition flex items-center justify-center gap-2"><Icons.Upload /> {newItem.img ? 'Image Selected' : 'Upload Photo'}</button>
+                                                <button onClick={handleAddItem} className="bg-brand-dark text-white px-6 rounded-lg text-xs font-bold hover:bg-stone-800 transition">Add Item</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Pricing</h4><div className="flex gap-4 items-center bg-stone-50 p-4 rounded-xl"><input type="range" min="0" max="10" step="0.5" value={curbsideFee} onChange={(e) => setCurbsideFee(Number(e.target.value))} className="flex-1 accent-brand-orange h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer" /><span className="font-bold text-2xl w-16 text-right">${curbsideFee.toFixed(2)}</span></div><p className="text-xs text-stone-400 mt-2 italic text-center">Tip: Set to $0.00 to boost order volume during slow hours.</p></div>
-                                <div className="text-center pt-8 border-t border-stone-100"><p className="text-sm text-stone-500 mb-2">Need to update your banking or menu?</p><a href={`mailto:${CONTACT_EMAIL}`} className="text-brand-orange font-bold hover:underline">Email Business Support</a></div>
+                                <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4><div className="flex gap-2 mb-4"><button onClick={() => setOrderLimitType('unlimited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Unlimited</button><button onClick={() => setOrderLimitType('limited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'limited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Limit Flow</button></div>{orderLimitType === 'limited' && <div className="bg-stone-50 p-4 rounded-xl animate-fade-in"><div className="flex items-center justify-between mb-2"><span className="text-stone-600 font-medium">Max Orders</span><div className="flex items-center gap-3"><button onClick={() => setMaxOrdersPerWindow(Math.max(1, maxOrdersPerWindow - 1))} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">-</button><span className="font-bold text-xl w-8 text-center">{maxOrdersPerWindow}</span><button onClick={() => setMaxOrdersPerWindow(maxOrdersPerWindow + 1)} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">+</button></div></div><div className="flex items-center justify-between"><span className="text-stone-600 font-medium">Time Window</span><select value={timeWindowMins} onChange={(e) => setTimeWindowMins(Number(e.target.value))} className="p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold"><option value={10}>Every 10 mins</option><option value={15}>Every 15 mins</option><option value={20}>Every 20 mins</option><option value={30}>Every 30 mins</option><option value={60}>Every Hour</option></select></div></div>}</div>
                             </div>
                         )}
                         {adminTab === 'partner' && (
                             <div className="animate-fade-in bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-stone-100">
                                 <div className="max-w-4xl mx-auto">
                                     <div className="mb-12 bg-stone-900 rounded-2xl p-6 text-white shadow-2xl border border-stone-700">
-                                        <div className="flex items-center gap-3 border-b border-stone-700 pb-4 mb-4"><div className="bg-brand-orange p-2 rounded-lg text-white animate-pulse"><Icons.Robot /></div><div><h3 className="font-bold">Partner AI Support</h3><p className="text-xs text-stone-400">Ask me anything. Type below.</p></div></div>
+                                        <div className="flex items-center gap-3 border-b border-stone-700 pb-4 mb-4"><div className="bg-brand-orange p-2 rounded-lg text-white animate-pulse"><Icons.Robot /></div><div><h3 className="font-bold">Instant Partner Support</h3><p className="text-xs text-stone-400">Ask me anything. Type below.</p></div></div>
                                         <div className="h-48 overflow-y-auto space-y-3 mb-4 pr-2 scrollbar-thin">{botChat.map((msg, idx) => (<div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}><div className={`p-3 rounded-2xl max-w-[80%] text-sm ${msg.type === 'user' ? 'bg-brand-orange text-white rounded-br-none' : 'bg-stone-800 text-stone-200 rounded-bl-none'}`}>{msg.text}</div></div>))}</div>
-                                        <form onSubmit={handleBotSubmit} className="flex gap-2"><input type="text" value={botInput} onChange={e => setBotInput(e.target.value)} placeholder="Type a question (e.g. Fees, Insurance...)" className="flex-1 bg-stone-800 border-none rounded-xl px-4 py-3 text-sm text-white focus:ring-1 focus:ring-brand-orange placeholder-stone-500" /><button type="submit" className="bg-brand-orange p-3 rounded-xl text-white hover:bg-orange-600 transition"><Icons.Send /></button></form>
+                                        <form onSubmit={handleBotSubmit} className="flex gap-2"><input type="text" value={botInput} onChange={e => setBotInput(e.target.value)} placeholder="Type a question (e.g. Fees, Menu update...)" className="flex-1 bg-stone-800 border-none rounded-xl px-4 py-3 text-sm text-white focus:ring-1 focus:ring-brand-orange placeholder-stone-500" /><button type="submit" className="bg-brand-orange p-3 rounded-xl text-white hover:bg-orange-600 transition"><Icons.Send /></button></form>
                                     </div>
                                     <div className="bg-brand-dark text-white rounded-2xl p-8 border border-stone-800 text-center"><h3 className="font-bold text-2xl mb-4">Join the Virtual Drive-Thru Revolution</h3><p className="text-stone-300 mb-8 max-w-xl mx-auto">Early adopters get lifetime lower commission rates and priority placement. Ready to serve the "parents in cars" market?</p><a href={`mailto:${CONTACT_EMAIL}?subject=Partnership Inquiry`} className="bg-white text-brand-dark px-10 py-5 rounded-2xl font-bold hover:bg-stone-200 transition inline-flex items-center gap-3"><Icons.Mail /> Email Founder directly</a><p className="text-[10px] text-stone-500 mt-6 tracking-widest uppercase">STEVEN WEIR • {CONTACT_EMAIL}</p></div>
                                 </div>
@@ -304,7 +412,6 @@
             const [details, setDetails] = useState('');
             const [carPhoto, setCarPhoto] = useState(null);
             const [agreed, setAgreed] = useState(false);
-            
             const fileInputRef = useRef(null);
 
             const handleChange = (field, value) => { setUser(prev => ({ ...prev, [field]: value })); };
@@ -316,7 +423,6 @@
                     <div className="max-w-lg mx-auto">
                         <button onClick={onBack} className="mb-6 flex items-center text-stone-500 font-medium hover:text-brand-dark transition"><Icons.X /> <span className="ml-2">Back to Menu</span></button>
                         <h2 className="text-3xl font-serif font-bold text-brand-dark mb-6">Final Details</h2>
-                        <p className="text-stone-500 mb-8">Tell us when and where to find you.</p>
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-5 mb-6">
                             <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Pickup Time</label><div className="flex gap-2 mb-3"><button onClick={() => setPickupType('ASAP')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'ASAP' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}><Icons.TrendingUp /> ASAP</button><button onClick={() => setPickupType('LATER')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${pickupType === 'LATER' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}><Icons.Clock /> Pick Time</button></div>{pickupType === 'LATER' && <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-lg font-bold text-center" />}</div>
                             <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label><input type="text" value={user.name} onChange={e => handleChange('name', e.target.value)} placeholder="e.g. Alex" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div>
@@ -329,9 +435,7 @@
                             <input type="checkbox" id="refund-policy" className="mt-1 w-5 h-5 accent-brand-orange" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
                             <label htmlFor="refund-policy" className="text-stone-600">I agree to be curbside within 10 minutes of my time. I understand late arrivals <span className="font-bold text-stone-800">forfeit the order with no refunds</span>.</label>
                         </div>
-                        <div className="mb-6 text-xs text-stone-500 text-center italic">
-                            Payment is processed securely <strong>only after</strong> the cafe accepts your order.
-                        </div>
+                        <div className="mb-6 text-xs text-stone-500 text-center italic">Payment is processed securely <strong>only after</strong> the cafe accepts your order.</div>
                         <button disabled={!agreed} onClick={() => onSubmit({ pickupType, customTime, details, carPhoto })} className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"><Icons.ChevronRight /> Pay & Pull Up</button>
                     </div>
                 </div>
@@ -447,6 +551,7 @@
 
         const App = () => {
             const [view, setView] = useState('landing');
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
             const [selectedLocation, setSelectedLocation] = useState(null);
             const [cart, setCart] = useState([]);
             const [orders, setOrders] = useState([]);
@@ -477,10 +582,11 @@
             const updateOrderStatus = (id, newStatus) => { setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o)); };
             const rejectOrder = (id) => { setOrders(orders.map(o => o.id === id ? { ...o, status: 'rejected' } : o)); };
 
+            if (!isAuthenticated) return <LockScreen onUnlock={() => setIsAuthenticated(true)} />;
             if (view === 'landing') return <LandingPage setView={navigate} />;
             if (view === 'location-select') return <LocationSelect setView={navigate} setSelectedLocation={setSelectedLocation} />;
             if (view === 'profile') return <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} setView={navigate} />;
-            if (view === 'cafe-login') return <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} />;
+            if (view === 'cafe-login') return <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} menu={menu} setMenu={setMenu} />;
             if (view === 'customer') return <CustomerMenu selectedLocation={selectedLocation} menu={menu} cart={cart} addToCart={addToCart} setView={navigate} getTotal={getTotal} />;
             if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => navigate('customer')} cart={cart} total={getTotal()} curbsideFee={curbsideFee} />;
             if (view === 'success') return <SuccessScreen setView={navigate} userProfile={userProfile} />;
