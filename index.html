@@ -25,12 +25,10 @@
                         'fade-in': 'fadeIn 0.4s ease-out',
                         'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
                         'bounce-slow': 'bounce 2s infinite',
-                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
-                        shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } }
+                        slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
                     }
                 }
             }
@@ -88,7 +86,10 @@
             Mail: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
             Edit: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
             Upload: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
-            Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
+            Megaphone: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 9 11 13 4 13 20 9 13 3 13 3 11"/><path d="M13 8a5 5 0 0 1 0 8"/></svg>,
+            Star: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+            Bolt: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         };
 
         const CONTACT_EMAIL = "hello@pullupcoffee.com";
@@ -115,43 +116,11 @@
         const LockScreen = ({ onUnlock }) => {
             const [code, setCode] = useState('');
             const [error, setError] = useState(false);
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                if (code === '4551') {
-                    onUnlock();
-                } else {
-                    setError(true);
-                    setTimeout(() => setError(false), 500);
-                }
-            };
-
+            const handleSubmit = (e) => { e.preventDefault(); if (btoa(code) === 'NDU1MQ==') { onUnlock(); } else { setError(true); setTimeout(() => setError(false), 500); } };
             return (
                 <div className="flex flex-col min-h-screen bg-brand-dark text-white items-center justify-center p-6 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30 blur-sm"></div>
-                    <div className="relative z-10 w-full max-w-sm text-center">
-                        <div className="bg-brand-orange w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl animate-bounce-slow">
-                            <Icons.Lock />
-                        </div>
-                        <h1 className="text-3xl font-serif font-bold mb-2">Pull Up Coffee™</h1>
-                        <p className="text-stone-400 mb-8 text-sm uppercase tracking-widest">Beta Access Restricted</p>
-                        
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input 
-                                type="password" 
-                                inputMode="numeric" 
-                                pattern="[0-9]*"
-                                value={code} 
-                                onChange={(e) => setCode(e.target.value)} 
-                                placeholder="Enter Access Code" 
-                                className={`w-full p-4 bg-white/10 backdrop-blur-md border rounded-xl text-center text-xl tracking-widest focus:outline-none transition ${error ? 'border-red-500 animate-shake' : 'border-white/20 focus:border-brand-orange'}`}
-                                autoFocus
-                            />
-                            <button type="submit" className="w-full bg-brand-orange text-white py-4 rounded-xl font-bold text-lg hover:bg-orange-600 transition shadow-lg">
-                                Unlock
-                            </button>
-                        </form>
-                    </div>
+                    <div className="relative z-10 w-full max-w-sm text-center"><div className="bg-brand-orange w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl animate-bounce-slow"><Icons.Lock /></div><h1 className="text-3xl font-serif font-bold mb-2">Pull Up Coffee™</h1><p className="text-stone-400 mb-8 text-sm uppercase tracking-widest">Beta Access Restricted</p><form onSubmit={handleSubmit} className="space-y-4"><input type="password" inputMode="numeric" pattern="[0-9]*" value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter Access Code" className={`w-full p-4 bg-white/10 backdrop-blur-md border rounded-xl text-center text-xl tracking-widest focus:outline-none transition ${error ? 'border-red-500 animate-shake' : 'border-white/20 focus:border-brand-orange'}`} autoFocus /><button type="submit" className="w-full bg-brand-orange text-white py-4 rounded-xl font-bold text-lg hover:bg-orange-600 transition shadow-lg">Unlock</button></form></div>
                 </div>
             );
         };
@@ -172,32 +141,16 @@
 
             const getAdjustedPrice = () => {
                 let price = item.price;
-                if (!isFood && !isBeans) {
-                    if(size === 'Large') price += 0.50;
-                    if(milk === 'Oat' || milk === 'Almond' || milk === 'Soy') price += 0.50;
-                }
-                if (isBeans) {
-                    if(beanWeight === '500g') price = 32.00; 
-                    if(beanWeight === '1kg') price = 55.00;
-                }
+                if (!isFood && !isBeans) { if(size === 'Large') price += 0.50; if(milk === 'Oat' || milk === 'Almond' || milk === 'Soy') price += 0.50; }
+                if (isBeans) { if(beanWeight === '500g') price = 32.00; if(beanWeight === '1kg') price = 55.00; }
                 return price;
             };
-
             return (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in">
                     <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto">
-                        <div className="flex justify-between items-start mb-6">
-                            <div><h3 className="font-serif font-bold text-2xl text-brand-dark">{item.name}</h3><p className="text-stone-500 text-sm">Customize your choice</p></div>
-                            <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
-                        </div>
+                        <div className="flex justify-between items-start mb-6"><div><h3 className="font-serif font-bold text-2xl text-brand-dark">{item.name}</h3><p className="text-stone-500 text-sm">Customize your choice</p></div><button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button></div>
                         <div className="space-y-6 mb-8">
-                            {!isFood && !isBeans && (
-                                <Fragment>
-                                    <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Size</label><div className="flex gap-2">{['Small', 'Reg', 'Large'].map(opt => (<button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>{opt}</button>))}</div></div>
-                                    {!item.name.includes("Black") && <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label><select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition"><option>Full Cream</option><option>Skim</option><option>Oat (+$0.50)</option><option>Almond (+$0.50)</option><option>Soy (+$0.50)</option><option>Lactose Free</option></select></div>}
-                                    <div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Sugar</label><select value={sugar} onChange={e => setSugar(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl"><option value="0">None</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="Splenda">Splenda</option></select></div><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Temp</label><select value={temp} onChange={e => setTemp(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl"><option>Hot</option><option>Extra Hot</option><option>Warm</option></select></div></div>
-                                </Fragment>
-                            )} 
+                            {!isFood && !isBeans && (<Fragment><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Size</label><div className="flex gap-2">{['Small', 'Reg', 'Large'].map(opt => (<button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>{opt}</button>))}</div></div>{!item.name.includes("Black") && <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label><select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition"><option>Full Cream</option><option>Skim</option><option>Oat (+$0.50)</option><option>Almond (+$0.50)</option><option>Soy (+$0.50)</option><option>Lactose Free</option></select></div>}<div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Sugar</label><select value={sugar} onChange={e => setSugar(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl"><option value="0">None</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="Splenda">Splenda</option></select></div><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Temp</label><select value={temp} onChange={e => setTemp(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl"><option>Hot</option><option>Extra Hot</option><option>Warm</option></select></div></div></Fragment>)} 
                             {isFood && (<div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Preparation</label><div className="flex gap-2">{['Room Temp', 'Warmed Up'].map(opt => (<button key={opt} onClick={() => setPrep(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${prep === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>{opt}</button>))}</div></div>)}
                             {isBeans && (<Fragment><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Weight</label><div className="flex gap-2">{[{l: '250g', p: 18}, {l: '500g', p: 32}, {l: '1kg', p: 55}].map(opt => (<button key={opt.l} onClick={() => setBeanWeight(opt.l)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition flex flex-col items-center justify-center ${beanWeight === opt.l ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}><span>{opt.l}</span><span className="text-xs opacity-80">${opt.p}</span></button>))}</div></div><div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Grind</label><select value={grind} onChange={e => setGrind(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition"><option>Whole Bean</option><option>Espresso</option><option>Stovetop</option><option>Plunger / French Press</option><option>Filter / Pour Over</option></select></div></Fragment>)}
                             <div><label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">{isFood ? 'Dietary Notes' : isBeans ? 'Machine Details' : 'Barista Notes'}</label><textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder={isFood ? "e.g. No butter..." : isBeans ? "e.g. For a Breville Express..." : "e.g. 3/4 full..."} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm focus:bg-white transition"></textarea></div>
@@ -218,7 +171,7 @@
                     <p className="text-stone-300 mb-12 text-lg max-w-md font-light leading-relaxed">Premium coffee. Delivered to your window, from your favourite cafe.</p>
                     <div className="flex flex-col gap-4 w-full max-w-sm mb-12">
                         <button onClick={() => setView('location-select')} className="bg-white text-brand-dark py-5 px-8 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-200 transform hover:scale-105 transition shadow-2xl"><Icons.Car /> Order Now</button>
-                        <div className="flex gap-4"><button onClick={() => setView('profile')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Profile</button><button onClick={() => setView('cafe-login')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partners</button></div>
+                        <button onClick={() => setView('cafe-login')} className="bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partner Login</button>
                     </div>
                 </div>
                 <div className="relative z-10 bg-black/40 backdrop-blur-lg border-t border-white/10 p-6 md:p-8">
@@ -233,30 +186,23 @@
             </div>
         );
 
-        const UserProfile = ({ userProfile, setUserProfile, setView }) => {
-            const handleChange = (field, value) => { setUserProfile(prev => ({ ...prev, [field]: value })); };
-            return (
-                <div className="min-h-screen bg-stone-50 p-6 flex flex-col items-center animate-fade-in">
-                    <div className="w-full max-w-md">
-                        <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-500 hover:text-brand-dark"><Icons.X /> Back</button>
-                        <h2 className="text-3xl font-serif font-bold text-brand-dark mb-6">My Profile</h2>
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
-                            <h3 className="font-bold mb-4">Saved Details</h3>
-                            <p className="text-sm text-stone-500 mb-4">We'll auto-fill these when you order.</p>
-                            <div className="space-y-4">
-                                <input type="text" placeholder="My Name" value={userProfile.name} onChange={e => handleChange('name', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
-                                <input type="text" placeholder="My Car Model" value={userProfile.carModel} onChange={e => handleChange('carModel', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
-                                <input type="text" placeholder="My Car Color" value={userProfile.carColor} onChange={e => handleChange('carColor', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
-                                <input type="text" placeholder="My License Plate (Full)" value={userProfile.plate} onChange={e => handleChange('plate', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl uppercase font-mono tracking-widest focus:bg-white transition" />
-                            </div>
-                            <button onClick={() => { alert('Profile Saved!'); setView('landing'); }} className="w-full mt-6 bg-brand-dark text-white py-3 rounded-xl font-bold hover:bg-stone-800 transition">Save Profile</button>
-                        </div>
+        const TermsModal = ({ onClose }) => (
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl max-h-[80vh] overflow-y-auto p-6">
+                    <div className="flex justify-between items-center mb-4"><h3 className="font-bold text-xl">Terms of Service</h3><button onClick={onClose}><Icons.X /></button></div>
+                    <div className="prose text-sm text-stone-600 leading-relaxed space-y-4">
+                        <p><strong>1. Service Overview:</strong> Pull Up Coffee is a technology platform connecting users with third-party cafes.</p>
+                        <p><strong>2. Liability:</strong> We are not responsible for the quality of food/beverages or safety on cafe premises.</p>
+                        <p><strong>3. Refunds:</strong> Refunds are at the discretion of the specific cafe partner.</p>
+                        <p><strong>4. User Data:</strong> We collect email and phone numbers solely for order receipts and essential service notifications.</p>
+                        <p><strong>5. Australian Consumer Law:</strong> Our services come with guarantees that cannot be excluded under the Australian Consumer Law.</p>
                     </div>
+                    <button onClick={onClose} className="w-full mt-6 bg-brand-dark text-white py-3 rounded-xl font-bold">I Understand</button>
                 </div>
-            );
-        };
+            </div>
+        );
 
-        const CafeAdmin = ({ orders, updateOrderStatus, setView, rejectOrder, curbsideFee, setCurbsideFee, menu, setMenu }) => {
+        const CafeAdmin = ({ orders, updateOrderStatus, setView, rejectOrder, curbsideFee, setCurbsideFee, menu, setMenu, isPromoActive, setIsPromoActive, isLoyaltyActive, setIsLoyaltyActive, autoSurge, setAutoSurge }) => {
             const [adminTab, setAdminTab] = useState('orders'); 
             const [isOnline, setIsOnline] = useState(true);
             const [showContract, setShowContract] = useState(false);
@@ -265,6 +211,7 @@
             const [timeWindowMins, setTimeWindowMins] = useState(15);
             const [botChat, setBotChat] = useState([{ type: 'bot', text: 'Hi! I am your Instant Partner Support. Ask me anything about fees, menu setup, or hardware.' }]);
             const [botInput, setBotInput] = useState('');
+            const [localName, setLocalName] = useState('');
             
             // New Menu Item State
             const [newItem, setNewItem] = useState({ name: '', desc: '', price: '', img: null });
@@ -276,7 +223,8 @@
                 const q = question.toLowerCase();
                 setTimeout(() => {
                     let answer = `I'm not sure about that one yet, but Steven would love to help. Please email us at ${CONTACT_EMAIL} for an immediate response.`;
-                    if (q.includes("fee") || q.includes("price") || q.includes("cost")) { answer = "You have full control over the 'Curbside Fee'. Set it to $0 for promos or raise it during peak times. We take a flat 20% commission on the fee only."; }
+                    if (q.includes("fee") || q.includes("price") || q.includes("cost")) { answer = "You have full control over the 'Curbside Fee'. Set it to $0 for promos or raise it up to $10.00 during peak times. Note: Our commission percentage scales with dynamic pricing to support the surge infrastructure."; }
+                    else if (q.includes("commission") || q.includes("split")) { answer = "Standard split is 80/20 on the service fee. However, during high-volume 'Surge' pricing (fees > $3), the commission percentage adjusts to cover the increased server load and demand management."; }
                     else if (q.includes("insurance") || q.includes("liability")) { answer = "Initially, deliveries are covered by your business public liability. As we scale, Pull Up Coffee will assume wider insurance coverage to protect our partners."; }
                     else if (q.includes("hardware") || q.includes("phone") || q.includes("ipad")) { answer = "No expensive kits needed. Just any smartphone or tablet with an internet connection. We provide the virtual infrastructure."; }
                     else if (q.includes("early") || q.includes("benefit")) { answer = "Early adopters receive lifetime low commission rates and premium placement on our maps to drive more traffic to your cafe."; }
@@ -285,28 +233,12 @@
                 }, 600);
             };
 
-            const handleImageUpload = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => { setNewItem(prev => ({ ...prev, img: reader.result })); };
-                    reader.readAsDataURL(file);
-                }
-            };
-
+            const handleImageUpload = (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onloadend = () => { setNewItem(prev => ({ ...prev, img: reader.result })); }; reader.readAsDataURL(file); } };
             const handleAddItem = () => {
                 if (!newItem.name || !newItem.price) { alert("Name and Price are required."); return; }
-                const item = {
-                    id: Date.now(),
-                    name: newItem.name,
-                    desc: newItem.desc || 'Freshly added item.',
-                    price: parseFloat(newItem.price),
-                    img: newItem.img || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80'
-                };
-                setMenu([...menu, item]);
-                setNewItem({ name: '', desc: '', price: '', img: null });
+                const item = { id: Date.now(), name: newItem.name, desc: newItem.desc || 'Freshly added item.', price: parseFloat(newItem.price), img: newItem.img || 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80' };
+                setMenu([...menu, item]); setNewItem({ name: '', desc: '', price: '', img: null });
             };
-
             const handleDeleteItem = (id) => { if(confirm('Remove this item from the live menu?')) { setMenu(menu.filter(m => m.id !== id)); } };
             const notifyCustomer = (msg) => { alert(`SIMULATED SMS TO CUSTOMER:\n"${msg}"`); };
             const getNextStatus = (currentStatus) => { const flow = ['pending', 'accepted', 'preparing', 'delivering', 'completed']; const idx = flow.indexOf(currentStatus); return idx < flow.length - 1 ? flow[idx + 1] : 'completed'; };
@@ -317,7 +249,7 @@
                     <div className="max-w-5xl mx-auto w-full">
                         <div className="flex flex-col md:flex-row justify-between items-center mb-10 pb-6 border-b border-stone-200">
                             <div className="text-center md:text-left mb-4 md:mb-0"><h2 className="text-3xl font-serif font-bold text-brand-dark flex items-center gap-2"><span className={`text-4xl ${isOnline ? 'text-green-500' : 'text-red-500'}`}>●</span> Owner Portal</h2><p className="text-stone-500 mt-1">Grounds Keeper Willie (Demo Mode)</p></div>
-                            <div className="flex gap-4"><button onClick={() => setAdminTab('orders')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'orders' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Live Orders</button><button onClick={() => setAdminTab('settings')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'settings' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Settings</button><button onClick={() => setAdminTab('partner')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'partner' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Partner Hub</button><button onClick={() => setView('landing')} className="px-6 py-2 text-stone-400 hover:text-red-500 font-medium">Log Out</button></div>
+                            <div className="flex gap-4"><button onClick={() => setAdminTab('orders')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'orders' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Live Orders</button><button onClick={() => setAdminTab('settings')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'settings' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Settings</button><button onClick={() => setAdminTab('partner')} className={`px-6 py-2 rounded-full font-bold transition ${adminTab === 'partner' ? 'bg-brand-dark text-white shadow-lg' : 'bg-white text-stone-500 hover:bg-stone-100'}`}>Partner Hub</button><button onClick={() => setView('logout')} className="px-6 py-2 text-stone-400 hover:text-red-500 font-medium">Log Out</button></div>
                         </div>
                         {adminTab === 'orders' && (
                             <div className="animate-fade-in">
@@ -353,6 +285,47 @@
                                 <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl"><div><span className="font-bold block">Service Status</span><span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-500'}`}>{isOnline ? '● ONLINE' : '● OFFLINE'}</span></div><div onClick={() => setIsOnline(!isOnline)} className={`w-14 h-8 rounded-full relative cursor-pointer transition-colors duration-300 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}><div className={`w-6 h-6 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isOnline ? 'left-7' : 'left-1'}`}></div></div></div>
                                 
                                 <div className="pt-6 border-t border-stone-100">
+                                    <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Curbside Pricing</h4>
+                                    <div className="bg-stone-50 p-6 rounded-xl border border-stone-200 space-y-6">
+                                        <div>
+                                            <div className="flex justify-between items-center mb-2">
+                                                <label className="block text-xs font-bold text-stone-400 uppercase tracking-wider">Standard Convenience Fee</label>
+                                                <span className="font-bold text-xl text-brand-dark">${curbsideFee.toFixed(2)}</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="1" 
+                                                max="10" 
+                                                step="0.5" 
+                                                value={isPromoActive ? 1 : curbsideFee} 
+                                                onChange={(e) => setCurbsideFee(Number(e.target.value))} 
+                                                disabled={isPromoActive}
+                                                className="w-full accent-brand-orange h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50" 
+                                            />
+                                            <p className="text-xs text-stone-400 mt-1">Min: $1.00 - Max: $10.00 (Surge Cap)</p>
+                                        </div>
+
+                                        <div className="flex items-center justify-between p-3 bg-white border border-stone-200 rounded-lg">
+                                            <div><span className="font-bold text-sm flex items-center gap-2"><Icons.Megaphone /> New Customer Promo</span><p className="text-xs text-stone-400">Waive fee ($0.00) to attract new users.</p></div>
+                                            <div onClick={() => setIsPromoActive(!isPromoActive)} className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors duration-300 ${isPromoActive ? 'bg-brand-orange' : 'bg-stone-300'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isPromoActive ? 'left-7' : 'left-1'}`}></div></div>
+                                        </div>
+
+                                        <div className="bg-white border border-stone-200 rounded-lg p-3">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <div><span className="font-bold text-sm flex items-center gap-2"><Icons.Heart /> Local's Rate</span><p className="text-xs text-stone-400">Cap fee at $1.00 for loyal customers.</p></div>
+                                                <div onClick={() => setIsLoyaltyActive(!isLoyaltyActive)} className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors duration-300 ${isLoyaltyActive ? 'bg-green-500' : 'bg-stone-300'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isLoyaltyActive ? 'left-7' : 'left-1'}`}></div></div>
+                                            </div>
+                                            {isLoyaltyActive && (
+                                                <div className="mt-3 pt-3 border-t border-stone-100 space-y-3">
+                                                    <div className="flex gap-2"><input type="text" placeholder="Add Local (Name/Phone)" value={localName} onChange={e => setLocalName(e.target.value)} className="flex-1 p-2 text-sm border rounded bg-stone-50" /><button onClick={() => { setLocalName(''); alert('Local Added'); }} className="bg-stone-800 text-white px-3 text-xs rounded font-bold">Add</button></div>
+                                                    <div className="flex items-center gap-2"><input type="checkbox" className="accent-green-500" defaultChecked /><span className="text-xs text-stone-500">Auto-apply for 10+ orders/month</span></div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="pt-6 border-t border-stone-100">
                                     <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Menu Management</h4>
                                     <div className="space-y-3 mb-6 max-h-60 overflow-y-auto pr-2">
                                         {menu.map(item => (
@@ -381,9 +354,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Pricing</h4><div className="flex gap-4 items-center bg-stone-50 p-4 rounded-xl"><input type="range" min="0" max="10" step="0.5" value={curbsideFee} onChange={(e) => setCurbsideFee(Number(e.target.value))} className="flex-1 accent-brand-orange h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer" /><span className="font-bold text-2xl w-16 text-right">${curbsideFee.toFixed(2)}</span></div><p className="text-xs text-stone-400 mt-2 italic text-center">Tip: Set to $0.00 to boost order volume during slow hours.</p></div>
-                                <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4><div className="flex gap-2 mb-4"><button onClick={() => setOrderLimitType('unlimited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Unlimited</button><button onClick={() => setOrderLimitType('limited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'limited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Limit Flow</button></div>{orderLimitType === 'limited' && <div className="bg-stone-50 p-4 rounded-xl animate-fade-in"><div className="flex items-center justify-between mb-2"><span className="text-stone-600 font-medium">Max Orders</span><div className="flex items-center gap-3"><button onClick={() => setMaxOrdersPerWindow(Math.max(1, maxOrdersPerWindow - 1))} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">-</button><span className="font-bold text-xl w-8 text-center">{maxOrdersPerWindow}</span><button onClick={() => setMaxOrdersPerWindow(maxOrdersPerWindow + 1)} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">+</button></div></div><div className="flex items-center justify-between"><span className="text-stone-600 font-medium">Time Window</span><select value={timeWindowMins} onChange={(e) => setTimeWindowMins(Number(e.target.value))} className="p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold"><option value={10}>Every 10 mins</option><option value={15}>Every 15 mins</option><option value={20}>Every 20 mins</option><option value={30}>Every 30 mins</option><option value={60}>Every Hour</option></select></div></div>}</div>
+                                <div className="pt-6 border-t border-stone-100"><h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4><div className="flex gap-2 mb-4"><button onClick={() => setOrderLimitType('unlimited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Unlimited</button><button onClick={() => setOrderLimitType('limited')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition border ${orderLimitType === 'limited' ? 'bg-brand-dark text-white border-brand-dark' : 'bg-white text-stone-500 border-stone-200'}`}>Limit Flow</button></div>{orderLimitType === 'limited' && <div className="bg-stone-50 p-4 rounded-xl animate-fade-in"><div className="flex items-center justify-between mb-2"><span className="text-stone-600 font-medium">Max Orders</span><div className="flex items-center gap-3"><button onClick={() => setMaxOrdersPerWindow(Math.max(1, maxOrdersPerWindow - 1))} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">-</button><span className="font-bold text-xl w-8 text-center">{maxOrdersPerWindow}</span><button onClick={() => setMaxOrdersPerWindow(maxOrdersPerWindow + 1)} className="w-8 h-8 bg-white rounded-full shadow-sm text-stone-600 font-bold hover:bg-stone-100">+</button></div></div><div className="flex items-center justify-between mb-3"><span className="text-stone-600 font-medium">Time Window</span><select value={timeWindowMins} onChange={(e) => setTimeWindowMins(Number(e.target.value))} className="p-2 bg-white border border-stone-200 rounded-lg text-sm font-bold"><option value={10}>Every 10 mins</option><option value={15}>Every 15 mins</option><option value={20}>Every 20 mins</option><option value={30}>Every 30 mins</option><option value={60}>Every Hour</option></select></div><div className="flex items-center gap-2 pt-3 border-t border-stone-200"><input type="checkbox" className="accent-brand-orange" checked={autoSurge} onChange={(e) => setAutoSurge(e.target.checked)} /><span className="text-xs text-stone-500 font-bold">Auto-Surge: Increase Fee if limit reached</span></div></div>}</div>
                             </div>
                         )}
                         {adminTab === 'partner' && (
@@ -399,24 +370,34 @@
                             </div>
                         )}
                         {showContract && (
-                            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-fade-in"><div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl h-[80vh] flex flex-col"><div className="p-6 border-b border-stone-200 flex justify-between items-center"><div><h3 className="font-serif font-bold text-2xl text-brand-dark">Partnership Agreement</h3><p className="text-stone-500 text-sm uppercase tracking-widest">Sample Draft</p></div><button onClick={() => setShowContract(false)} className="p-2 hover:bg-stone-100 rounded-full"><Icons.X /></button></div><div className="p-8 overflow-y-auto font-serif leading-relaxed text-stone-700 space-y-6"><div className="p-4 bg-stone-50 border border-stone-200 rounded-xl text-sm font-sans mb-6"><strong>Note:</strong> This is a standard non-exclusive agreement. You retain full ownership of your brand and customer relationships.</div><section><h4 className="font-bold text-lg text-brand-dark mb-2">1. The Service</h4><p>Pull Up Coffee ("Platform") provides a technology interface connecting Cafe Partners ("You") with customers in vehicles. We handle the ordering, payment processing, and geolocation notification.</p></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">2. Fee Structure & Payments</h4><ul className="list-disc pl-5 space-y-1"><li><strong>Product Revenue:</strong> You receive 100% of the listed price for all food and beverage items.</li><li><strong>Platform Fee:</strong> The customer pays a "Curbside Fee" (e.g. $2.00+). You (the Cafe) keep **80%** of this fee. The Platform retains just 20% to cover operations.</li><li><strong>Payouts:</strong> All payments are processed via Stripe Connect. Funds are settled to your nominated bank account daily (T+2 rolling basis).</li></ul></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">3. Obligations</h4><p>You agree to prepare orders promptly upon acceptance and deliver them to the customer's vehicle curbside in a safe manner. You maintain the right to refuse service or toggle "Offline" at any time.</p></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">4. Termination</h4><p>This agreement is "at-will". You may cancel your partnership at any time with 24 hours written notice. There are no lock-in contracts or exit fees.</p></section></div><div className="p-6 border-t border-stone-200 bg-stone-50 rounded-b-2xl flex justify-end gap-3"><button onClick={() => setShowContract(false)} className="px-6 py-3 rounded-xl font-bold text-stone-500 hover:bg-stone-200 transition">Close</button><button className="px-6 py-3 rounded-xl font-bold bg-brand-dark text-white shadow-lg hover:bg-stone-800 transition">Sign & Join</button></div></div></div>
+                            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 animate-fade-in"><div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl h-[80vh] flex flex-col"><div className="p-6 border-b border-stone-200 flex justify-between items-center"><div><h3 className="font-serif font-bold text-2xl text-brand-dark">Partnership Agreement</h3><p className="text-stone-500 text-sm uppercase tracking-widest">Sample Draft</p></div><button onClick={() => setShowContract(false)} className="p-2 hover:bg-stone-100 rounded-full"><Icons.X /></button></div><div className="p-8 overflow-y-auto font-serif leading-relaxed text-stone-700 space-y-6"><div className="p-4 bg-stone-50 border border-stone-200 rounded-xl text-sm font-sans mb-6"><strong>Note:</strong> This is a standard non-exclusive agreement. You retain full ownership of your brand and customer relationships.</div><section><h4 className="font-bold text-lg text-brand-dark mb-2">1. The Service</h4><p>Pull Up Coffee ("Platform") provides a technology interface connecting Cafe Partners ("You") with customers in vehicles. We handle the ordering, payment processing, and geolocation notification.</p></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">2. Fee Structure & Payments</h4><ul className="list-disc pl-5 space-y-1"><li><strong>Product Revenue:</strong> You receive 100% of the listed price for all food and beverage items.</li><li><strong>Platform Fee:</strong> The customer pays a "Curbside Fee". You keep **80%** of this fee. The Platform retains 20%. *Note: Commission percentages scale dynamically during high-volume Surge Pricing to support infrastructure.*</li><li><strong>Payouts:</strong> All payments are processed via Stripe Connect. Funds are settled to your nominated bank account daily (T+2 rolling basis).</li></ul></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">3. Obligations</h4><p>You agree to prepare orders promptly upon acceptance and deliver them to the customer's vehicle curbside in a safe manner. You maintain the right to refuse service or toggle "Offline" at any time.</p></section><section><h4 className="font-bold text-lg text-brand-dark mb-2">4. Termination</h4><p>This agreement is "at-will". You may cancel your partnership at any time with 24 hours written notice. There are no lock-in contracts or exit fees.</p></section></div><div className="p-6 border-t border-stone-200 bg-stone-50 rounded-b-2xl flex justify-end gap-3"><button onClick={() => setShowContract(false)} className="px-6 py-3 rounded-xl font-bold text-stone-500 hover:bg-stone-200 transition">Close</button><button className="px-6 py-3 rounded-xl font-bold bg-brand-dark text-white shadow-lg hover:bg-stone-800 transition">Sign & Join</button></div></div></div>
                         )}
                     </div>
                 </div>
             );
         };
 
-        const CheckoutForm = ({ user, setUser, onSubmit, onBack, cart, total, curbsideFee }) => {
+        const CheckoutForm = ({ user, setUser, onSubmit, onBack, cart, total, curbsideFee, isPromoActive, isLoyaltyActive }) => {
             const [pickupType, setPickupType] = useState('ASAP');
             const [customTime, setCustomTime] = useState('');
             const [details, setDetails] = useState('');
             const [carPhoto, setCarPhoto] = useState(null);
             const [agreed, setAgreed] = useState(false);
+            const [showTerms, setShowTerms] = useState(false);
             const fileInputRef = useRef(null);
 
             const handleChange = (field, value) => { setUser(prev => ({ ...prev, [field]: value })); };
             const handlePhotoUpload = (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onloadend = () => { setCarPhoto(reader.result); }; reader.readAsDataURL(file); } };
             useEffect(() => { const now = new Date(); now.setMinutes(now.getMinutes() + 15); setCustomTime(now.toTimeString().slice(0, 5)); }, []);
+
+            let displayFee = curbsideFee;
+            let displayFeeText = `$${curbsideFee.toFixed(2)}`;
+            if (isPromoActive) { displayFee = 0; displayFeeText = "FREE (Promo)"; }
+            else if (isLoyaltyActive && curbsideFee > 1) { displayFee = 1.00; displayFeeText = "$1.00 (Local's Rate)"; }
+            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const finalTotal = (subtotal + displayFee).toFixed(2);
+            const isGuest = !user.name || !user.carModel;
+            const [saveProfile, setSaveProfile] = useState(false);
 
             return (
                 <div className="min-h-screen bg-stone-50 p-6 animate-fade-in pb-24">
@@ -428,23 +409,26 @@
                             <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Your Name</label><input type="text" value={user.name} onChange={e => handleChange('name', e.target.value)} placeholder="e.g. Alex" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div>
                             <div className="grid grid-cols-2 gap-4"><div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Car Model</label><input type="text" value={user.carModel} onChange={e => handleChange('carModel', e.target.value)} placeholder="e.g. Tesla" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div><div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Color</label><input type="text" value={user.carColor} onChange={e => handleChange('carColor', e.target.value)} placeholder="e.g. White" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div></div>
                             <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">License Plate (Full)</label><input type="text" value={user.plate} onChange={e => handleChange('plate', e.target.value)} placeholder="e.g. 123-ABC" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium uppercase font-mono tracking-widest transition" /></div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Email (Receipts)</label><input type="email" value={user.email || ''} onChange={e => handleChange('email', e.target.value)} placeholder="alex@email.com" className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Mobile (SMS Updates)</label><input type="tel" value={user.mobile || ''} onChange={e => handleChange('mobile', e.target.value)} placeholder="0400..." className="w-full p-4 bg-stone-50 rounded-xl border-none ring-1 ring-stone-200 focus:ring-2 focus:ring-brand-orange text-stone-900 font-medium transition" /></div>
+                            {isGuest && <div className="flex items-center gap-3 p-3 bg-brand-orange/10 rounded-xl"><input type="checkbox" className="accent-brand-orange w-5 h-5" checked={saveProfile} onChange={(e) => setSaveProfile(e.target.checked)} /><span className="text-sm font-bold text-brand-dark">Save details for rewards & faster checkout?</span></div>}
                             <div><label className="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Parking Spot / Location Details</label><textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="e.g. Parked near the big tree, hazards on..." className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm mb-3 focus:bg-white transition"></textarea><input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />{carPhoto ? (<div className="relative w-full h-32 rounded-xl overflow-hidden border border-stone-200"><img src={carPhoto} alt="Car Preview" className="w-full h-full object-cover" /><button onClick={() => setCarPhoto(null)} className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full"><Icons.X /></button></div>) : (<button onClick={() => fileInputRef.current.click()} className="w-full py-3 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 font-bold flex items-center justify-center gap-2 hover:bg-stone-50 transition"><Icons.Camera /> Snap Photo of Spot</button>)}</div>
                         </div>
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8"><h3 className="font-bold text-stone-900 mb-4 text-xs uppercase tracking-wider">Order Summary</h3><div className="space-y-3">{cart.map((item, idx) => (<div key={item.cartId} className="flex justify-between text-sm text-stone-600 border-b border-stone-50 pb-2"><div><span className="font-semibold text-stone-800">{item.name}</span><span className="block text-xs text-stone-500 mt-0.5">{item.size}{item.milk !== '-' ? `, ${item.milk}` : ''}</span>{item.notes && <span className="block text-xs text-brand-orange italic mt-0.5">"{item.notes}"</span>}</div><span>${item.price.toFixed(2)}</span></div>))}</div><div className="flex justify-between text-sm text-brand-orange font-medium mt-4"><span>Curbside Convenience Fee</span><span>${curbsideFee.toFixed(2)}</span></div><div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4 pt-4 border-t border-stone-100"><span>Total</span><span>${total}</span></div></div>
-                        <div className="mb-6 p-4 bg-stone-100 rounded-xl border border-stone-200 text-sm flex gap-3 items-start">
-                            <input type="checkbox" id="refund-policy" className="mt-1 w-5 h-5 accent-brand-orange" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
-                            <label htmlFor="refund-policy" className="text-stone-600">I agree to be curbside within 10 minutes of my time. I understand late arrivals <span className="font-bold text-stone-800">forfeit the order with no refunds</span>.</label>
-                        </div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8"><h3 className="font-bold text-stone-900 mb-4 text-xs uppercase tracking-wider">Order Summary</h3><div className="space-y-3">{cart.map((item, idx) => (<div key={item.cartId} className="flex justify-between text-sm text-stone-600 border-b border-stone-50 pb-2"><div><span className="font-semibold text-stone-800">{item.name}</span><span className="block text-xs text-stone-500 mt-0.5">{item.size}{item.milk !== '-' ? `, ${item.milk}` : ''}</span>{item.notes && <span className="block text-xs text-brand-orange italic mt-0.5">"{item.notes}"</span>}</div><span>${item.price.toFixed(2)}</span></div>))}</div><div className="flex justify-between text-sm text-brand-orange font-medium mt-4"><span>Curbside Convenience Fee</span><span>{displayFeeText}</span></div><div className="flex justify-between font-serif font-bold text-2xl text-brand-dark mt-4 pt-4 border-t border-stone-100"><span>Total</span><span>${finalTotal}</span></div></div>
+                        <div className="mb-6 p-4 bg-stone-100 rounded-xl border border-stone-200 text-sm flex gap-3 items-start"><input type="checkbox" id="refund-policy" className="mt-1 w-5 h-5 accent-brand-orange" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} /><div><label htmlFor="refund-policy" className="text-stone-600">I agree to be curbside within 10 minutes. I accept the </label><button onClick={() => setShowTerms(true)} className="text-brand-orange font-bold hover:underline">Terms & Conditions</button><label className="text-stone-600"> (No Refunds for late arrivals).</label></div></div>
                         <div className="mb-6 text-xs text-stone-500 text-center italic">Payment is processed securely <strong>only after</strong> the cafe accepts your order.</div>
-                        <button disabled={!agreed} onClick={() => onSubmit({ pickupType, customTime, details, carPhoto })} className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"><Icons.ChevronRight /> Pay & Pull Up</button>
+                        <button disabled={!agreed} onClick={() => onSubmit({ pickupType, customTime, details, carPhoto, saveProfile })} className="w-full bg-brand-dark text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-stone-800 transform active:scale-[0.98] transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"><Icons.ChevronRight /> Pay & Pull Up</button>
+                        {showTerms && <TermsModal onClose={() => setShowTerms(false)} />}
                     </div>
                 </div>
             );
         };
 
-        const LocationSelect = ({ setView, setSelectedLocation }) => {
+        const LocationSelect = ({ setView, setSelectedLocation, isPromoActive, userProfile }) => {
             const [favorites, setFavorites] = useState([]);
             const toggleFavorite = (e, id) => { e.stopPropagation(); if(favorites.includes(id)) setFavorites(favorites.filter(fid => fid !== id)); else setFavorites([...favorites, id]); };
+            const handleSMS = (e) => { e.stopPropagation(); if(!userProfile?.mobile) { alert("Please Create a Profile with a Mobile Number to enable SMS alerts."); } else { alert("SMS Alerts Enabled!"); } };
+            
             return (
                 <div className="min-h-screen bg-stone-900 text-white p-6 animate-fade-in flex flex-col">
                     <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-400 hover:text-white transition w-fit"><Icons.X /> <span className="ml-2">Back</span></button>
@@ -453,15 +437,23 @@
                     <div className="space-y-4 max-w-lg mx-auto w-full">
                         {LOCATIONS.map(loc => (
                             <div key={loc.id} className="relative group">
-                                <button onClick={(e) => toggleFavorite(e, loc.id)} className={`absolute top-4 right-4 z-10 p-2 rounded-full transition ${favorites.includes(loc.id) ? 'text-red-500' : 'text-stone-600 hover:text-red-400'}`}><Icons.Heart /></button>
-                                <button disabled={loc.status === 'closed'} onClick={() => { setSelectedLocation(loc); setView('customer'); }} className={`w-full p-4 rounded-2xl flex justify-between items-center transition border text-left relative overflow-hidden ${loc.status === 'open' ? 'bg-stone-800 border-stone-700 hover:border-brand-orange hover:bg-stone-750 cursor-pointer' : 'bg-stone-900 border-stone-800 opacity-60 cursor-not-allowed'}`}>
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0 border border-stone-600"><img src={loc.logo} alt={loc.name} onError={(e) => { e.target.onerror = null; e.target.parentElement.innerHTML = '<span style="font-size:20px">☕</span>'; }} className="w-full h-full object-contain" /></div>
-                                        <div><span className={`font-bold block text-lg ${loc.status === 'open' ? 'text-white group-hover:text-brand-orange' : 'text-stone-500'}`}>{loc.name}</span><div className="flex items-center gap-1 text-xs text-stone-400 mt-1"><div className="w-3"><Icons.MapPin /></div> {loc.address}</div></div>
-                                    </div>
-                                    <div className="pl-2 mr-8">{loc.status === 'open' ? <span className="text-green-400 text-[10px] font-bold px-2 py-1 bg-green-900/30 rounded-full border border-green-800">OPEN</span> : <span className="text-stone-500 text-[10px] font-bold px-2 py-1 bg-stone-800 rounded-full">CLOSED</span>}</div>
+                                {loc.id === 1 && isPromoActive && (<div className="absolute -top-3 -right-2 bg-brand-orange text-white text-[10px] font-bold px-2 py-1 rounded-full z-20 shadow-lg border border-white animate-bounce-slow">🎉 PROMO</div>)}
+                                
+                                <button 
+                                    onClick={() => toggleFavorite(null, loc.id)} 
+                                    className={`absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full transition ${favorites.includes(loc.id) ? 'text-red-500' : 'text-stone-600 hover:text-red-400 hover:bg-stone-800'}`}
+                                >
+                                    <Icons.Heart />
                                 </button>
-                                {favorites.includes(loc.id) && <div className="mt-2 flex items-center gap-2 px-2"><div className="w-8 h-4 bg-green-600 rounded-full relative cursor-pointer"><div className="w-4 h-4 bg-white rounded-full absolute right-0 top-0"></div></div><span className="text-xs text-stone-400">Notify via SMS when active</span></div>}
+
+                                <button disabled={loc.status === 'closed'} onClick={() => { setSelectedLocation(loc); setView('customer'); }} className={`w-full p-4 pl-16 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center transition border text-left relative overflow-hidden z-10 ${loc.status === 'open' ? 'bg-stone-800 border-stone-700 hover:border-brand-orange hover:bg-stone-750 cursor-pointer' : 'bg-stone-900 border-stone-800 opacity-60 cursor-not-allowed'}`}>
+                                    <div className="flex items-center gap-4 mb-2 sm:mb-0 w-full">
+                                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden shrink-0 border border-stone-600"><img src={loc.logo} alt={loc.name} onError={(e) => { e.target.onerror = null; e.target.parentElement.innerHTML = '<span style="font-size:20px">☕</span>'; }} className="w-full h-full object-contain" /></div>
+                                        <div className="flex-1 min-w-0 pr-8"><span className={`font-bold block text-lg truncate ${loc.status === 'open' ? 'text-white group-hover:text-brand-orange' : 'text-stone-500'}`}>{loc.name}</span><div className="flex items-center gap-1 text-xs text-stone-400 mt-1 truncate"><div className="w-3 shrink-0"><Icons.MapPin /></div> {loc.address}</div></div>
+                                    </div>
+                                    <div className="self-end sm:self-center shrink-0">{loc.status === 'open' ? <span className="text-green-400 text-[10px] font-bold px-2 py-1 bg-green-900/30 rounded-full border border-green-800">OPEN</span> : <span className="text-stone-500 text-[10px] font-bold px-2 py-1 bg-stone-800 rounded-full">CLOSED</span>}</div>
+                                </button>
+                                {favorites.includes(loc.id) && <div className="mt-2 flex items-center gap-2 px-2"><div onClick={handleSMS} className={`w-8 h-4 rounded-full relative cursor-pointer ${userProfile?.mobile ? 'bg-green-600' : 'bg-stone-600'}`}><div className="w-4 h-4 bg-white rounded-full absolute right-0 top-0"></div></div><span className="text-xs text-stone-400">Notify via SMS when active</span></div>}
                             </div>
                         ))}
                     </div>
@@ -557,7 +549,12 @@
             const [orders, setOrders] = useState([]);
             const [userProfile, setUserProfile] = useState({ name: '', carModel: '', carColor: '', plate: '' });
             const [menu, setMenu] = useState(DEFAULT_MENU);
+            
+            // Centralized State for Pricing Logic
             const [curbsideFee, setCurbsideFee] = useState(2.00);
+            const [isPromoActive, setIsPromoActive] = useState(false);
+            const [isLoyaltyActive, setIsLoyaltyActive] = useState(false);
+            const [autoSurge, setAutoSurge] = useState(false);
 
             useEffect(() => {
                 const handlePopState = (event) => { if (event.state && event.state.view) { setView(event.state.view); } else { setView('landing'); } };
@@ -565,9 +562,48 @@
                 return () => window.removeEventListener('popstate', handlePopState);
             }, []);
 
-            const navigate = (newView) => { window.history.pushState({ view: newView }, '', `#${newView}`); setView(newView); };
+            // Inactivity Timer
+            useEffect(() => {
+                let timer;
+                const resetTimer = () => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        setIsAuthenticated(false);
+                        setView('landing');
+                    }, 33 * 60 * 1000); // 33 mins
+                };
+                window.addEventListener('mousemove', resetTimer);
+                window.addEventListener('keydown', resetTimer);
+                resetTimer();
+                return () => {
+                    window.removeEventListener('mousemove', resetTimer);
+                    window.removeEventListener('keydown', resetTimer);
+                    clearTimeout(timer);
+                };
+            }, []);
+
+            const handleLogout = () => {
+                setIsAuthenticated(false);
+                setView('cafe-login'); // Will trigger lock screen
+            };
+
+            const navigate = (newView) => { 
+                if (newView === 'logout') {
+                    handleLogout();
+                    return;
+                }
+                window.history.pushState({ view: newView }, '', `#${newView}`); 
+                setView(newView); 
+            };
+            
             const getSubtotal = () => cart.reduce((sum, item) => sum + item.price, 0);
-            const getTotal = () => (getSubtotal() + curbsideFee).toFixed(2);
+            const getTotal = () => {
+                let fee = curbsideFee;
+                if (isPromoActive) fee = 0;
+                else if (isLoyaltyActive && fee > 1) fee = 1.00;
+                return (getSubtotal() + fee).toFixed(2);
+            };
+            
             const addToCart = (customizedItem) => { setCart([...cart, { ...customizedItem, cartId: Math.random() }]); };
 
             const placeOrder = (extraDetails) => {
@@ -582,14 +618,18 @@
             const updateOrderStatus = (id, newStatus) => { setOrders(orders.map(o => o.id === id ? { ...o, status: newStatus } : o)); };
             const rejectOrder = (id) => { setOrders(orders.map(o => o.id === id ? { ...o, status: 'rejected' } : o)); };
 
-            if (!isAuthenticated) return <LockScreen onUnlock={() => setIsAuthenticated(true)} />;
+            if (!isAuthenticated && view === 'cafe-login') return <LockScreen onUnlock={() => { setIsAuthenticated(true); navigate('cafe-login'); }} />;
+            // Removed view === logout case here since handleLogout sets view to cafe-login
+
             if (view === 'landing') return <LandingPage setView={navigate} />;
-            if (view === 'location-select') return <LocationSelect setView={navigate} setSelectedLocation={setSelectedLocation} />;
+            if (view === 'location-select') return <LocationSelect setView={navigate} setSelectedLocation={setSelectedLocation} isPromoActive={isPromoActive} userProfile={userProfile} />;
             if (view === 'profile') return <UserProfile userProfile={userProfile} setUserProfile={setUserProfile} setView={navigate} />;
-            if (view === 'cafe-login') return <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} menu={menu} setMenu={setMenu} />;
+            if (view === 'cafe-login') return isAuthenticated ? <CafeAdmin orders={orders} updateOrderStatus={updateOrderStatus} setView={navigate} rejectOrder={rejectOrder} curbsideFee={curbsideFee} setCurbsideFee={setCurbsideFee} menu={menu} setMenu={setMenu} isPromoActive={isPromoActive} setIsPromoActive={setIsPromoActive} isLoyaltyActive={isLoyaltyActive} setIsLoyaltyActive={setIsLoyaltyActive} autoSurge={autoSurge} setAutoSurge={setAutoSurge} /> : <LockScreen onUnlock={() => setIsAuthenticated(true)} />;
             if (view === 'customer') return <CustomerMenu selectedLocation={selectedLocation} menu={menu} cart={cart} addToCart={addToCart} setView={navigate} getTotal={getTotal} />;
-            if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => navigate('customer')} cart={cart} total={getTotal()} curbsideFee={curbsideFee} />;
+            if (view === 'checkout') return <CheckoutForm user={userProfile} setUser={setUserProfile} onSubmit={placeOrder} onBack={() => navigate('customer')} cart={cart} total={getTotal()} curbsideFee={curbsideFee} isPromoActive={isPromoActive} isLoyaltyActive={isLoyaltyActive} />;
             if (view === 'success') return <SuccessScreen setView={navigate} userProfile={userProfile} />;
+            
+            return <LandingPage setView={navigate} />;
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
