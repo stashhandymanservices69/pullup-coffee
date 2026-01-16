@@ -114,8 +114,6 @@
             { id: 7, name: 'Signature House Beans', price: 18.00, desc: 'Take our signature blend home', img: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=400&q=80' },
         ];
 
-        const CURBSIDE_FEE = 2.00;
-
         // --- SUB-COMPONENTS ---
 
         const LockScreen = ({ onUnlock }) => {
@@ -135,7 +133,22 @@
                 <div className="fixed inset-0 bg-brand-dark/95 z-[60] flex items-center justify-center p-4 animate-fade-in">
                     <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                         <div className="relative bg-stone-900 aspect-video w-full flex items-center justify-center group cursor-pointer">
-                            <video src="Promotional_Video_For_Pull_Up_Coffee.mp4" controls autoPlay muted playsInline loop className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML += '<div class="absolute inset-0 flex items-center justify-center text-white bg-stone-900/80 p-4 text-center"><div><p class="font-bold text-xl mb-2">Video Not Found</p><p class="text-xs">Please ensure "Promotional_Video_For_Pull_Up_Coffee.mp4" is uploaded to your GitHub repository.</p></div></div>'; }}>Your browser does not support the video tag.</video>
+                            {/* UPDATED VIDEO TAG: Added playsInline and improved error message */}
+                            <video 
+                                src="https://github.com/stashhandymanservices69/pullup-coffee/raw/refs/heads/main/Promotional_Video_For_Pull_Up_Coffee.mp4.mp4" 
+                                controls 
+                                autoPlay 
+                                muted 
+                                playsInline 
+                                loop 
+                                className="w-full h-full object-cover" 
+                                onError={(e) => { 
+                                    e.target.style.display = 'none'; 
+                                    e.target.parentElement.innerHTML += '<div class="absolute inset-0 flex items-center justify-center text-white bg-stone-900/80 p-4 text-center"><div><p class="font-bold text-xl mb-2">Video Processing...</p><p class="text-xs">GitHub is still processing your video upload.<br/>Please wait 2 minutes and Refresh.</p></div></div>'; 
+                                }}
+                            >
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
                         <div className="p-8 text-center flex-1 overflow-y-auto">
                             <h2 className="text-3xl font-serif font-bold text-brand-dark mb-4">Welcome to the Beta</h2>
@@ -197,7 +210,7 @@
                     <p className="text-stone-300 mb-12 text-lg max-w-md font-light leading-relaxed">Premium coffee. Delivered to your window, from your favourite cafe.</p>
                     <div className="flex flex-col gap-4 w-full max-w-sm mb-12">
                         <button onClick={() => setView('location-select')} className="bg-white text-brand-dark py-5 px-8 rounded-2xl font-bold text-xl flex items-center justify-center gap-3 hover:bg-stone-200 transform hover:scale-105 transition shadow-2xl"><Icons.Car /> Order Now</button>
-                        <button onClick={() => setView('cafe-login')} className="bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partner Login</button>
+                        <div className="flex gap-4"><button onClick={() => setView('profile')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Profile</button><button onClick={() => setView('cafe-login')} className="flex-1 bg-white/10 backdrop-blur-md border border-white/20 text-white py-4 rounded-xl font-medium hover:bg-white/20 transition">Partners</button></div>
                     </div>
                 </div>
                 <div className="relative z-10 bg-black/40 backdrop-blur-lg border-t border-white/10 p-6 md:p-8">
@@ -212,21 +225,28 @@
             </div>
         );
 
-        const TermsModal = ({ onClose }) => (
-            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-                <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl max-h-[80vh] overflow-y-auto p-6">
-                    <div className="flex justify-between items-center mb-4"><h3 className="font-bold text-xl">Terms of Service</h3><button onClick={onClose}><Icons.X /></button></div>
-                    <div className="prose text-sm text-stone-600 leading-relaxed space-y-4">
-                        <p><strong>1. Service Overview:</strong> Pull Up Coffee is a technology platform connecting users with third-party cafes.</p>
-                        <p><strong>2. Liability:</strong> We are not responsible for the quality of food/beverages or safety on cafe premises.</p>
-                        <p><strong>3. Refunds:</strong> Refunds are at the discretion of the specific cafe partner.</p>
-                        <p><strong>4. User Data:</strong> We collect email and phone numbers solely for order receipts and essential service notifications.</p>
-                        <p><strong>5. Australian Consumer Law:</strong> Our services come with guarantees that cannot be excluded under the Australian Consumer Law.</p>
+        const UserProfile = ({ userProfile, setUserProfile, setView }) => {
+            const handleChange = (field, value) => { setUserProfile(prev => ({ ...prev, [field]: value })); };
+            return (
+                <div className="min-h-screen bg-stone-50 p-6 flex flex-col items-center animate-fade-in">
+                    <div className="w-full max-w-md">
+                        <button onClick={() => setView('landing')} className="mb-6 flex items-center text-stone-500 hover:text-brand-dark"><Icons.X /> Back</button>
+                        <h2 className="text-3xl font-serif font-bold text-brand-dark mb-6">My Profile</h2>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                            <h3 className="font-bold mb-4">Saved Details</h3>
+                            <p className="text-sm text-stone-500 mb-4">We'll auto-fill these when you order.</p>
+                            <div className="space-y-4">
+                                <input type="text" placeholder="My Name" value={userProfile.name} onChange={e => handleChange('name', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
+                                <input type="text" placeholder="My Car Model" value={userProfile.carModel} onChange={e => handleChange('carModel', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
+                                <input type="text" placeholder="My Car Color" value={userProfile.carColor} onChange={e => handleChange('carColor', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition" />
+                                <input type="text" placeholder="My License Plate (Full)" value={userProfile.plate} onChange={e => handleChange('plate', e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl uppercase font-mono tracking-widest focus:bg-white transition" />
+                            </div>
+                            <button onClick={() => { alert('Profile Saved!'); setView('landing'); }} className="w-full mt-6 bg-brand-dark text-white py-3 rounded-xl font-bold hover:bg-stone-800 transition">Save Profile</button>
+                        </div>
                     </div>
-                    <button onClick={onClose} className="w-full mt-6 bg-brand-dark text-white py-3 rounded-xl font-bold">I Understand</button>
                 </div>
-            </div>
-        );
+            );
+        };
 
         const CafeAdmin = ({ orders, updateOrderStatus, setView, rejectOrder, curbsideFee, setCurbsideFee, menu, setMenu, isPromoActive, setIsPromoActive, isLoyaltyActive, setIsLoyaltyActive, autoSurge, setAutoSurge }) => {
             const [adminTab, setAdminTab] = useState('orders'); 
@@ -239,6 +259,7 @@
             const [botInput, setBotInput] = useState('');
             const [localName, setLocalName] = useState('');
             
+            // New Menu Item State
             const [newItem, setNewItem] = useState({ name: '', desc: '', price: '', img: null });
             const fileInputRef = useRef(null);
 
