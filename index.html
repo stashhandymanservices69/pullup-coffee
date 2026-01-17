@@ -120,7 +120,7 @@
         const LockScreen = ({ onUnlock }) => {
             const [code, setCode] = useState('');
             const [error, setError] = useState(false);
-            const handleSubmit = (e) => { e.preventDefault(); if (btoa(code) === 'NTQ0NjM4Njc===') { onUnlock(); } else { setError(true); setTimeout(() => setError(false), 500); } };
+            const handleSubmit = (e) => { e.preventDefault(); if (btoa(code) === 'NTQ0NjM4Njc=') { onUnlock(); } else { setError(true); setTimeout(() => setError(false), 500); } };
             return (
                 <div className="flex flex-col min-h-screen bg-brand-dark text-white items-center justify-center p-6 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30 blur-sm"></div>
