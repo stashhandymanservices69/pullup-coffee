@@ -66,30 +66,19 @@
         const playNotificationSound = (type = 'normal') => {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             if (!AudioContext) return;
-            
             const ctx = new AudioContext();
             const osc = ctx.createOscillator();
             const gainNode = ctx.createGain();
-
             osc.connect(gainNode);
             gainNode.connect(ctx.destination);
-
             if (type === 'urgent') {
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(800, ctx.currentTime);
-                osc.frequency.setValueAtTime(1200, ctx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.3);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.3);
+                osc.type = 'square'; osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.setValueAtTime(1200, ctx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.1, ctx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.3);
+                osc.start(); osc.stop(ctx.currentTime + 0.3);
             } else {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-                osc.frequency.exponentialRampToValueAtTime(261.63, ctx.currentTime + 0.5); // C4
-                gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.8);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.8);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(261.63, ctx.currentTime + 0.5);
+                gainNode.gain.setValueAtTime(0.3, ctx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.8);
+                osc.start(); osc.stop(ctx.currentTime + 0.8);
             }
         };
 
@@ -98,7 +87,6 @@
             Car: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>,
             Coffee: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>,
             User: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-            Store: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>,
             X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>,
             ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
             CheckCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
@@ -136,16 +124,17 @@
             Crosshair: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>,
             CreditCard: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>,
             Apple: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 1.64c-.33.37-.8.56-1.34.56-.47 0-.9-.16-1.28-.5-.38-.34-.6-.82-.6-1.34 0-.49.17-.92.53-1.29.35-.36.83-.56 1.34-.56.49 0 .91.17 1.28.53.37.37.56.81.56 1.3 0 .47-.16.92-.49 1.3zM21.36 17.68c-.68 2.06-1.56 3.69-2.58 4.88-1.04 1.21-2.03 1.83-3.03 1.83-.49 0-1.11-.14-1.83-.44-.73-.29-1.42-.44-2.03-.44-.61 0-1.33.15-2.08.45-.75.3-1.36.43-1.8.43-.95 0-1.92-.61-2.92-1.78-2.28-2.67-3.41-5.63-3.41-8.8 0-1.91.5-3.5 1.5-4.73 1.01-1.24 2.37-1.86 4.09-1.86.6 0 1.34.19 2.22.56.55.24.96.36 1.22.36.33 0 .86-.14 1.58-.41.72-.28 1.45-.43 2.19-.43 1.07 0 2.02.3 2.85.91.83.61 1.4 1.38 1.7 2.28-1.58.7-2.39 2.05-2.39 3.97 0 1.25.43 2.35 1.27 3.25.75.81 1.65 1.25 2.65 1.28-.15.86-.42 1.69-.81 2.52z"/></svg>,
-            Smartphone: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            Smartphone: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>,
+            ArrowRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         };
 
         const CONTACT_EMAIL = "hello@pullupcoffee.com";
 
         // --- LOCATIONS ---
         const LOCATIONS = [
-            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "  Allen St,Moffat Beach QLD 4551", logo: "willie.avif" },
-            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "  Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
-            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "  Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
+            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "Allen St, Moffat Beach QLD 4551", logo: "willie.avif" },
+            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
+            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
         ];
 
         // Added 'active' flag to menu items for soft-delete
@@ -176,37 +165,87 @@
         const WelcomeModal = ({ onStart }) => {
             return (
                 <div className="fixed inset-0 bg-brand-dark/95 z-[60] flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                        <div className="relative bg-stone-900 aspect-video w-full flex items-center justify-center group cursor-pointer">
-                            <video 
-                                src="https://raw.githubusercontent.com/stashhandymanservices69/pullup-coffee/main/Promotional_Video_For_Pull_Up_Coffee.mp4.mp4" 
-                                controls 
-                                autoPlay 
-                                muted 
-                                playsInline 
-                                loop 
-                                className="w-full h-full object-cover" 
-                                onError={(e) => { 
-                                    e.target.style.display = 'none'; 
-                                    e.target.parentElement.innerHTML += '<div class="absolute inset-0 flex items-center justify-center text-white bg-stone-900/80 p-4 text-center"><div><p class="font-bold text-xl mb-2">Video Processing...</p><p class="text-xs">GitHub is still processing your video upload.<br/>Please wait 2 minutes and Refresh.</p></div></div>'; 
-                                }}
-                            >
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
-                        <div className="p-8 text-center flex-1 overflow-y-auto">
-                            <h2 className="text-3xl font-serif font-bold text-brand-dark mb-4">Welcome to Pull Up Coffee</h2>
-                            <p className="text-stone-500 text-sm uppercase tracking-widest mb-4">Proof of Concept Test Website</p>
-                            <div className="text-stone-600 mb-6 leading-relaxed text-left text-sm space-y-3">
-                                <p><strong>Hi, I’m Steven, the founder of Pull Up, based on the Sunshine Coast, Queensland.</strong></p>
-                                <p>Pull Up was built to remove everyday barriers between customers and businesses. What started as a way to access great coffee without leaving the car has grown into a flexible platform that supports parents, people with anxiety, disabilities, mobility limitations, and anyone who values convenience.</p>
-                                <p>The platform integrates directly into a business’s existing operations, allowing street parking to function as a pull-up ordering and collection option. It’s not limited to coffee — partners can offer any products they choose and control availability at any time.</p>
-                                <p>Pull Up is completely flexible: businesses can turn it on or off whenever they like, with no lock-in contracts and no obligation to use it outside of times that suit their workflow. The goal is to create an additional, low-friction sales channel that increases accessibility and overall revenue without adding complexity.</p>
-                                <p>This beta allows you to view both the Customer Experience and the Partner Portal to understand how the integration works.</p>
-                                <p>If this aligns with your business, I’d welcome a conversation. A fully active, real-world tested version of the platform is currently being finalised and is only weeks away.</p>
-                                <p>Thanks for taking the time to take a look.</p>
+                    <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
+                        {/* LEFT: Video & Vision */}
+                        <div className="md:w-5/12 bg-stone-900 relative flex flex-col group">
+                            <div className="absolute inset-0 z-0">
+                                <video 
+                                    src="https://raw.githubusercontent.com/stashhandymanservices69/pullup-coffee/main/Promotional_Video_For_Pull_Up_Coffee.mp4.mp4" 
+                                    autoPlay muted playsInline loop 
+                                    className="w-full h-full object-cover opacity-60"
+                                    onError={(e) => { e.target.style.display = 'none'; }}
+                                ></video>
                             </div>
-                            <button onClick={onStart} className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg hover:bg-stone-800 transition shadow-lg mt-6">Enter Demo</button>
+                            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                            
+                            <div className="relative z-20 p-8 flex flex-col h-full justify-end text-white">
+                                <h2 className="text-2xl font-serif font-bold mb-2">"Give your business the flexible option of a drive-thru service, anytime."</h2>
+                                <div className="text-sm space-y-4 leading-relaxed text-stone-300">
+                                    <p><strong>Hi, I’m Steven, the founder of Pull Up.</strong></p>
+                                    <p>Pull Up removes everyday barriers between customers and businesses. It's not limited to coffee — partners can offer any products they choose.</p>
+                                    <p>No lock-in contracts. Just a low-friction sales channel to increase revenue without complexity.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* RIGHT: Demo Flow */}
+                        <div className="md:w-7/12 p-8 md:p-10 flex flex-col bg-stone-50 overflow-y-auto">
+                            <div className="mb-6 text-center md:text-left">
+                                <h2 className="text-3xl font-bold text-brand-dark mb-1">Pull Up Coffee™</h2>
+                                <p className="text-stone-500 text-xs uppercase tracking-widest">Beta Platform Preview</p>
+                            </div>
+
+                            {/* FLOW CHART */}
+                            <div className="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 mb-8 relative overflow-hidden">
+                                <div className="absolute top-0 left-0 w-1 h-full bg-brand-orange"></div>
+                                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-6">How it Works (Not Delivery)</h4>
+                                
+                                <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center">
+                                    {/* Customer */}
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600"><Icons.Smartphone /></div>
+                                            <div className="text-xs font-bold text-stone-700">1. Customer Orders<br/><span className="font-normal text-stone-400">Pre-pays & sets time</span></div>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600"><Icons.Car /></div>
+                                            <div className="text-xs font-bold text-stone-700">2. Customer Arrives<br/><span className="font-normal text-stone-400">Parks in designated spot</span></div>
+                                        </div>
+                                    </div>
+                                    {/* Divider */}
+                                    <div className="h-full w-px bg-stone-200 relative"><div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-1 text-stone-300"><Icons.ArrowRight /></div></div>
+                                    {/* Business */}
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex items-center gap-3 text-right flex-row-reverse">
+                                            <div className="w-8 h-8 rounded-full bg-brand-dark flex items-center justify-center text-white"><Icons.Alert /></div>
+                                            <div className="text-xs font-bold text-brand-dark">3. Cafe Alerted<br/><span className="font-normal text-stone-500">See car photo/details</span></div>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-right flex-row-reverse">
+                                            <div className="w-8 h-8 rounded-full bg-brand-orange flex items-center justify-center text-white"><Icons.Coffee /></div>
+                                            <div className="text-xs font-bold text-brand-orange">4. Staff Runs Out<br/><span className="font-normal text-stone-500">Handover at window</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* INSTRUCTIONS */}
+                            <div className="mb-8">
+                                <h4 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-3">Interactive Demo Instructions</h4>
+                                <ol className="space-y-3 text-sm text-stone-600">
+                                    <li className="flex gap-3 items-start">
+                                        <span className="bg-stone-200 text-stone-600 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+                                        <span><strong>Roleplay Customer:</strong> Click 'Enter Website', choose a cafe, order a coffee.</span>
+                                    </li>
+                                    <li className="flex gap-3 items-start">
+                                        <span className="bg-stone-200 text-stone-600 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+                                        <span><strong>Roleplay Business:</strong> Return to Landing Page, click 'Partner Login' to see the order.</span>
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <button onClick={onStart} className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg hover:bg-stone-800 transition shadow-lg mt-auto flex items-center justify-center gap-3 animate-pulse-fast">
+                                ENTER WEBSITE <Icons.ChevronRight />
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -254,11 +293,11 @@
                                     
                                     <h4 className="font-bold text-brand-orange">6) Statement of Authorship (Execution Block)</h4>
                                     <div className="grid grid-cols-2 gap-4 text-sm font-mono bg-white p-4 border border-stone-200 rounded">
-                                        <div>Rights Holder / Author:</div><div className="font-bold">Steven Weir</div>
-                                        <div>Legal Name:</div><div className="font-bold">Steven Weir</div>
-                                        <div>Address / Country:</div><div className="font-bold">Sunshine Coast, Australia</div>
-                                        <div>Date:</div><div className="font-bold">{today}</div>
-                                        <div>Digital Signature:</div><div className="font-bold text-green-600">[VERIFIED USER: 4551]</div>
+                                            <div>Rights Holder / Author:</div><div className="font-bold">Steven Weir</div>
+                                            <div>Legal Name:</div><div className="font-bold">Steven Weir</div>
+                                            <div>Address / Country:</div><div className="font-bold">Sunshine Coast, Australia</div>
+                                            <div>Date:</div><div className="font-bold">{today}</div>
+                                            <div>Digital Signature:</div><div className="font-bold text-green-600">[VERIFIED USER: 4551]</div>
                                     </div>
                                 </div>
                             </div>
@@ -309,32 +348,79 @@
             );
         };
 
+        const EditItemModal = ({ item, onSave, onClose }) => {
+            const [name, setName] = useState(item.name);
+            const [desc, setDesc] = useState(item.desc);
+            const [price, setPrice] = useState(item.price);
+
+            return (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+                        <h3 className="font-bold text-xl mb-4 text-brand-dark">Edit Menu Item</h3>
+                        <div className="space-y-4 mb-6">
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase mb-1">Name</label><input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full p-2 border rounded-lg text-sm" /></div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase mb-1">Description</label><input type="text" value={desc} onChange={e => setDesc(e.target.value)} className="w-full p-2 border rounded-lg text-sm" /></div>
+                            <div><label className="block text-xs font-bold text-stone-400 uppercase mb-1">Base Price ($)</label><input type="number" step="0.10" value={price} onChange={e => setPrice(e.target.value)} className="w-full p-2 border rounded-lg text-sm" /></div>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={onClose} className="flex-1 py-2 bg-stone-100 text-stone-600 rounded-lg font-bold hover:bg-stone-200">Cancel</button>
+                            <button onClick={() => onSave({ ...item, name, desc, price: parseFloat(price) })} className="flex-1 py-2 bg-brand-dark text-white rounded-lg font-bold hover:bg-stone-800">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const RateCustomerModal = ({ order, onSave, onClose }) => {
+            const [thumbs, setThumbs] = useState(null); 
+            const [comment, setComment] = useState('');
+            return (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center">
+                        <h3 className="font-bold text-xl mb-2 text-brand-dark">Staff Rating</h3>
+                        <p className="text-xs text-stone-400 mb-6 uppercase tracking-wider">Confidential - Staff Eyes Only</p>
+                        <div className="flex justify-center gap-4 mb-6">
+                            <button onClick={() => setThumbs('down')} className={`p-4 rounded-full transition border-2 ${thumbs === 'down' ? 'bg-red-100 border-red-500 text-red-500' : 'bg-white border-stone-200 text-stone-300 hover:border-red-200'}`}><div className="scale-150"><Icons.ThumbsDown /></div></button>
+                            <button onClick={() => setThumbs('up')} className={`p-4 rounded-full transition border-2 ${thumbs === 'up' ? 'bg-green-100 border-green-500 text-green-500' : 'bg-white border-stone-200 text-stone-300 hover:border-green-200'}`}><div className="scale-150"><Icons.ThumbsUp /></div></button>
+                        </div>
+                        <textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Private note (e.g. 'Always late')..." className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-24 text-sm mb-4 focus:bg-white transition"></textarea>
+                        <div className="flex gap-2">
+                            <button onClick={onClose} className="flex-1 py-3 bg-stone-100 text-stone-600 rounded-xl font-bold hover:bg-stone-200">Cancel</button>
+                            <button disabled={!thumbs} onClick={() => onSave({ thumbs, comment })} className="flex-1 py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800 disabled:opacity-50">Save</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const EmailReportModal = ({ onClose, onSend }) => {
+            const [email, setEmail] = useState('');
+            return (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+                        <h3 className="font-bold text-xl mb-4 text-brand-dark">Email History Report</h3>
+                        <p className="text-sm text-stone-500 mb-4">Enter the email address to receive the full CSV export of your order history.</p>
+                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" className="w-full p-3 border border-stone-300 rounded-lg mb-4" />
+                        <div className="flex gap-2">
+                            <button onClick={onClose} className="flex-1 py-3 bg-stone-100 text-stone-600 rounded-xl font-bold hover:bg-stone-200">Cancel</button>
+                            <button onClick={() => { if(email) onSend(email); else alert("Please enter an email"); }} className="flex-1 py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800">Send Report</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const ProductModal = ({ item, onClose, onAdd, addonPrices }) => {
             const [size, setSize] = useState('Small');
             const [milk, setMilk] = useState('Full Cream');
-            const [sugar, setSugar] = useState('0');
-            const [temp, setTemp] = useState('Hot');
             const [notes, setNotes] = useState('');
-            const [extraShot, setExtraShot] = useState(false);
             
-            const [prep, setPrep] = useState('Room Temp');
-            const [beanWeight, setBeanWeight] = useState('250g');
-            const [grind, setGrind] = useState('Whole Bean');
-
-            const isFood = item.name.includes("Baked") || item.name.includes("Muffin");
-            const isBeans = item.name.includes("Beans");
-
             const getAdjustedPrice = () => {
                 let price = item.price;
-                if (!isFood && !isBeans) { 
+                if (!item.name.includes("Baked")) { 
                     if(size === 'Medium') price += addonPrices.medium;
                     if(size === 'Large') price += addonPrices.large; 
-                    if(milk === 'Oat' || milk === 'Almond' || milk === 'Soy') price += addonPrices.milk; 
-                    if(extraShot) price += addonPrices.extraShot;
-                }
-                if (isBeans) { 
-                    if(beanWeight === '500g') price = 32.00; 
-                    if(beanWeight === '1kg') price = 55.00; 
+                    if(milk !== 'Full Cream' && milk !== 'Skim') price += addonPrices.milk; 
                 }
                 return price;
             };
@@ -346,135 +432,35 @@
                             <div><h3 className="font-serif font-bold text-2xl text-brand-dark">{item.name}</h3><p className="text-stone-500 text-sm">Customize your choice</p></div>
                             <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
                         </div>
-
                         <div className="space-y-6 mb-8">
-                            
-                            {!isFood && !isBeans && (
+                            {!item.name.includes("Baked") && (
                                 <Fragment>
                                     <div>
                                         <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Size</label>
                                         <div className="flex gap-2">
-                                            {['Small', 'Medium', 'Large'].map(opt => {
-                                                let label = opt;
-                                                if(opt === 'Medium') label = `Medium (+$${addonPrices.medium.toFixed(2)})`;
-                                                if(opt === 'Large') label = `Large (+$${addonPrices.large.toFixed(2)})`;
-                                                return (
-                                                    <button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
-                                                        {opt}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label>
-                                        <select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition">
-                                            <option>Full Cream</option>
-                                            <option>Skim</option>
-                                            <option>Oat (+${addonPrices.milk.toFixed(2)})</option>
-                                            <option>Almond (+${addonPrices.milk.toFixed(2)})</option>
-                                            <option>Soy (+${addonPrices.milk.toFixed(2)})</option>
-                                            <option>Lactose Free</option>
-                                        </select>
-                                    </div>
-
-                                    <div className="flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-200">
-                                        <span className="text-sm font-bold text-stone-600">Extra Shot (+${addonPrices.extraShot.toFixed(2)})</span>
-                                        <div onClick={() => setExtraShot(!extraShot)} className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors duration-300 ${extraShot ? 'bg-brand-orange' : 'bg-stone-300'}`}><div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${extraShot ? 'left-7' : 'left-1'}`}></div></div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Sugar</label>
-                                            <select value={sugar} onChange={e => setSugar(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl">
-                                                <option value="0">None</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="Splenda">Splenda</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Temp</label>
-                                            <select value={temp} onChange={e => setTemp(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl">
-                                                <option>Hot</option>
-                                                <option>Extra Hot</option>
-                                                <option>Warm</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </Fragment>
-                            )} 
-                            
-                            {isFood && (
-                                <div>
-                                    <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Preparation</label>
-                                    <div className="flex gap-2">
-                                        {['Room Temp', 'Warmed Up'].map(opt => (
-                                            <button key={opt} onClick={() => setPrep(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${prep === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                            {isBeans && (
-                                <Fragment>
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Weight</label>
-                                        <div className="flex gap-2">
-                                            {[
-                                                {l: '250g', p: 18},
-                                                {l: '500g', p: 32}, 
-                                                {l: '1kg', p: 55}
-                                            ].map(opt => (
-                                                <button key={opt.l} onClick={() => setBeanWeight(opt.l)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition flex flex-col items-center justify-center ${beanWeight === opt.l ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
-                                                    <span>{opt.l}</span>
-                                                    <span className="text-xs opacity-80">${opt.p}</span>
+                                            {['Small', 'Medium', 'Large'].map(opt => (
+                                                <button key={opt} onClick={() => setSize(opt)} className={`flex-1 py-3 rounded-xl border text-sm font-semibold transition ${size === opt ? 'bg-brand-dark text-white border-brand-dark shadow-md' : 'bg-white text-stone-600 border-stone-200 hover:border-stone-300'}`}>
+                                                    {opt} {opt !== 'Small' && `(+$${opt === 'Medium' ? addonPrices.medium.toFixed(2) : addonPrices.large.toFixed(2)})`}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Grind</label>
-                                        <select value={grind} onChange={e => setGrind(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition">
-                                            <option>Whole Bean</option>
-                                            <option>Espresso</option>
-                                            <option>Stovetop</option>
-                                            <option>Plunger / French Press</option>
-                                            <option>Filter / Pour Over</option>
+                                        <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Milk Preference</label>
+                                        <select value={milk} onChange={e => setMilk(e.target.value)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white transition">
+                                            {['Full Cream', 'Skim', 'Oat', 'Almond', 'Soy', 'Lactose Free'].map(m => (
+                                                <option key={m}>{m} {['Oat','Almond','Soy'].includes(m) ? `(+$${addonPrices.milk.toFixed(2)})` : ''}</option>
+                                            ))}
                                         </select>
                                     </div>
                                 </Fragment>
                             )}
-
                             <div>
-                                <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">
-                                    {isFood ? 'Dietary Notes / Requests' : isBeans ? 'Machine Details (e.g. Breville Barista)' : 'Barista Notes'}
-                                </label>
-                                <textarea 
-                                    value={notes} 
-                                    onChange={e => setNotes(e.target.value)} 
-                                    placeholder={isFood ? "e.g. No butter, gluten allergy..." : isBeans ? "e.g. For a Breville Express..." : "e.g. 3/4 full, no lid..."} 
-                                    className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm focus:bg-white transition"
-                                ></textarea>
+                                <label className="block text-xs font-bold uppercase text-stone-400 mb-2 tracking-wider">Notes</label>
+                                <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="e.g. Extra hot, no lid..." className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-20 text-sm focus:bg-white transition"></textarea>
                             </div>
                         </div>
-
-                        <button 
-                            onClick={() => onAdd({ 
-                                ...item, 
-                                size: isFood ? 'Std' : isBeans ? beanWeight : size, 
-                                milk: isFood ? '-' : isBeans ? grind : milk, 
-                                sugar: isFood || isBeans ? '-' : sugar, 
-                                temp: isFood || isBeans ? '-' : temp, 
-                                notes: isFood ? `${prep}. ${notes}` : `${notes}${extraShot ? ' + Extra Shot' : ''}`, 
-                                price: getAdjustedPrice() 
-                            })}
-                            className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-stone-800 transition transform active:scale-[0.98]"
-                        >
+                        <button onClick={() => onAdd({ ...item, size, milk: item.name.includes("Baked") ? '-' : milk, notes, price: getAdjustedPrice() })} className="w-full bg-brand-dark text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-stone-800 transition transform active:scale-[0.98]">
                             Add to Order • ${getAdjustedPrice().toFixed(2)}
                         </button>
                     </div>
@@ -570,90 +556,6 @@
             );
         };
 
-        const EditItemModal = ({ item, onSave, onClose }) => {
-            const [name, setName] = useState(item.name);
-            const [desc, setDesc] = useState(item.desc);
-            const [price, setPrice] = useState(item.price);
-
-            return (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
-                        <h3 className="font-bold text-xl mb-4 text-brand-dark">Edit Menu Item</h3>
-                        <div className="space-y-4 mb-6">
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase mb-1">Name</label>
-                                <input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase mb-1">Description</label>
-                                <input type="text" value={desc} onChange={e => setDesc(e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-stone-400 uppercase mb-1">Base Price ($)</label>
-                                <input type="number" step="0.10" value={price} onChange={e => setPrice(e.target.value)} className="w-full p-2 border rounded-lg text-sm" />
-                            </div>
-                        </div>
-                        <div className="flex gap-2">
-                            <button onClick={onClose} className="flex-1 py-2 bg-stone-100 text-stone-600 rounded-lg font-bold hover:bg-stone-200">Cancel</button>
-                            <button onClick={() => onSave({ ...item, name, desc, price: parseFloat(price) })} className="flex-1 py-2 bg-brand-dark text-white rounded-lg font-bold hover:bg-stone-800">Save Changes</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        const RateCustomerModal = ({ order, onSave, onClose }) => {
-            const [thumbs, setThumbs] = useState(null); // 'up' or 'down'
-            const [comment, setComment] = useState('');
-
-            return (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center">
-                        <h3 className="font-bold text-xl mb-2 text-brand-dark">Staff Rating</h3>
-                        <p className="text-xs text-stone-400 mb-6 uppercase tracking-wider">Confidential - Staff Eyes Only</p>
-                        
-                        <div className="flex justify-center gap-4 mb-6">
-                            <button onClick={() => setThumbs('down')} className={`p-4 rounded-full transition border-2 ${thumbs === 'down' ? 'bg-red-100 border-red-500 text-red-500' : 'bg-white border-stone-200 text-stone-300 hover:border-red-200'}`}>
-                                <div className="scale-150"><Icons.ThumbsDown /></div>
-                            </button>
-                            <button onClick={() => setThumbs('up')} className={`p-4 rounded-full transition border-2 ${thumbs === 'up' ? 'bg-green-100 border-green-500 text-green-500' : 'bg-white border-stone-200 text-stone-300 hover:border-green-200'}`}>
-                                <div className="scale-150"><Icons.ThumbsUp /></div>
-                            </button>
-                        </div>
-
-                        <textarea 
-                            value={comment} 
-                            onChange={e => setComment(e.target.value)} 
-                            placeholder="Add a private note (e.g. 'Loves extra hot', 'Always late')..." 
-                            className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl h-24 text-sm mb-4 focus:bg-white transition"
-                        ></textarea>
-
-                        <div className="flex gap-2">
-                            <button onClick={onClose} className="flex-1 py-3 bg-stone-100 text-stone-600 rounded-xl font-bold hover:bg-stone-200">Cancel</button>
-                            <button disabled={!thumbs} onClick={() => onSave({ thumbs, comment })} className="flex-1 py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800 disabled:opacity-50">Save Rating</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        const EmailReportModal = ({ onClose, onSend }) => {
-            const [email, setEmail] = useState('');
-            return (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[80] flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
-                        <h3 className="font-bold text-xl mb-4 text-brand-dark">Email History Report</h3>
-                        <p className="text-sm text-stone-500 mb-4">Enter the email address to receive the full CSV export of your order history.</p>
-                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" className="w-full p-3 border border-stone-300 rounded-lg mb-4" />
-                        <div className="flex gap-2">
-                            <button onClick={onClose} className="flex-1 py-3 bg-stone-100 text-stone-600 rounded-xl font-bold hover:bg-stone-200">Cancel</button>
-                            <button onClick={() => { if(email) onSend(email); else alert("Please enter an email"); }} className="flex-1 py-3 bg-brand-dark text-white rounded-xl font-bold hover:bg-stone-800">Send Report</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
         const LandingPage = ({ setView, onOpenLegal }) => (
             <div className="flex flex-col min-h-screen bg-brand-dark text-white relative overflow-hidden font-sans">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30"></div>
@@ -731,8 +633,8 @@
                                  onChange={(e) => setSearchTerm(e.target.value)}
                                  className="w-full bg-white/10 border border-white/20 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-brand-orange transition"
                              />
-                         </div>
-                         <button className="bg-white/10 hover:bg-white/20 border border-white/20 p-3 rounded-xl transition" title="Use My Location"><Icons.Crosshair /></button>
+                          </div>
+                          <button className="bg-white/10 hover:bg-white/20 border border-white/20 p-3 rounded-xl transition" title="Use My Location"><Icons.Crosshair /></button>
                     </div>
 
                     <div className="space-y-4 max-w-lg mx-auto w-full">
@@ -1235,30 +1137,26 @@
         const App = () => {
             const [view, setView] = useState('landing');
             const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [showWelcome, setShowWelcome] = useState(false);
             const [selectedLocation, setSelectedLocation] = useState(null);
             const [cart, setCart] = useState([]);
             const [orders, setOrders] = useState([]);
+            const [completedOrders, setCompletedOrders] = useState([]);
             const [userProfile, setUserProfile] = useState({ name: '', carModel: '', carColor: '', plate: '' });
-            const [menu, setMenu] = useState(DEFAULT_MENU);
-            
-            // Centralized State for Pricing Logic - NOW INCLUDES EXTRA SHOT & SIZES
-            const [curbsideFee, setCurbsideFee] = useState(2.00);
             const [addonPrices, setAddonPrices] = useState({ milk: 0.50, syrup: 0.50, medium: 0.50, large: 1.00, extraShot: 0.50 });
+            const [curbsideFee, setCurbsideFee] = useState(2.00);
+            const [menu, setMenu] = useState(DEFAULT_MENU);
+            const [audioEnabled, setAudioEnabled] = useState(true);
+            const [customerRatings, setCustomerRatings] = useState({});
+            
+            // New States for Settings
             const [isPromoActive, setIsPromoActive] = useState(false);
             const [isLoyaltyActive, setIsLoyaltyActive] = useState(false);
             const [autoSurge, setAutoSurge] = useState(false);
-            const [audioEnabled, setAudioEnabled] = useState(true);
             const [currentOrderId, setCurrentOrderId] = useState(null);
-            
-            // New: State for Welcome Modal
-            const [showWelcome, setShowWelcome] = useState(false);
             
             // New: State for Legal Modal
             const [showLegal, setShowLegal] = useState(false);
-
-            // New: Order History & Ratings
-            const [completedOrders, setCompletedOrders] = useState([]);
-            const [customerRatings, setCustomerRatings] = useState({});
 
             useEffect(() => {
                 const handlePopState = (event) => { if (event.state && event.state.view) { setView(event.state.view); } else { setView('landing'); } };
@@ -1266,7 +1164,6 @@
                 return () => window.removeEventListener('popstate', handlePopState);
             }, []);
 
-            // Inactivity Timer
             useEffect(() => {
                 let timer;
                 const resetTimer = () => {
