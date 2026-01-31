@@ -53,6 +53,10 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         input:focus, select:focus, textarea:focus { outline: none; ring: 2px solid #f97316; }
         .secure-img { pointer-events: none; user-select: none; -webkit-user-drag: none; }
+        /* Custom Range Slider */
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #f97316; cursor: pointer; margin-top: -8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #e7e5e4; border-radius: 2px; }
     </style>
 </head>
 <body class="text-stone-800 antialiased selection:bg-orange-100">
@@ -133,9 +137,9 @@
 
         // --- LOCATIONS ---
         const LOCATIONS = [
-            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "  Allen St,Moffat Beach QLD 4551", logo: "willie.avif" },
-            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "  Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
-            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "  Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
+            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "Allen St, Moffat Beach QLD 4551", logo: "willie.avif" },
+            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
+            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
         ];
 
         // Added 'active' flag to menu items for soft-delete
@@ -488,7 +492,7 @@
         };
 
         const IPRegistryModal = ({ onClose }) => {
-            const today = new Date().toLocaleDateString('en-AU', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const today = "16 January 2026"; // Locked to original creation date
             return (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[70] flex items-center justify-center p-4 animate-fade-in">
                     <div className="bg-stone-50 w-full max-w-3xl rounded-xl shadow-2xl border border-stone-300 max-h-[90vh] overflow-y-auto font-serif">
@@ -507,7 +511,7 @@
                             
                             <div className="bg-stone-100 p-6 rounded-xl border border-stone-200">
                                 <h3 className="text-lg font-bold mb-4 font-sans uppercase tracking-wide text-brand-dark">Claim of Original Expression, Prior Art, and Rights Reservation</h3>
-                                <p className="text-sm font-bold text-stone-500 mb-4">Pull Up Coffee Platform<br/>Document Type: Declaration of Original Expression and Prior Art Notice (Australia + international)<br/>Effective Date: 16 January 2026 (Australia-Pacific time reference)</p>
+                                <p className="text-sm font-bold text-stone-500 mb-4">Pull Up Coffee Platform<br/>Document Type: Declaration of Original Expression and Prior Art Notice (Australia + international)<br/>Effective Date: {today} (Australia-Pacific time reference)</p>
                                 
                                 <p className="leading-relaxed mb-4 text-sm">This document is a formal declaration made by the undersigned author and rights holder in relation to the digital artifact, product concept, and associated written and/or recorded materials describing the “Pull Up Coffee” platform (the Work). This document is intended to operate as a clear, professional notice of authorship, ownership of copyright in original expression, and an evidentiary record of prior art and conception for the purposes of Australia and applicable international regimes.</p>
 
@@ -525,6 +529,8 @@
                                     <p className="text-sm"><strong>3.2 Arrival time locking pre‑payment.</strong> A mechanism by which a customer’s arrival time is selected and locked before payment is completed.</p>
                                     <p className="text-sm"><strong>3.3 Late arrival forfeiture policy logic.</strong> A defined policy whereby late arrival beyond a stated grace period may trigger forfeiture.</p>
                                     <p className="text-sm"><strong>3.4 Integrated latency management.</strong> Linking pricing and policy logic to curbside GPS notification to reduce service disruption.</p>
+                                    <p className="text-sm"><strong>3.5 Dynamic "Surge" Pricing.</strong> Algorithms adjusting platform fees based on demand.</p>
+                                    <p className="text-sm"><strong>3.6 Visual Design & UI Patterns.</strong> The specific arrangement of the "Pull Up" card interface.</p>
                                     
                                     <h4 className="font-bold text-brand-orange">6) Statement of Authorship (Execution Block)</h4>
                                     <div className="grid grid-cols-2 gap-4 text-sm font-mono bg-white p-4 border border-stone-200 rounded">
@@ -725,7 +731,7 @@
                             <p className="text-stone-300 text-xs leading-relaxed italic opacity-90">
                                 "Becoming a new dad brought so many joyful moments, and one very familiar routine: those gentle drives to help my baby drift off to sleep. The only challenge? Craving a great cup of coffee without disturbing that precious nap or stepping out in my pajamas. That’s why I created Pull Up Coffee™."
                             </p>
-                            <p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mt-2">– Steven Weir, Founder</p>
+                            <p className="text-brand-orange text-[10px] font-bold uppercase tracking-widest mt-2">– Steven Weir, Founder (Sunshine Coast)</p>
                         </div>
                     </div>
                     <div className="text-center text-[10px] text-stone-500 uppercase tracking-widest pt-4 border-t border-white/5 flex flex-col gap-2">
@@ -1199,6 +1205,44 @@
                             <div className="animate-fade-in bg-white rounded-3xl p-8 shadow-sm border border-stone-100 max-w-2xl mx-auto space-y-8">
                                 <h3 className="font-bold text-xl mb-6 text-brand-dark">Store Configuration</h3>
                                 <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl"><div><span className="font-bold block">Service Status</span><span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-500'}`}>{isOnline ? '● ONLINE' : '● OFFLINE'}</span></div><div onClick={() => setIsOnline(!isOnline)} className={`w-14 h-8 rounded-full relative cursor-pointer transition-colors duration-300 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}><div className={`w-6 h-6 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isOnline ? 'left-7' : 'left-1'}`}></div></div></div>
+                                
+                                <div className="pt-6 border-t border-stone-100">
+                                     <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Pricing</h4>
+                                     
+                                     {/* Manual Fee Control */}
+                                     <div className="bg-stone-50 p-4 rounded-xl border border-stone-200 mb-4">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <label className="font-bold text-brand-dark">Base Curbside Fee</label>
+                                            <span className="text-xl font-bold text-brand-orange">${curbsideFee.toFixed(2)}</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="0" 
+                                            max="10" 
+                                            step="0.50" 
+                                            value={curbsideFee} 
+                                            onChange={(e) => setCurbsideFee(parseFloat(e.target.value))}
+                                            className="w-full accent-brand-orange h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer"
+                                        />
+                                        <div className="flex justify-between text-xs text-stone-400 mt-2 font-mono">
+                                            <span>$0.00</span>
+                                            <span>$5.00</span>
+                                            <span>$10.00</span>
+                                        </div>
+                                     </div>
+
+                                     {/* Automation Toggle */}
+                                     <div className="flex items-center justify-between p-3 bg-stone-50 rounded-xl">
+                                         <div>
+                                             <span className="font-bold block text-brand-dark">Surge Automation</span>
+                                             <span className="text-xs text-stone-500">Auto-adjust fee based on demand</span>
+                                         </div>
+                                         <div onClick={() => setAutoSurge(!autoSurge)} className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors duration-300 ${autoSurge ? 'bg-brand-orange' : 'bg-stone-300'}`}>
+                                             <div className={`w-4 h-4 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${autoSurge ? 'left-7' : 'left-1'}`}></div>
+                                         </div>
+                                     </div>
+                                </div>
+                                
                                 <div className="pt-6 border-t border-stone-100">
                                     <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Global Add-on Pricing</h4>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
