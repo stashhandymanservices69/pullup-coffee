@@ -137,9 +137,9 @@
 
         // --- LOCATIONS ---
         const LOCATIONS = [
-            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "Allen St, Moffat Beach QLD 4551", logo: "willie.avif" },
-            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
-            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
+            { id: 1, name: "Grounds Keeper Willie", status: "open", address: "  Allen St,Moffat Beach QLD 4551", logo: "willie.avif" },
+            { id: 2, name: "The Pocket Espresso Bar", status: "open", address: "  Seaview Terrace, Moffat Beach QLD 4551", logo: "thepocket-logo.png" },
+            { id: 3, name: "Ours. Cafe & Goods", status: "closed", address: "  Roderick St, Moffat Beach QLD 4551", logo: "ours.png" },
         ];
 
         // Added 'active' flag to menu items for soft-delete
@@ -159,7 +159,7 @@
         const LockScreen = ({ onUnlock }) => {
             const [code, setCode] = useState('');
             const [error, setError] = useState(false);
-            const handleSubmit = (e) => { e.preventDefault(); if (btoa(code) === 'NTQ0NjM4Njc=') { onUnlock(); } else { setError(true); setTimeout(() => setError(false), 500); } };
+            const handleSubmit = (e) => { e.preventDefault(); if (btoa(code) === 'MTIzMjE=') { onUnlock(); } else { setError(true); setTimeout(() => setError(false), 500); } };
             return (
                 <div className="flex flex-col min-h-screen bg-brand-dark text-white items-center justify-center p-6 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=60')] bg-cover bg-center opacity-30 blur-sm"></div>
@@ -188,12 +188,7 @@
                 if (!isFood && !isBeans) { 
                     if(size === 'Medium') price += addonPrices.medium;
                     if(size === 'Large') price += addonPrices.large; 
-                    if(milk === 'Oat' || milk === 'Almond' || milk === 'Soy') price += addonPrices.milk; 
-                    if(extraShot) price += addonPrices.extraShot;
-                }
-                if (isBeans) { 
-                    if(beanWeight === '500g') price = 32.00; 
-                    if(beanWeight === '1kg') price = 55.00; 
+                    if(milk !== 'Full Cream' && milk !== 'Skim') price += addonPrices.milk; 
                 }
                 return price;
             };
@@ -344,7 +339,7 @@
         const CartPreviewModal = ({ cart, onClose, onDelete, onCheckout, total }) => {
             return (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in">
-                    <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl animate-slide-up max-h-[80vh] overflow-y-auto flex flex-col">
+                    <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto flex flex-col">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="font-serif font-bold text-2xl text-brand-dark">Current Order</h3>
                             <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition"><Icons.X /></button>
@@ -610,7 +605,7 @@
                             <div className="relative z-20 p-8 flex flex-col h-full justify-end text-white">
                                 <h2 className="text-2xl font-serif font-bold mb-2">"Give your business the flexible option of a drive-thru service, anytime."</h2>
                                 <div className="text-sm space-y-4 leading-relaxed text-stone-300">
-                                    <p><strong>Hi, I’m Steven, the founder of Pull Up.</strong></p>
+                                    <p><strong>Hi, I’m Steven, founder of Pull Up (Sunshine Coast, QLD).</strong></p>
                                     <p>Pull Up removes everyday barriers between customers and businesses. It's not limited to coffee — partners can offer any products they choose.</p>
                                     <p>No lock-in contracts. Just a low-friction sales channel to increase revenue without complexity.</p>
                                 </div>
@@ -1206,6 +1201,26 @@
                                 <h3 className="font-bold text-xl mb-6 text-brand-dark">Store Configuration</h3>
                                 <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl"><div><span className="font-bold block">Service Status</span><span className={`text-xs font-bold ${isOnline ? 'text-green-600' : 'text-red-500'}`}>{isOnline ? '● ONLINE' : '● OFFLINE'}</span></div><div onClick={() => setIsOnline(!isOnline)} className={`w-14 h-8 rounded-full relative cursor-pointer transition-colors duration-300 ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}><div className={`w-6 h-6 bg-white rounded-full absolute top-1 shadow-md transition-transform duration-300 ${isOnline ? 'left-7' : 'left-1'}`}></div></div></div>
                                 
+                                <div className="pt-6 border-t border-stone-100">
+                                    <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Order Pacing</h4>
+                                    <div className="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                                        <div className="flex gap-2 mb-4">
+                                            <button onClick={() => setOrderLimitType('unlimited')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 ${orderLimitType === 'unlimited' ? 'bg-brand-dark text-white shadow-lg ring-2 ring-brand-dark ring-offset-2' : 'bg-white text-stone-500 border border-stone-200 hover:bg-stone-100'}`}><Icons.TrendingUp /> Unlimited</button>
+                                            <button onClick={() => setOrderLimitType('limited')} className={`flex-1 py-3 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 ${orderLimitType === 'limited' ? 'bg-brand-dark text-white shadow-lg ring-2 ring-brand-dark ring-offset-2' : 'bg-white text-stone-500 border border-stone-200 hover:bg-stone-100'}`}><Icons.Clock /> Limit Flow</button>
+                                        </div>
+                                        {orderLimitType === 'limited' && (
+                                            <div className="animate-fade-in bg-white p-4 rounded-xl border border-stone-200 shadow-sm">
+                                                <div className="flex items-end gap-4">
+                                                    <div className="flex-1"><label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block mb-2">Max Orders</label><input type="number" min="1" value={maxOrdersPerWindow} onChange={(e) => setMaxOrdersPerWindow(parseInt(e.target.value) || 1)} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-center font-bold text-lg focus:ring-2 focus:ring-brand-orange outline-none" /></div>
+                                                    <div className="text-stone-400 font-bold pb-4">per</div>
+                                                    <div className="flex-1"><label className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block mb-2">Time Window</label><select value={timeWindowMins} onChange={(e) => setTimeWindowMins(parseInt(e.target.value))} className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-center font-bold text-sm focus:ring-2 focus:ring-brand-orange outline-none appearance-none"><option value={10}>10 Mins</option><option value={15}>15 Mins</option><option value={30}>30 Mins</option><option value={60}>60 Mins</option></select></div>
+                                                </div>
+                                                <div className="mt-3 pt-3 border-t border-stone-100 text-center"><p className="text-xs text-brand-orange font-medium">System will auto-reject orders after <strong>{maxOrdersPerWindow}</strong> received in <strong>{timeWindowMins}m</strong>.</p></div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
                                 <div className="pt-6 border-t border-stone-100">
                                      <h4 className="font-bold text-sm text-stone-500 uppercase tracking-wider mb-4">Dynamic Pricing</h4>
                                      
